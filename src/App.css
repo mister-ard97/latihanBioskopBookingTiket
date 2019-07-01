@@ -31,3 +31,43 @@
     transform: rotate(360deg);
   }
 }
+
+body {
+  background-color: #f3f3f4;
+}
+
+.mycard {
+  background-color: white;
+  padding: 0px;
+}
+
+.mycard img {
+  border-bottom: 2px solid #4ec697;
+}
+
+.mycard img:hover {
+  background-color: #282c34;
+  transition: 1s;
+}
+
+.durationbox {
+  width: 40px;
+  height: 40px;
+  background-color: #51C697;
+  position: absolute;
+  left: 80%;
+  top: 1%;
+  font-size: 10px;
+  font-weight: bold;
+  color: antiquewhite;
+}
+
+.durationbox .durationtext {
+  padding: 2px;
+}
+
+.genrebox {
+  font-size: 12px;
+  background-color: darkgray;
+  width: 70px;
+}
