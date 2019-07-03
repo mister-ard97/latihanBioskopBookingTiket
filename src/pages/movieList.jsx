@@ -24,14 +24,15 @@ class MovieList extends React.Component {
         // console.log(this.state.data)
         var jsx = this.state.data.map((val) => {
             return (
-                <div className="col-md-3 mt-3">
-                    <div className='mycard'>
-                        <div className="durationbox rounded-circle text-center"><span className='durationtext'>{val.runtime.split(' ')[0]} minutes</span></div>
-                        <img src={val.poster} alt={'Poster-'+val.id} className='img-fluid'/>
-                        <div className="mycard_desc p-2">
-                            <p>{val.title}</p>
-                            <div className='genrebox rounded-pill text-center'><span>{val.genre}</span></div>
-                        </div>
+                <div className="col-sm-6 col-md-3 mt-4 d-flex justify-content-center justify-content-md-start">
+                    <div className="card mycard">
+                        <div className="durationbox rounded-circle text-center"><span>{val.runtime} min</span></div>
+                        <img className="card-img-top" src={val.poster} alt={'Poster-'+val.id}/>
+                            <div className="card-body">
+                                <h5 className="card-title">{val.title}</h5>
+                                <p className="card-text genrebox rounded-pill text-center">{val.genre}</p>
+                                <a href={'/'} className="btn btn-danger bg-btn-movie">Movie Detail...</a>
+                            </div>
                     </div>
                 </div>
             );

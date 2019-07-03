@@ -25,13 +25,13 @@ export default class Header extends React.Component {
     render() {
         return (
             <div>
-                <Navbar color="light" light expand="md">
+                <Navbar className="Custnavbar" dark expand="md">
                     <NavbarBrand href="/">Bioskop Purwadhika</NavbarBrand>
                     <NavbarToggler onClick={this.toggle} />
                     <Collapse isOpen={this.state.isOpen} navbar>
                         <Nav className="ml-auto" navbar>
                             <NavItem>
-                                <NavLink href="/components/">Components</NavLink>
+                                <NavLink href="/manage">Manage Movie</NavLink>
                             </NavItem>
                             <NavItem>
                                 <NavLink href="https://github.com/reactstrap/reactstrap">GitHub</NavLink>
