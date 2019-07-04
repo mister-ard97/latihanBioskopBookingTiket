@@ -1,5 +1,5 @@
 import React from 'react';
-import Axios from 'axios';
+// import Axios from 'axios';
 import { Modal, ModalBody, ModalHeader, ModalFooter, Form } from 'reactstrap';
 
 export class ModalAddMovieAdmin extends React.Component {

@@ -7,6 +7,9 @@ import { Route } from 'react-router-dom';
 import Header from './components/header';
 import MovieList from './pages/movieList';
 import ManageMovie from './pages/admin/manageMovie';
+import MovieDetail from './pages/movieDetail';
+import { Register } from './pages/register';
+import { Login } from './pages/login';
 
 class App extends React.Component {
   render() {
@@ -15,6 +18,9 @@ class App extends React.Component {
         <Header />
         <Route path='/' component={MovieList} exact/>
         <Route path='/manage' component={ManageMovie} exact/>
+        <Route path='/movie-detail' component={MovieDetail}/>
+        <Route path='/register' component={Register} />
+        <Route path='/login' component={Login} />
       </div>
     );
   }

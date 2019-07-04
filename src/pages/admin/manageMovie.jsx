@@ -1,6 +1,7 @@
 import React from 'react';
 // Material UI
-import {Table, TableBody, TableCell, TableFooter, TablePagination, TableRow, Paper, Container, TableHead} from '@material-ui/core';
+//TableFooter, TablePagination,
+import {Table, TableBody, TableCell, TableRow, Paper, Container, TableHead} from '@material-ui/core';
 import {DeleteForeverOutlined, Edit} from '@material-ui/icons';
 // Reactstrap
 import { ModalAddMovieAdmin, ModalEditMovieAdmin } from '../../components/modal';

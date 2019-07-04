@@ -57,7 +57,6 @@ body {
 }
 
 .mycard img:hover {
-  background-image: #282c34;
   cursor: pointer;
 }
 
@@ -65,7 +64,7 @@ body {
   height: 50px;
 }
 
-.mycard .card-body a {
+.mycard .card-body button {
   background-image: linear-gradient(#c31432, #240b36);
 }
 
