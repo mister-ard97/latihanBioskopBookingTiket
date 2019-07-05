@@ -70,6 +70,15 @@ class ManageMovie extends React.Component {
             return param.join(', ');
         }
     }
+
+    checkTrailer = (param) => {
+        let youtubeLink = /youtube.com/g.test(param)
+       if(param !== undefined && youtubeLink === true) {
+           return 'Ada'
+       } else {
+           return 'Tidak Ada'
+       }
+    }
     // end functions
 
 
@@ -95,6 +104,7 @@ class ManageMovie extends React.Component {
                         <span id={'more' + val.id} style={{ display: 'none' }}>{this.morePlot(val.plot)}</span>
                         <p id={'readMore' + val.id} className='linkReadMore' onClick={() => this.showPlot(val.id)}>Read More</p>
                     </TableCell>
+                    <TableCell>{this.checkTrailer(val.linkTrailer)}</TableCell>
                     <TableCell><DeleteForeverOutlined className='hoverAction' onClick={() => this.deleteData(val.id, index)}/></TableCell>
                     <TableCell><Edit className='hoverAction' onClick={() => this.setState({selected: index, idSelected: val.id, modal: true})}/></TableCell>
                 </TableRow>
@@ -117,6 +127,7 @@ class ManageMovie extends React.Component {
         let plot = form[4].value;
         let director = form[10].value;
         let poster = form[11].value;
+        let trailerMovie = form[12].value;
 
         let playingAt = [];
         for(let x = 0; x < 5; x++) {
@@ -134,7 +145,8 @@ class ManageMovie extends React.Component {
             && plot !== '' 
             && director !== "" 
             && poster !== '' 
-            && playingAt.length !== 0) 
+            && playingAt.length !== 0 
+            && trailerMovie !== '') 
             {
                 Axios.post('http://localhost:2000/movies', {
                     title,
@@ -144,7 +156,8 @@ class ManageMovie extends React.Component {
                     plot,
                     playingAt,
                     director,
-                    poster
+                    poster,
+                    linkTrailer: trailerMovie
                 })
                     .then((res) => {
                         alert('Add Data Success');
@@ -198,6 +211,7 @@ class ManageMovie extends React.Component {
         let plot = form[4].value;
         let director = form[10].value;
         let poster = form[11].value;
+        let trailerMovie = form[12].value;
 
         let playingAt = [];
         for (let x = 0; x < 5; x++) {
@@ -215,7 +229,8 @@ class ManageMovie extends React.Component {
             && plot !== ''
             && director !== ""
             && poster !== ''
-            && playingAt.length !== 0) 
+            && playingAt.length !== 0
+            && trailerMovie !== '') 
             {
                 Axios.patch(
                     'http://localhost:2000/movies/' + this.state.idSelected,
@@ -227,7 +242,8 @@ class ManageMovie extends React.Component {
                         plot,
                         playingAt,
                         director,
-                        poster
+                        poster,
+                        linkTrailer: trailerMovie
                     })
                     .then((res) => {
                         alert('Data Berhasil Diubah');
@@ -306,9 +322,10 @@ class ManageMovie extends React.Component {
                         <TableCell>Sutradara</TableCell>
                         <TableCell>Image</TableCell>
                         <TableCell>Genre</TableCell>
-                        <TableCell>Schedule</TableCell>
+                        <TableCell>Schedule (Jam)</TableCell>
                         <TableCell>Duration</TableCell>
                         <TableCell>Sinopsis</TableCell>
+                        <TableCell>Trailer</TableCell>
                         <TableCell colSpan={2} className='text-center'>Action</TableCell>
                     </TableHead>
                     <TableBody>

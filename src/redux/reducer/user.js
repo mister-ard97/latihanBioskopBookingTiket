@@ -6,7 +6,7 @@ const INITIAL_STATE = {
 //Password harus di hashing terlebih dahulu
 
 export default (state = INITIAL_STATE, action) => {
-    if(action.type === 'LOGIN_SUCCESS') {
+    if(action.type === 'LOGIN_BERHASIL') {
         return action.payload
     } else {
         return state

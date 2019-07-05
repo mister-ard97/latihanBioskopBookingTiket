@@ -3,6 +3,31 @@ import React from 'react';
 import { Modal, ModalBody, ModalHeader, ModalFooter, Form } from 'reactstrap';
 
 export class ModalAddMovieAdmin extends React.Component {
+    state = {
+        linkVideo: null
+    }
+
+    showFrameTrailer = (param) => {
+        if(param) {
+            let linkVideo = document.getElementById('linkMovie').value;
+            let youtubeLink = /youtube.com/g.test(linkVideo);
+            if (youtubeLink === false) {
+                return (
+                    <div>
+                        <p>Link Harus Link Trailer dari Youtube</p>
+                        <p>(example : https://www.youtube.com/watch?v=1nVRj7Jr0G0)</p>
+                    </div>
+                )
+            } else {
+                linkVideo = linkVideo.split('=')[1];
+                return (
+                    <div className="embed-responsive embed-responsive-1by1">
+                        <iframe title='trailer-movie' className="embed-responsive-item" src={'https://www.youtube.com/embed/' + linkVideo} allowfullscreen></iframe>
+                    </div>
+                )
+            }
+        }
+    }
     
     render() {
         return (
@@ -64,6 +89,16 @@ export class ModalAddMovieAdmin extends React.Component {
                             className='form-control'
                             placeholder='Image'
                         />
+                        Trailer :
+                        {this.showFrameTrailer(this.state.linkVideo)}
+                        <input
+                            type='text'
+                            name='movie'
+                            id='linkMovie'
+                            className='form-control my-3'
+                            placeholder='Link Trailer (example : https://www.youtube.com/watch?v=1nVRj7Jr0G0)'
+                            onChange={() => this.setState({linkVideo: true})}
+                        />
                     </Form>
                 </ModalBody>
                 <ModalFooter>
@@ -86,6 +121,33 @@ export class ModalAddMovieAdmin extends React.Component {
 }
 
 export class ModalEditMovieAdmin extends React.Component {
+    
+    state = {
+        linkVideo: null
+    }
+
+    showFrameTrailer = (param) => {
+        if (param) {
+            let linkVideo = document.getElementById('linkMovie').value;
+            let youtubeLink = /youtube.com/g.test(linkVideo);
+            if (youtubeLink === false) {
+                return (
+                    <div>
+                        <p>Link Harus Link Trailer dari Youtube</p>
+                        <p>(example : https://www.youtube.com/watch?v=1nVRj7Jr0G0)</p>
+                    </div>
+                )
+            } else {
+                linkVideo = linkVideo.split('=')[1];
+                return (
+                    <div className="embed-responsive embed-responsive-1by1">
+                        <iframe title='trailer-movie' className="embed-responsive-item" src={'https://www.youtube.com/embed/' + linkVideo} allowfullscreen></iframe>
+                    </div>
+                )
+            }
+        }
+    }
+
     render() {
         const title = this.props.data[this.props.index].title;
         const rated = this.props.data[this.props.index].rated;
@@ -95,6 +157,7 @@ export class ModalEditMovieAdmin extends React.Component {
         const playingAt = this.props.data[this.props.index].playingAt.join(', ');
         const director = this.props.data[this.props.index].director;
         const poster = this.props.data[this.props.index].poster;
+        const linkTrailer = this.props.data[this.props.index].linkTrailer;
         return (
             <Modal isOpen={this.props.modal} toggle={this.props.closeModal}>
                 <ModalHeader>
@@ -159,6 +222,17 @@ export class ModalEditMovieAdmin extends React.Component {
                             className='form-control'
                             placeholder='Image'
                             defaultValue={poster}
+                        />
+                        Trailer :
+                        {this.showFrameTrailer(this.state.linkVideo)}
+                        <input
+                            type='text'
+                            name='movie'
+                            id='linkMovie'
+                            className='form-control my-3'
+                            placeholder='Link Trailer (example : https://www.youtube.com/watch?v=1nVRj7Jr0G0)'
+                            defaultValue={linkTrailer}
+                            onChange={() => this.setState({ linkVideo: true })}
                         />
                     </Form>
                 </ModalBody>

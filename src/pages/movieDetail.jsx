@@ -39,6 +39,15 @@ class MovieDetail extends React.Component {
         }
     }
 
+    loadingTrailer = (param) => {
+        if(param === undefined) {
+            return 'Loading'
+        } else {
+            param = param.split('=')[1]
+            return 'https://www.youtube.com/embed/'+param
+        }
+    }
+
     render() {
         if(this.state.login === false) {
             return <Redirect to='/login' />
@@ -62,10 +71,9 @@ class MovieDetail extends React.Component {
                             <iframe 
                                 title='trailer' 
                                 className="embed-responsive-item" 
-                                src="https://www.youtube.com/embed/wmiIUN-7qhEi"
-                                frameBorder={0}
-                                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                                allowFullScreen></iframe>
+                                src={this.loadingTrailer(this.state.data.linkTrailer)}
+                                allowFullScreen>
+                            </iframe>
                         </div>
                         <p>{this.state.data.genre}</p>
                         <h5>{this.state.data.runtime} minutes</h5>

@@ -8,8 +8,8 @@ import Header from './components/header';
 import MovieList from './pages/movieList';
 import ManageMovie from './pages/admin/manageMovie';
 import MovieDetail from './pages/movieDetail';
-import { Register } from './pages/register';
-import { Login } from './pages/login';
+import Register from './pages/register';
+import Login from './pages/login';
 
 class App extends React.Component {
   render() {

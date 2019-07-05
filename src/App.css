@@ -106,6 +106,9 @@ body {
   cursor: pointer;
 }
 
+.registerForm {
+  height: 500px;
+}
 
 @media (max-width: 575.98px) {
 

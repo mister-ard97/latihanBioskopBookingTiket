@@ -1,7 +1,7 @@
 import React from 'react';
 import Paper from '@material-ui/core/Paper';
 
-export class Login extends React.Component {
+export default class Login extends React.Component {
     render() {
         return (
             <div className="container">
