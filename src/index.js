@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import * as serviceWorker from './serviceWorker';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 import App from './App';
 import Reducers from './redux/reducer'
 import { BrowserRouter } from 'react-router-dom';

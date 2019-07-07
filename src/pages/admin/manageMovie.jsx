@@ -1,8 +1,8 @@
 import React from 'react';
 // Material UI
 //TableFooter, TablePagination,
-import {Table, TableBody, TableCell, TableRow, Paper, Container, TableHead} from '@material-ui/core';
-import {DeleteForeverOutlined, Edit} from '@material-ui/icons';
+import { Table, TableBody, TableCell, TableRow, Paper, Container, TableHead } from '@material-ui/core';
+import { DeleteForeverOutlined, Edit } from '@material-ui/icons';
 // Reactstrap
 import { ModalAddMovieAdmin, ModalEditMovieAdmin } from '../../components/modal';
 import Axios from 'axios'
@@ -11,27 +11,33 @@ import Axios from 'axios'
 class ManageMovie extends React.Component {
     // state
     state = {
-        data : [],
+        data: [],
         modal: true,
         input: false,
         idSelected: null,
-        selected: null
+        selected: null,
     }
-    
+
     // lifecycle
     componentDidMount() {
+        document.title = 'Manage Movie'
+        document.body.style.backgroundImage = 'linear-gradient(to right, #c31432, #240b36)';
         Axios.get('http://localhost:2000/movies')
-        .then((res) => {
-            this.setState({data : res.data})
-        })
-        .catch((err) => {
-            console.log(err)
-        })
+            .then((res) => {
+                this.setState({ data: res.data })
+            })
+            .catch((err) => {
+                console.log(err)
+            })
     }
-    
+
+    componentDidUpdate() {
+        window.scrollTo(0, 0);
+    }
+
     // functions
     cutPlotStr = (param) => {
-        if(param.length < 50 ) {       
+        if (param.length < 50) {
             return param;
         } else {
             return param.substr(0, 50);
@@ -39,7 +45,7 @@ class ManageMovie extends React.Component {
     }
 
     morePlot = (param) => {
-        if(param < 51) {
+        if (param < 51) {
             return ''
         } else {
             return param.substr(51, param.length);
@@ -64,7 +70,7 @@ class ManageMovie extends React.Component {
     }
 
     playingAt = (param) => {
-        if(param.length <= 1) {
+        if (param.length <= 1) {
             return param;
         } else {
             return param.join(', ');
@@ -73,17 +79,17 @@ class ManageMovie extends React.Component {
 
     checkTrailer = (param) => {
         let youtubeLink = /youtube.com/g.test(param)
-       if(param !== undefined && youtubeLink === true) {
-           return 'Ada'
-       } else {
-           return 'Tidak Ada'
-       }
+        if (param !== undefined && youtubeLink === true) {
+            return 'Ada'
+        } else {
+            return 'Tidak Ada'
+        }
     }
     // end functions
 
 
     // function print, add, edit, delete
-    
+
     // function printdatamovies.
     PrintDataMovies = () => {
         var jsx = this.state.data.map((val, index) => {
@@ -105,13 +111,13 @@ class ManageMovie extends React.Component {
                         <p id={'readMore' + val.id} className='linkReadMore' onClick={() => this.showPlot(val.id)}>Read More</p>
                     </TableCell>
                     <TableCell>{this.checkTrailer(val.linkTrailer)}</TableCell>
-                    <TableCell><DeleteForeverOutlined className='hoverAction' onClick={() => this.deleteData(val.id, index)}/></TableCell>
-                    <TableCell><Edit className='hoverAction' onClick={() => this.setState({selected: index, idSelected: val.id, modal: true})}/></TableCell>
+                    <TableCell><DeleteForeverOutlined className='hoverAction' onClick={() => this.deleteData(val.id, index)} /></TableCell>
+                    <TableCell><Edit className='hoverAction' onClick={() => this.setState({ selected: index, idSelected: val.id, modal: true })} /></TableCell>
                 </TableRow>
             )
         });
 
-        return jsx; 
+        return jsx;
     }
     // end function printdata movies
 
@@ -128,53 +134,55 @@ class ManageMovie extends React.Component {
         let director = form[10].value;
         let poster = form[11].value;
         let trailerMovie = form[12].value;
+        let directorImage = form[13].value;
 
         let playingAt = [];
-        for(let x = 0; x < 5; x++) {
-            let radioButtons = document.getElementsByName('radio'+x)[0]
-            if(radioButtons.checked === true) {
+        for (let x = 0; x < 5; x++) {
+            let radioButtons = document.getElementsByName('radio' + x)[0]
+            if (radioButtons.checked === true) {
                 playingAt.push(Number(radioButtons.value));
             }
         }
 
-        if(
-            title !== '' 
-            && rated !== '' 
-            && runtime !== '' 
-            && genre !== '' 
-            && plot !== '' 
-            && director !== "" 
-            && poster !== '' 
-            && playingAt.length !== 0 
-            && trailerMovie !== '') 
-            {
-                Axios.post('http://localhost:2000/movies', {
-                    title,
-                    rated,
-                    runtime,
-                    genre,
-                    plot,
-                    playingAt,
-                    director,
-                    poster,
-                    linkTrailer: trailerMovie
+        if (
+            title !== ''
+            && rated !== ''
+            && runtime !== ''
+            && genre !== ''
+            && plot !== ''
+            && director !== ""
+            && poster !== ''
+            && playingAt.length !== 0
+            && trailerMovie !== ''
+            && directorImage) {
+            Axios.post('http://localhost:2000/movies', {
+                title,
+                rated,
+                runtime,
+                genre,
+                plot,
+                playingAt,
+                director,
+                poster,
+                linkTrailer: trailerMovie,
+                directorImage
+            })
+                .then((res) => {
+                    alert('Add Data Success');
+                    var addMovieData = this.state.data;
+                    addMovieData.push(res.data);
+                    this.setState({ data: addMovieData });
                 })
-                    .then((res) => {
-                        alert('Add Data Success');
-                        var addMovieData = this.state.data;
-                        addMovieData.push(res.data);
-                        this.setState({ data: addMovieData });
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                    })
+                .catch((err) => {
+                    console.log(err);
+                })
 
-                this.closeModal();
-            } else {
-                alert('Semua Data Harus Di isi');
-            }
-        
-        
+            this.closeModal();
+        } else {
+            alert('Semua Data Harus Di isi');
+        }
+
+
     }
     // end addData function
 
@@ -182,19 +190,19 @@ class ManageMovie extends React.Component {
     // function delete menerima parameter (nomoridDatabase, nomoridArray di this.state.data)
     deleteData = (indexDB, index) => {
         let confirmDelete = window.confirm('Are Your Sure Want To Delete This Post?');
-        if(confirmDelete) {
-            Axios.delete('http://localhost:2000/movies/' + indexDB )
-            .then((res) => {
-                if(res.status === 200) {
-                    let data = this.state.data;
-                    data.splice(index, 1);
-                    this.setState(data);
-    
-                }
-            })
-            .catch((err) => {
-                console.log(err)
-            })
+        if (confirmDelete) {
+            Axios.delete('http://localhost:2000/movies/' + indexDB)
+                .then((res) => {
+                    if (res.status === 200) {
+                        let data = this.state.data;
+                        data.splice(index, 1);
+                        this.setState(data);
+
+                    }
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
         }
     }
     // end of delete function
@@ -212,6 +220,7 @@ class ManageMovie extends React.Component {
         let director = form[10].value;
         let poster = form[11].value;
         let trailerMovie = form[12].value;
+        let directorImage = form[13].value;
 
         let playingAt = [];
         for (let x = 0; x < 5; x++) {
@@ -230,51 +239,52 @@ class ManageMovie extends React.Component {
             && director !== ""
             && poster !== ''
             && playingAt.length !== 0
-            && trailerMovie !== '') 
-            {
-                Axios.patch(
-                    'http://localhost:2000/movies/' + this.state.idSelected,
-                    {
-                        title,
-                        rated,
-                        runtime,
-                        genre,
-                        plot,
-                        playingAt,
-                        director,
-                        poster,
-                        linkTrailer: trailerMovie
-                    })
-                    .then((res) => {
-                        alert('Data Berhasil Diubah');
-                        let data = this.state.data;
-                        data[index] = res.data;
-                        this.setState({ data })
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                    })
+            && trailerMovie !== ''
+            && directorImage) {
+            Axios.patch(
+                'http://localhost:2000/movies/' + this.state.idSelected,
+                {
+                    title,
+                    rated,
+                    runtime,
+                    genre,
+                    plot,
+                    playingAt,
+                    director,
+                    poster,
+                    linkTrailer: trailerMovie,
+                    directorImage
+                })
+                .then((res) => {
+                    alert('Data Berhasil Diubah');
+                    let data = this.state.data;
+                    data[index] = res.data;
+                    this.setState({ data })
+                })
+                .catch((err) => {
+                    console.log(err);
+                })
 
-                this.closeModal();
+            this.closeModal();
         } else {
             alert('Semua Data Harus Di isi');
         }
 
-       
+
     }
     //end of editData function
 
     // Modal Add, Edit Movie 
     showModalMovieAdmin = () => {
-        this.setState({input: true, modal: true});
+        this.setState({ input: true, modal: true });
     }
 
     addModalMovieAdmin = (param) => {
-        if(param) {
+        if (param) {
             return (
-                <ModalAddMovieAdmin 
-                    addData={this.addData} 
-                    closeModal={this.closeModal} 
+                <ModalAddMovieAdmin
+                    addData={this.addData}
+                    closeModal={this.closeModal}
                     modal={this.state.modal}
                 />
             )
@@ -284,12 +294,12 @@ class ManageMovie extends React.Component {
     editModalMovieAdmin = (param) => {
         if (param !== null) {
             return (
-                <ModalEditMovieAdmin 
-                    editData={this.editData} 
-                    closeModal={this.closeModal} 
-                    modal={this.state.modal} 
-                    index={this.state.selected} 
-                    indexDb={this.state.idSelected} 
+                <ModalEditMovieAdmin
+                    editData={this.editData}
+                    closeModal={this.closeModal}
+                    modal={this.state.modal}
+                    index={this.state.selected}
+                    indexDb={this.state.idSelected}
                     data={this.state.data}
                 />
             )
@@ -298,40 +308,40 @@ class ManageMovie extends React.Component {
 
     // Modal 
     closeModal = () => {
-        this.setState({input: false, modal: false, selected: null, idSelected: null});
+        this.setState({ input: false, modal: false, selected: null, idSelected: null });
     }
 
     // render
-    render () {
+    render() {
         return (
-            <Container fixed>
+            <Container fixed className='bg-white text-dark py-4 rounded mt-4'>
                 <h1>Ini Manage Movie</h1>
-                <input 
-                    type='button' 
-                    className='btn btn-success mb-2' 
-                    value='Add Data' 
+                <input
+                    type='button'
+                    className='btn btn-success mb-2'
+                    value='Add Data'
                     onClick={() => this.showModalMovieAdmin()}
                 />
                 {this.addModalMovieAdmin(this.state.input)}
                 {this.editModalMovieAdmin(this.state.selected)}
                 <Paper>
-                   <Table>
+                    <Table>
                         <TableHead>
-                        <TableCell>No</TableCell>
-                        <TableCell>Title</TableCell>
-                        <TableCell>Sutradara</TableCell>
-                        <TableCell>Image</TableCell>
-                        <TableCell>Genre</TableCell>
-                        <TableCell>Schedule (Jam)</TableCell>
-                        <TableCell>Duration</TableCell>
-                        <TableCell>Sinopsis</TableCell>
-                        <TableCell>Trailer</TableCell>
-                        <TableCell colSpan={2} className='text-center'>Action</TableCell>
-                    </TableHead>
-                    <TableBody>
-                       {this.PrintDataMovies()}
-                    </TableBody>
-                   </Table>
+                            <TableCell>No</TableCell>
+                            <TableCell>Title</TableCell>
+                            <TableCell>Sutradara</TableCell>
+                            <TableCell>Image</TableCell>
+                            <TableCell>Genre</TableCell>
+                            <TableCell>Schedule (Jam)</TableCell>
+                            <TableCell>Duration</TableCell>
+                            <TableCell>Sinopsis</TableCell>
+                            <TableCell>Trailer</TableCell>
+                            <TableCell colSpan={2} className='text-center'>Action</TableCell>
+                        </TableHead>
+                        <TableBody>
+                            {this.PrintDataMovies()}
+                        </TableBody>
+                    </Table>
                 </Paper>
             </Container>
         )

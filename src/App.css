@@ -36,8 +36,17 @@ body {
   background-color: #f3f3f4;
 }
 
+.registerNowBtn {
+  background-image: linear-gradient(to bottom, #c31432, #240b36);
+}
+
+.loginBtn {
+  background-image: linear-gradient(to bottom, #FF0099, #493240);
+  width: 100px;
+}
+
 .Custnavbar {
-  background-image: linear-gradient(to right, #c31432, #240b36);
+  background-image: linear-gradient(to right, #c31432, #240b36) !important;
   color: white !important;
 }
 
@@ -106,11 +115,23 @@ body {
   cursor: pointer;
 }
 
-.registerForm {
-  height: 500px;
+.customForm {
+  height: 420px;
 }
 
-@media (max-width: 575.98px) {
+.customForm img {
+  width: 300px;
+}
 
+.iconTrailer:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+
+@media (max-width: 767px) {
+  .customForm .col-md-6 {
+    border-right: 0 !important;
+  }
 }
 

@@ -17,45 +17,39 @@ export default class Header extends React.Component {
     state = {
         isOpen: false
     }
+
     toggle = () => {
         this.setState({
             isOpen: !this.state.isOpen
         });
     }
+   
     render() {
         return (
-            <div>
-                <Navbar className="Custnavbar" dark expand="md">
-                    <NavbarBrand href="/">Bioskop Purwadhika</NavbarBrand>
-                    <NavbarToggler onClick={this.toggle} />
-                    <Collapse isOpen={this.state.isOpen} navbar>
-                        <Nav className="ml-auto" navbar>
-                            <NavItem>
-                                <NavLink href="/manage">Manage Movie</NavLink>
-                            </NavItem>
-                            <NavItem>
-                                <NavLink href="https://github.com/reactstrap/reactstrap">GitHub</NavLink>
-                            </NavItem>
-                            <UncontrolledDropdown nav inNavbar>
-                                <DropdownToggle nav caret>
-                                    Options
-                                </DropdownToggle>
-                                <DropdownMenu right>
-                                    <DropdownItem>
-                                        Option 1
-                                </DropdownItem>
-                                    <DropdownItem>
-                                        Option 2
-                                </DropdownItem>
-                                    <DropdownItem divider />
-                                    <DropdownItem>
-                                        Reset
-                                </DropdownItem>
-                                </DropdownMenu>
-                            </UncontrolledDropdown>
-                        </Nav>
-                    </Collapse>
-                </Navbar>
+            <div className='Custnavbar'>
+               <div className='container-fluid px-5'>
+                    <Navbar dark expand="md">
+                        <NavbarBrand href="/">MisterMovie</NavbarBrand>
+                        <NavbarToggler onClick={this.toggle} />
+                        <Collapse isOpen={this.state.isOpen} navbar>
+                            <Nav className="ml-auto" navbar>
+                                <NavItem>
+                                    <NavLink href="/manage">Manage Movie</NavLink>
+                                </NavItem>
+                                <NavItem>
+                                    <NavLink href="/register">Register</NavLink>
+                                </NavItem>
+                                <NavItem>
+                                    <NavLink 
+                                        href="/login" 
+                                        className='rounded-pill px-3 py-2 loginBtn text-center font-weight-bold'>Login
+                                    </NavLink>
+                                </NavItem>
+                                
+                            </Nav>
+                        </Collapse>
+                    </Navbar>
+               </div>
             </div>
         );
     }

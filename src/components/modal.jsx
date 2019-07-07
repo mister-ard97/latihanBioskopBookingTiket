@@ -4,11 +4,12 @@ import { Modal, ModalBody, ModalHeader, ModalFooter, Form } from 'reactstrap';
 
 export class ModalAddMovieAdmin extends React.Component {
     state = {
-        linkVideo: null
+        showVideo: null,
+        showDirectorPhoto: null
     }
 
     showFrameTrailer = (param) => {
-        if(param) {
+        if (param) {
             let linkVideo = document.getElementById('linkMovie').value;
             let youtubeLink = /youtube.com/g.test(linkVideo);
             if (youtubeLink === false) {
@@ -28,7 +29,30 @@ export class ModalAddMovieAdmin extends React.Component {
             }
         }
     }
-    
+
+    showDirectorPhoto = (param) => {
+        if (param) {
+            let linkImage = document.getElementById('linkDirectorImage').value;
+            if (linkImage === '') {
+                return (
+                    <div className='my-3'>
+                        <p>Link Foto Sutradara Kosong.</p>
+                    </div>
+                )
+            } else {
+                return (
+                    <div className='my-3'>
+                        <img
+                            src={linkImage}
+                            alt="director-image"
+                            style={{ width: '200px' }}
+                        />
+                    </div>
+                )
+            }
+        }
+    }
+
     render() {
         return (
             <Modal isOpen={this.props.modal} toggle={this.props.closeModal}>
@@ -67,14 +91,14 @@ export class ModalAddMovieAdmin extends React.Component {
                         />
                         Plot :
                         <textarea placeholder='Plot Film' class="form-control" rows="3"></textarea>
-                       <div className='my-2'>
+                        <div className='my-2'>
                             <span>Playing At : </span>
-                            <input name='radio0' type="radio" value="9" /> <span> 09.00 </span> 
-                            <input name='radio1' type="radio" value="14" /> <span> 14.00 </span>
-                            <input name='radio2' type="radio" value="16" /> <span> 16.00 </span> 
-                            <input name='radio3' type="radio" value="20" /> <span> 20.00 </span>
-                            <input name='radio4' type="radio" value="22" /> <span> 22.00 </span>
-                       </div>
+                            <input name='radio0' type="radio" value="9" /> <span> 09:00 </span>
+                            <input name='radio1' type="radio" value="14" /> <span> 14:00 </span>
+                            <input name='radio2' type="radio" value="16" /> <span> 16:00 </span>
+                            <input name='radio3' type="radio" value="20" /> <span> 20:00 </span>
+                            <input name='radio4' type="radio" value="22" /> <span> 22:00 </span>
+                        </div>
                         Sutradara :
                         <input
                             type='text'
@@ -90,14 +114,24 @@ export class ModalAddMovieAdmin extends React.Component {
                             placeholder='Image'
                         />
                         Trailer :
-                        {this.showFrameTrailer(this.state.linkVideo)}
+                        {this.showFrameTrailer(this.state.showVideo)}
                         <input
                             type='text'
                             name='movie'
                             id='linkMovie'
                             className='form-control my-3'
                             placeholder='Link Trailer (example : https://www.youtube.com/watch?v=1nVRj7Jr0G0)'
-                            onChange={() => this.setState({linkVideo: true})}
+                            onChange={() => this.setState({ showVideo: true })}
+                        />
+                        Foto Sutradara :
+                        {this.showDirectorPhoto(this.state.showDirectorPhoto)}
+                        <input
+                            type='text'
+                            name='director-image'
+                            id='linkDirectorImage'
+                            className='form-control'
+                            placeholder='Foto Sutradara'
+                            onChange={() => this.setState({ showDirectorPhoto: true})}
                         />
                     </Form>
                 </ModalBody>
@@ -121,15 +155,17 @@ export class ModalAddMovieAdmin extends React.Component {
 }
 
 export class ModalEditMovieAdmin extends React.Component {
-    
+
     state = {
-        linkVideo: null
+        showVideo: null,
+        showDirectorPhoto: null
     }
 
-    showFrameTrailer = (param) => {
-        if (param) {
-            let linkVideo = document.getElementById('linkMovie').value;
-            let youtubeLink = /youtube.com/g.test(linkVideo);
+    showFrameTrailer = (condition) => {
+        if(condition) {
+            let linkTrailer = document.getElementById('linkMovie').defaultValue;
+            console.log(linkTrailer)
+            let youtubeLink = /youtube.com/g.test(linkTrailer);
             if (youtubeLink === false) {
                 return (
                     <div>
@@ -138,10 +174,33 @@ export class ModalEditMovieAdmin extends React.Component {
                     </div>
                 )
             } else {
-                linkVideo = linkVideo.split('=')[1];
+                linkTrailer = linkTrailer.split('=')[1];
                 return (
                     <div className="embed-responsive embed-responsive-1by1">
-                        <iframe title='trailer-movie' className="embed-responsive-item" src={'https://www.youtube.com/embed/' + linkVideo} allowfullscreen></iframe>
+                        <iframe title='trailer-movie' className="embed-responsive-item" src={'https://www.youtube.com/embed/' + linkTrailer} allowfullscreen></iframe>
+                    </div>
+                )
+            }
+        }
+    }
+
+    showDirectorPhoto = (param) => {
+        if (param) {
+            let linkImage = document.getElementById('linkDirectorImage').value;
+            if (linkImage === '') {
+                return (
+                    <div className='my-3'>
+                        <p>Link Foto Sutradara Kosong.</p>
+                    </div>
+                )
+            } else {
+                return (
+                    <div className='my-3'>
+                        <img
+                            src={linkImage}
+                            alt="director-image"
+                            style={{ width: '200px' }}
+                        />
                     </div>
                 )
             }
@@ -158,6 +217,7 @@ export class ModalEditMovieAdmin extends React.Component {
         const director = this.props.data[this.props.index].director;
         const poster = this.props.data[this.props.index].poster;
         const linkTrailer = this.props.data[this.props.index].linkTrailer;
+        const directorImage = this.props.data[this.props.index].directorImage;
         return (
             <Modal isOpen={this.props.modal} toggle={this.props.closeModal}>
                 <ModalHeader>
@@ -188,7 +248,6 @@ export class ModalEditMovieAdmin extends React.Component {
                             placeholder='Runtime (minutes)'
                             defaultValue={runtime}
                         />
-                        <span>Min</span>
                         Genre :
                         <input
                             type='text'
@@ -200,12 +259,12 @@ export class ModalEditMovieAdmin extends React.Component {
                         Plot :
                         <textarea class="form-control" rows="3" defaultValue={plot}></textarea>
                         <div className='my-2'>
-                            <span>Playing At : Data Sebelumnya = {playingAt}<br/></span>
-                            <input name='radio0' type="radio" value="9" /> <span> 09.00 </span>
-                            <input name='radio1' type="radio" value="14" /> <span> 14.00 </span>
-                            <input name='radio2' type="radio" value="16" /> <span> 16.00 </span>
-                            <input name='radio3' type="radio" value="20" /> <span> 20.00 </span>
-                            <input name='radio4' type="radio" value="22" /> <span> 22.00 </span>
+                            <span>Playing At : Data Sebelumnya = {playingAt}<br /></span>
+                            <input name='radio0' type="radio" value="9" /> <span> 09:00 </span>
+                            <input name='radio1' type="radio" value="14" /> <span> 14:00 </span>
+                            <input name='radio2' type="radio" value="16" /> <span> 16:00 </span>
+                            <input name='radio3' type="radio" value="20" /> <span> 20:00 </span>
+                            <input name='radio4' type="radio" value="22" /> <span> 22:00 </span>
                         </div>
                         Sutradara :
                         <input
@@ -224,7 +283,7 @@ export class ModalEditMovieAdmin extends React.Component {
                             defaultValue={poster}
                         />
                         Trailer :
-                        {this.showFrameTrailer(this.state.linkVideo)}
+                        {this.showFrameTrailer(this.state.showVideo)}
                         <input
                             type='text'
                             name='movie'
@@ -232,7 +291,17 @@ export class ModalEditMovieAdmin extends React.Component {
                             className='form-control my-3'
                             placeholder='Link Trailer (example : https://www.youtube.com/watch?v=1nVRj7Jr0G0)'
                             defaultValue={linkTrailer}
-                            onChange={() => this.setState({ linkVideo: true })}
+                            onChange={() => this.setState({showVideo : true})}
+                        />
+                        Foto Sutradara :
+                        {this.showDirectorPhoto(this.state.showDirectorPhoto)}
+                        <input
+                            type='text'
+                            name='director-image'
+                            id='linkDirectorImage'
+                            className='form-control'
+                            placeholder='Foto Sutradara'
+                            onChange={() => this.setState({ showDirectorPhoto: true })}
                         />
                     </Form>
                 </ModalBody>

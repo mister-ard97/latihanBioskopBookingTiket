@@ -51,8 +51,8 @@ class MovieList extends React.Component {
     render() {
         return (
             <div className='container'>
+                <h2 className='text-center'>List Movies</h2>
                 <div className='row'>
-
                     {this.onPrintMovies()}
                 
                 </div>
@@ -61,4 +61,4 @@ class MovieList extends React.Component {
     }
 }
 
-export default MovieList
+export default MovieList;
