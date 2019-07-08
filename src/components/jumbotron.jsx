@@ -5,9 +5,9 @@ import { connect } from 'react-redux';
 
 class Jumbotron extends React.Component {
 
-    componentDidUpdate() {
-        document.body.style.backgroundColor = '#f3f3f4';
+    componentDidMount() {
         window.scrollTo(0, 0);
+        console.log(this.props.username)
     }
 
     render() {
@@ -17,10 +17,20 @@ class Jumbotron extends React.Component {
                    <div className="row px-3">
                         <div className="col-md-9 pt-5 pb-5 pb-lg-0 mb-5">
                             {
-                                this.props.username !== '' ?
+                                this.props.status === 'Register' ?
                                     <div class="alert alert-info" role="alert">
-                                        Selamat Bergabung user {this.props.username}. <a href="/login">Klik untuk login &raquo;</a>
-                                    </div> : null
+                                        Selamat Bergabung user {this.props.username}.  
+                                        <Link to='/login'>
+                                            <button className='ml-3 btn btn-info'>Klik untuk login &raquo;</button>
+                                        </Link>
+                                    </div> 
+                                    : this.props.status === 'Login' ?
+                                        <div class="alert alert-info" role="alert">
+                                            Selamat Datang Kembali {this.props.username}.
+                                        <Link to='/'>
+                                                <button className='ml-3 btn btn-info'>Klik untuk melakukan Seat Reservation</button>
+                                            </Link>
+                                        </div> : null
                             }
                             <h1 className="display-4">MisterMovie</h1>
                             <p className="lead">Dengan mendaftar di MisterMovie, Kalian dapat booking tiket nonton yang kalian inginkan.</p>
@@ -69,7 +79,7 @@ class Jumbotron extends React.Component {
 
 const mapToStateProps = (state) => {
     return {
-        username: state.user.username
+        user: state.user
     }
 }
 

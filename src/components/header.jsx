@@ -12,10 +12,42 @@ import {
     DropdownMenu,
     DropdownItem
 } from 'reactstrap';
+import Loader from 'react-loader-spinner';
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { onLogout } from '../redux/actions';
 
-export default class Header extends React.Component {
+class Header extends React.Component {
     state = {
         isOpen: false
+    }
+
+    CheckUsername = (param) => {
+        if(param === '') {
+            
+        } else {
+            document.getElementById('login').style.display = 'none';
+            document.getElementById('register').style.display = 'none';
+           return (
+               <UncontrolledDropdown nav inNavbar>
+                   <DropdownToggle nav caret>
+                       {param}
+                </DropdownToggle>
+                   <DropdownMenu right>
+                       <DropdownItem>
+                           Check Profile
+                  </DropdownItem>
+                       <DropdownItem>
+                           History Pemesanan
+                  </DropdownItem>
+                       <DropdownItem divider />
+                       <DropdownItem onClick={() => this.LogOutBtn()}>
+                           Logout
+                  </DropdownItem>
+                   </DropdownMenu>
+               </UncontrolledDropdown>
+           )
+        }
     }
 
     toggle = () => {
@@ -23,29 +55,41 @@ export default class Header extends React.Component {
             isOpen: !this.state.isOpen
         });
     }
+
+    LogOutBtn = () => {
+        this.props.onLogout();
+        localStorage.removeItem('Username');
+        document.getElementById('login').style.display = 'block';
+        document.getElementById('register').style.display = 'block';
+    }
    
     render() {
         return (
             <div className='Custnavbar'>
                <div className='container-fluid px-5'>
                     <Navbar dark expand="md">
-                        <NavbarBrand href="/">MisterMovie</NavbarBrand>
+                        <Link to='/'>
+                            <NavbarBrand>MisterMovie</NavbarBrand>
+                        </Link>
                         <NavbarToggler onClick={this.toggle} />
                         <Collapse isOpen={this.state.isOpen} navbar>
                             <Nav className="ml-auto" navbar>
                                 <NavItem>
-                                    <NavLink href="/manage">Manage Movie</NavLink>
+                                    <Link to='/manage'>
+                                        <NavLink>Manage Movie</NavLink>
+                                    </Link>
                                 </NavItem>
-                                <NavItem>
-                                    <NavLink href="/register">Register</NavLink>
+                                <NavItem id='register'>
+                                    <Link to='/register'>
+                                        <NavLink>Register</NavLink>
+                                    </Link>
                                 </NavItem>
-                                <NavItem>
-                                    <NavLink 
-                                        href="/login" 
-                                        className='rounded-pill px-3 py-2 loginBtn text-center font-weight-bold'>Login
-                                    </NavLink>
+                                <NavItem id='login'>
+                                    <Link to='/login'>
+                                        <NavLink className='rounded-pill px-3 py-2 loginBtn text-center font-weight-bold'>Login</NavLink>
+                                    </Link>
                                 </NavItem>
-                                
+                                {this.CheckUsername(this.props.username)}
                             </Nav>
                         </Collapse>
                     </Navbar>
@@ -54,3 +98,11 @@ export default class Header extends React.Component {
         );
     }
 }
+
+const mapToStateProps = (state) => {
+    return {
+        username: state.user.username
+    }
+}
+
+export default connect(mapToStateProps, { onLogout })(Header);

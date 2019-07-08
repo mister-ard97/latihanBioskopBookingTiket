@@ -44,7 +44,7 @@ export class ModalAddMovieAdmin extends React.Component {
                     <div className='my-3'>
                         <img
                             src={linkImage}
-                            alt="director-image"
+                            alt="director-movie"
                             style={{ width: '200px' }}
                         />
                     </div>
@@ -127,7 +127,7 @@ export class ModalAddMovieAdmin extends React.Component {
                         {this.showDirectorPhoto(this.state.showDirectorPhoto)}
                         <input
                             type='text'
-                            name='director-image'
+                            name='director-movie'
                             id='linkDirectorImage'
                             className='form-control'
                             placeholder='Foto Sutradara'
@@ -198,7 +198,7 @@ export class ModalEditMovieAdmin extends React.Component {
                     <div className='my-3'>
                         <img
                             src={linkImage}
-                            alt="director-image"
+                            alt="director-movie"
                             style={{ width: '200px' }}
                         />
                     </div>
@@ -297,10 +297,11 @@ export class ModalEditMovieAdmin extends React.Component {
                         {this.showDirectorPhoto(this.state.showDirectorPhoto)}
                         <input
                             type='text'
-                            name='director-image'
+                            name='director-movie'
                             id='linkDirectorImage'
                             className='form-control'
                             placeholder='Foto Sutradara'
+                            defaultValue={directorImage}
                             onChange={() => this.setState({ showDirectorPhoto: true })}
                         />
                     </Form>

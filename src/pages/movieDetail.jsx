@@ -71,7 +71,7 @@ class MovieDetail extends React.Component {
                 <ModalHeader toggle={this.toggle}>Trailer Movie</ModalHeader>
                 <ModalBody>
                     <div className="embed-responsive embed-responsive-16by9">
-                        <iframe class="embed-responsive-item" src={'https://www.youtube.com/embed/' + this.linkTrailer(this.state.linkTrailer)} allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
+                        <iframe title='trailer-movie' class="embed-responsive-item" src={'https://www.youtube.com/embed/' + this.linkTrailer(this.state.linkTrailer)} allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
                     </div>
                 </ModalBody>
                 <ModalFooter>
@@ -114,7 +114,7 @@ class MovieDetail extends React.Component {
                         </div>
                         <img 
                             src={this.state.data.directorImage}
-                            alt="director-photo" 
+                            alt="director-movies" 
                             className='rounded-circle ml-3' 
                             style={{width: '50px'}}
                         />
