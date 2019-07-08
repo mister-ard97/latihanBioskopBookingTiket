@@ -7,7 +7,7 @@ class Jumbotron extends React.Component {
 
     componentDidMount() {
         window.scrollTo(0, 0);
-        console.log(this.props.username)
+        console.log(this.props.user)
     }
 
     render() {
@@ -17,27 +17,34 @@ class Jumbotron extends React.Component {
                    <div className="row px-3">
                         <div className="col-md-9 pt-5 pb-5 pb-lg-0 mb-5">
                             {
-                                this.props.status === 'Register' ?
+                                this.props.user.status === 'Register' ?
                                     <div class="alert alert-info" role="alert">
-                                        Selamat Bergabung user {this.props.username}.  
-                                        <Link to='/login'>
-                                            <button className='ml-3 btn btn-info'>Klik untuk login &raquo;</button>
-                                        </Link>
+                                        Selamat Bergabung user {this.props.user.username}.
                                     </div> 
-                                    : this.props.status === 'Login' ?
-                                        <div class="alert alert-info" role="alert">
-                                            Selamat Datang Kembali {this.props.username}.
-                                        <Link to='/'>
-                                                <button className='ml-3 btn btn-info'>Klik untuk melakukan Seat Reservation</button>
-                                            </Link>
-                                        </div> : null
+                                    : null
+                            }
+                            {
+                                this.props.user.status === 'Login' ?
+                                    <div class="alert alert-info" role="alert">
+                                        Selamat Datang Kembali {this.props.user.username}.
+                                    </div> : null
                             }
                             <h1 className="display-4">MisterMovie</h1>
-                            <p className="lead">Dengan mendaftar di MisterMovie, Kalian dapat booking tiket nonton yang kalian inginkan.</p>
-                            <p>BURUAN DAFTAR SEKARANG!</p>
-                            <Link to='/register'>
-                                <button className='registerNowBtn btn btn-danger'>REGISTER NOW</button>
-                            </Link>
+                            {
+                                this.props.user.status === '' ? 
+                                    <div>
+                                        <p className="lead">Dengan mendaftar di MisterMovie, Kalian dapat booking tiket nonton yang kalian inginkan.</p>
+                                        <p>BURUAN DAFTAR SEKARANG!</p>
+                                        <Link to='/register'>
+                                            <button className='registerNowBtn btn btn-danger'>REGISTER NOW</button>
+                                        </Link>
+                                    </div>
+                                    :
+                                    <div>
+                                        <p className="lead">Bagi Kalian yang sudah bergabung, dapat melakukan 'Buy Ticket' pada Movie yang kalian ingin tonton</p>
+                                        <p>Cek Movie yang kalian ingin tonton di List Movies Yah !!!</p>
+                                    </div>
+                            }
                        </div>
                        <div className="d-none d-lg-block col-md-3 pr-5">
                             <Carousel 

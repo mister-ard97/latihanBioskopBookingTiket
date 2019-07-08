@@ -20,20 +20,42 @@ import { UrlApi } from './supports/UrlApi';
 
 class App extends React.Component {
   componentDidMount() {
-    var username = localStorage.getItem('Username');
-    username = (username) ? JSON.parse(username) : [];
-    console.log(
-      'id:' + username[0] + 'user:' + username[1] + 'password:' + username[2] + 'status:' + username[3])
-    if (username.length < 3) {
-      let objLogin = () => {
-        return {
-          id: username[0],
-          username: username[1],
-          password: username[2],
-          status: username[3]
+    let username = localStorage.getItem('Username');
+    console.log(username)
+    // username = (username) ? JSON.parse(username) : {};
+    // console.log(
+    //   'id:' + username.id + 'user:' + username.username + 'password:' + username.password + 'status:' + username.status)
+    if(username !== null) {
+      username = JSON.parse(username);
+      console.log(username.status)
+      if (username.status === "Login") {
+
+        let obj = {
+          id: username.id,
+          username: username.username,
+          password: username.password,
+          status: username.status
         }
+        this.props.onRegisterSuccess({ ...obj });
+
+      } else if (username.status === "Register") {
+
+        Axios.get(UrlApi + '/users?username=' + username.username)
+          .then((res) => {
+            console.log(res.data)
+            let obj = {
+              id: res.data[0].id,
+              username: res.data[0].username,
+              password: res.data[0].password,
+              status: username.status
+            }
+            console.log(obj)
+            this.props.onRegisterSuccess({ ...obj })
+          })
+          .catch((err) => {
+            console.log(err)
+          })
       }
-      this.props.onRegisterSuccess(this.objLogin());
     }
   }
 

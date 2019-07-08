@@ -35,14 +35,14 @@ class Login extends React.Component {
                     if (res.data.length < 0) {
                         this.setState({ error: 'Username belum terdaftar. Silahkan daftar dahulu.', loading: false })
                     } else {
-                        this.props.onRegisterSuccess(res.data[0]);
-                        let Username = [
-                            res.data[0].id,
-                            res.data[0].username,
-                            res.data[0].password,
-                            'Login'
-                        ]
-                        localStorage.setItem('Username', JSON.stringify(Username));
+                        let data = {
+                            id: res.data[0].id,
+                            username: res.data[0].username,
+                            password: res.data[0].password,
+                            status: 'Login'
+                        }
+                        this.props.onRegisterSuccess({ ...data });
+                        localStorage.setItem('Username', JSON.stringify(data));
                     }
                 })
                 .catch((err) => {

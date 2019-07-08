@@ -40,12 +40,14 @@ class Register extends React.Component {
                         }
                         Axios.post('http://localhost:2000/users', obj)
                         .then((res) => {
-                            this.props.onRegisterSuccess(res.data);
-                            let username = [
-                                res.data.username,
-                                'Register'
-                            ]
-                            localStorage.setItem('Username', JSON.stringify(username));
+                            let data = {
+                                id: res.data.id,
+                                username: res.data.username,
+                                password: res.data.password,
+                                status: 'Register'
+                            }
+                            this.props.onRegisterSuccess({...data});
+                            localStorage.setItem('Username', JSON.stringify(data));
                         })
                         .catch((err) => {
                             console.log(err)
