@@ -16,16 +16,23 @@ import Loader from 'react-loader-spinner';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { onLogout } from '../redux/actions';
+import { Redirect } from 'react-router-dom';
 
 class Header extends React.Component {
     state = {
-        isOpen: false
+        isOpen: false,
+        idUser: ''
     }
 
+    componentDidMount() {
+        let user = localStorage.getItem('Username');
+        if(user !== null ) {
+            this.setState({ idUser: user.id })
+        }
+    }
+    
     CheckUsername = (param) => {
-        if(param === '') {
-            
-        } else {
+        if(param !== '') {
             document.getElementById('login').style.display = 'none';
             document.getElementById('register').style.display = 'none';
            return (
@@ -36,14 +43,16 @@ class Header extends React.Component {
                    <DropdownMenu right>
                        <DropdownItem>
                            Check Profile
-                  </DropdownItem>
+                        </DropdownItem>
                        <DropdownItem>
-                           History Pemesanan
-                  </DropdownItem>
+                           <Link to={'/cart?usersid='+this.state.idUser}>
+                               Cart Pemesanan
+                           </Link>
+                        </DropdownItem>
                        <DropdownItem divider />
                        <DropdownItem onClick={() => this.LogOutBtn()}>
                            Logout
-                  </DropdownItem>
+                        </DropdownItem>
                    </DropdownMenu>
                </UncontrolledDropdown>
            )
@@ -101,7 +110,8 @@ class Header extends React.Component {
 
 const mapToStateProps = (state) => {
     return {
-        username: state.user.username
+        username: state.user.username,
+        status: state.user.status
     }
 }
 

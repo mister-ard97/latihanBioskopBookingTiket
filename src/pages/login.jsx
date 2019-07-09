@@ -32,7 +32,7 @@ class Login extends React.Component {
             this.setState({loading: true})
             Axios.get(UrlApi + '/users?username=' + username + '&password=' + password)
                 .then((res) => {
-                    if (res.data.length < 0) {
+                    if (res.data.length === 0) {
                         this.setState({ error: 'Username belum terdaftar. Silahkan daftar dahulu.', loading: false })
                     } else {
                         let data = {

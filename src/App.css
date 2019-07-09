@@ -33,7 +33,7 @@
 }
 
 body, .bgRoot {
-  background-color: #f3f3f4;
+  background-image: linear-gradient(to right, #bdc3c7, #2c3e50)
 }
 
 .registerNowBtn {
@@ -96,12 +96,12 @@ body, .bgRoot {
   width: 70px;
 }
 
-.linkReadMore {
+.linkReadMore, .LinkLoginBtn {
   cursor: default;
   color: blue;
 }
 
-.linkReadMore:hover {
+.linkReadMore:hover, .LinkLoginBtn:hover {
   cursor: pointer;
   text-decoration: underline;
   color: blue;
@@ -128,6 +128,9 @@ body, .bgRoot {
   cursor: pointer;
 }
 
+.orderSeat-container {
+  height: 700px;
+}
 
 @media (max-width: 767px) {
   .customForm .col-md-6 {

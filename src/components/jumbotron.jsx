@@ -7,7 +7,7 @@ class Jumbotron extends React.Component {
 
     componentDidMount() {
         window.scrollTo(0, 0);
-        console.log(this.props.user)
+        document.title = 'MisterMovie - Booking Tiket Nonton Secara Online - JC9';
     }
 
     render() {

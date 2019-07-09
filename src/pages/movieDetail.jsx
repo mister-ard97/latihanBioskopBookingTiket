@@ -1,8 +1,11 @@
 import React from 'react';
 import Axios from 'axios';
+import Loader from 'react-loader-spinner';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlayCircle } from '@fortawesome/free-solid-svg-icons'
 
@@ -12,7 +15,8 @@ class MovieDetail extends React.Component {
         linkTrailer: '',
         titleMovies: '',
         login: null,
-        modalTrailer: false
+        modalTrailer: false,
+        modalAlertLogin: false
     }
     
     componentDidMount() {
@@ -51,7 +55,32 @@ class MovieDetail extends React.Component {
 
     btnBuyTicket = () => {
         if(this.props.user.id === 0) {
-            this.setState({login: false})
+            this.setState({ login: false, modalAlertLogin: true })
+        } else {
+            this.setState({ login: true, modalAlertLogin: false})
+        }
+    }
+
+    alertBuyTicket = (param) => {
+        if(param) {
+            return (
+                <Redirect to={'/order-seat?id=' + this.state.data.id}/>
+            )
+        } else {
+            return (
+                <Modal isOpen={this.state.modalAlertLogin} toggle={this.toggle} className={this.props.className}>
+                    <ModalHeader toggle={this.toggle}>Alert</ModalHeader>
+                    <ModalBody>
+                        Silahkan Login Terlebih Dahulu Untuk Dapat Melakukan Pembelian Ticket Nonton.
+                        <Link to='/login'>
+                            <p className='LinkLoginBtn'>Klik Disini untuk Login</p>
+                        </Link>
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button color="secondary" onClick={this.toggle}>Ok</Button>
+                    </ModalFooter>
+                </Modal>
+            )
         }
     }
 
@@ -62,7 +91,7 @@ class MovieDetail extends React.Component {
     }
 
     toggle = () => {
-        this.setState({modalTrailer: false});
+        this.setState({modalTrailer: false, modalAlertLogin: false});
     }
 
     showModalTrailer = () => {
@@ -82,13 +111,17 @@ class MovieDetail extends React.Component {
     }
 
     render() {
-        if(this.state.login === false) {
-            return <Redirect to='/login' />
-        }
-        if(this.state.data === null) {
+        if(this.state.data.length <= 0) {
             return (
-                <div>
-                    <p>Loading</p>
+                <div className='container-fluid text-white'>
+                    <div className='row justify-content-center'>
+                        <Loader 
+                            type='ThreeDots'
+                            color='#FFFFFF'
+                            height='50'
+                            width='50'
+                        />
+                    </div>
                 </div>
             )
         }
@@ -119,7 +152,7 @@ class MovieDetail extends React.Component {
                             style={{width: '50px'}}
                         />
                         <p>{this.state.data.director}</p>
-                        <div className='iconTrailer' onClick={() => this.setState({modalTrailer: true})}>
+                        <div className='iconTrailer' onClick={() => this.setState({modalTrailer: true})} style={{width: '120px'}}>
                             <FontAwesomeIcon icon={faPlayCircle} size='md' className='mr-1'/>
                             <span>Watch Trailer</span>
                         </div>
@@ -130,6 +163,7 @@ class MovieDetail extends React.Component {
                         </p>
                         <p className='font-italic'>{this.state.data.plot}</p>
                         <input type="button" className='btn btn-outline-success' value='Buy Ticket' onClick={this.btnBuyTicket}/>
+                        {this.alertBuyTicket(this.state.login)}
                     </div>
                 </div>
             </div>

@@ -14,20 +14,20 @@ import ManageMovie from './pages/admin/manageMovie';
 import MovieDetail from './pages/movieDetail';
 import Register from './pages/register';
 import Login from './pages/login';
+import SeatRes from './pages/seatReservation'
+import Cart from './pages/user/cart';
 import { onRegisterSuccess } from './redux/actions/'
 // Link URL API
 import { UrlApi } from './supports/UrlApi';
 
+
 class App extends React.Component {
   componentDidMount() {
     let username = localStorage.getItem('Username');
-    console.log(username)
-    // username = (username) ? JSON.parse(username) : {};
-    // console.log(
-    //   'id:' + username.id + 'user:' + username.username + 'password:' + username.password + 'status:' + username.status)
+
     if(username !== null) {
       username = JSON.parse(username);
-      console.log(username.status)
+
       if (username.status === "Login") {
 
         let obj = {
@@ -36,6 +36,7 @@ class App extends React.Component {
           password: username.password,
           status: username.status
         }
+        console.log(obj)
         this.props.onRegisterSuccess({ ...obj });
 
       } else if (username.status === "Register") {
@@ -69,10 +70,18 @@ class App extends React.Component {
         <Route path='/movie-detail' component={MovieDetail}/>
         <Route path='/register' component={Register} />
         <Route path='/login' component={Login} />
+        <Route path='/order-seat' component={SeatRes} />
+        <Route path='/cart' component={Cart} />
         <Footer />
       </div>
     );
   }
 }
 
-export default connect(null, { onRegisterSuccess })(App);
+const mapToStateToProps = (state) => {
+  return {
+    user: state.user 
+  }
+}
+
+export default connect(mapToStateToProps, { onRegisterSuccess })(App);
