@@ -4,7 +4,9 @@ const INITIAL_STATE = {
 
 export default (state = INITIAL_STATE, action) => {
     if (action.type === 'ADD_TO_CART') {
-        return action.payload
+        state = {...state}
+        state.cart.push({...action.payload})
+        return state;
     } else if (action.type === 'DELETE_CART') {
         return INITIAL_STATE
     } else {

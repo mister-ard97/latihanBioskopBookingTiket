@@ -21,7 +21,7 @@ import { Redirect } from 'react-router-dom';
 class Header extends React.Component {
     state = {
         isOpen: false,
-        idUser: ''
+        idUser: 0
     }
 
     componentDidMount() {
@@ -45,7 +45,7 @@ class Header extends React.Component {
                            Check Profile
                         </DropdownItem>
                        <DropdownItem>
-                           <Link to={'/cart?usersid='+this.state.idUser}>
+                           <Link to={'/cart?userid='+this.props.id}>
                                Cart Pemesanan
                            </Link>
                         </DropdownItem>
@@ -110,6 +110,7 @@ class Header extends React.Component {
 
 const mapToStateProps = (state) => {
     return {
+        id: state.user.id,
         username: state.user.username,
         status: state.user.status
     }

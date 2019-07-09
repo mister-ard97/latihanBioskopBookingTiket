@@ -17,10 +17,12 @@ class SeatRes extends Component {
         booked: [[2, 4], [3, 5], [1, 2], [1, 3]],
         chosen: [],
         bookedSeat: [],
-        modal: true
+        modal: true,
+        redirect: null
     }
 
     componentDidMount() {
+        window.scrollTo(0, 0);
         document.body.style.backgroundImage = 'linear-gradient(to right, #c31432, #240b36)';
         let id = this.props.location.search.split('=')[1];
         Axios.get('http://localhost:2000/movies/'+id)
@@ -164,18 +166,13 @@ class SeatRes extends Component {
     }
 
     render() {
-        if (this.props.status === '' && localStorage.getItem('Username') === '') {
+        if (this.props.status === '' && localStorage.getItem('Username') === null) {
             return (
                 <Redirect to='/' />
             )
         }
         return (
             <div className='container mt-5 mb-5 text-white orderSeat-container'>
-                <p>
-                    {this.props.cart.titleMovie}<br/>
-                    {this.props.cart.booked}<br/>
-                    {this.props.cart.price}<br/>
-                </p>
                 {this.ChangeTitleWebsite(this.state.titleMovies)}
                     {
                         this.state.titleMovies !== '' ?
@@ -195,7 +192,7 @@ class SeatRes extends Component {
                         </table>
                     </div>
                     <div className='container mt-4 text-white'>
-                        <h3>{this.BookedSeat()}</h3>
+                        <h3>{Array(this.BookedSeat()).join('-')}</h3>
                         {this.selectedSeat(this.state.chosen)}
                     </div>
             </div>

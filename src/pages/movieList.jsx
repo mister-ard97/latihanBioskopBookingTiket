@@ -51,8 +51,8 @@ class MovieList extends React.Component {
     render() {
         return (
             <div className='container-fluid p-0 bgRoot'>
-                <div className='container'>
-                    <h2 className='text-center mt-3'>List Movies</h2>
+                <div className='container py-4'>
+                    <h2 className='text-center'>List Movies</h2>
                     <div className='row'>
                         {this.onPrintMovies()}
                     </div>
