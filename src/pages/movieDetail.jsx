@@ -64,7 +64,10 @@ class MovieDetail extends React.Component {
     alertBuyTicket = (param) => {
         if(param) {
             return (
-                <Redirect to={'/order-seat?id=' + this.state.data.id}/>
+                <Redirect to={{
+                  pathname: 'order-seat',
+                  state: this.state.data
+                }}/>
             )
         } else {
             return (

@@ -39,7 +39,8 @@ class Login extends React.Component {
                             id: res.data[0].id,
                             username: res.data[0].username,
                             password: res.data[0].password,
-                            status: 'Login'
+                            status: 'Login',
+                            transaction: res.data[0].transaction
                         }
                         this.props.onRegisterSuccess({ ...data });
                         localStorage.setItem('Username', JSON.stringify(data));

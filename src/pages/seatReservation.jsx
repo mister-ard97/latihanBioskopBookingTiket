@@ -6,32 +6,23 @@ import Axios from 'axios';
 import { Paper } from '@material-ui/core';
 import Loader from 'react-loader-spinner';
 import {Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { UrlApi } from '../supports/UrlApi';
+
+
 var numeral = require('numeral')
 
 class SeatRes extends Component {
     state = {
-        data: [],
         titleMovies: '',
-        seats: 100, 
-        baris: 5, 
-        booked: [[2, 4], [3, 5], [1, 2], [1, 3]],
         chosen: [],
         bookedSeat: [],
         modal: true,
-        redirect: null
+        purchaseTicket: null
     }
 
     componentDidMount() {
         window.scrollTo(0, 0);
         document.body.style.backgroundImage = 'linear-gradient(to right, #c31432, #240b36)';
-        let id = this.props.location.search.split('=')[1];
-        Axios.get('http://localhost:2000/movies/'+id)
-        .then((res) => {
-            this.setState({data: res.data, titleMovies: res.data.title});
-        })
-        .catch((err) => {
-            console.log(err);
-        })
     }
 
     ChangeTitleWebsite = (param) => {
@@ -90,36 +81,70 @@ class SeatRes extends Component {
     }
 
     addTicketToCart = () => {
-        let title = this.state.titleMovies;
+        let title = this.props.location.state.title;
+        let bookedSeatPosition = this.state.chosen;
+        let transaction = this.props.transaction;
         let price = this.state.chosen.length * 30000;
         let obj = {
             titleMovie: title,
-            booked: this.BookedSeat(),
+            bookedSeat: this.BookedSeat(),
+            bookedPosition: bookedSeatPosition,
             price: price
+        }
+        
+        if(this.state.chosen !== 0) {
+            let booked = this.props.location.state.booked
+            let arrBooked = [...booked, ...this.state.chosen]
+            Axios.patch(UrlApi + '/movies/' + this.props.location.state.id, {
+                booked: arrBooked
+            })
+            .then((res) => {
+                var obj = {
+                    title: this.props.location.state.title,
+                    qty: this.state.chosen.length,
+                    total: this.state.chosen.length * 35000
+                }
+                transaction.push(obj)
+                Axios.patch(UrlApi + '/users/' + this.props.idUser, {
+                    transaction: transaction
+                }).then((res) => {
+                    this.setState({purchaseTicket: true})
+                })
+            })
+            .catch((err) => {
+                console.log(err)
+            })
         }
         this.props.AddToCart(obj);   
     }
 
+    purchaseTiketAlert = (param) => {
+        if(param) {
+            return (
+                <Redirect to='/'/>
+            )
+        }
+    }
     toggle = () => {
         this.setState({modal: false})
     }
 
     renderSeat = () => {
+        let { seats, booked } = this.props.location.state;
         let arr = [];
         let arrAbjad = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
-        for (let i = 0; i < this.state.baris; i++) {
+        for (let i = 0; i < seats / 20; i++) {
             arr.push([])
-            for (let j = 0; j < this.state.seats / this.state.baris; j++) {
+            for (let j = 0; j < seats/ (seats/20); j++) {
                 arr[i].push(true)
             }
         }
 
-        for (let i = 0; i < this.state.booked.length; i++) {
-            arr[this.state.booked[i][0]][this.state.booked[i][1]] = false
-            arr[this.state.booked[i][0]][this.state.booked[i][1]] = 2
+        for (let i = 0; i < booked.length; i++) {
+            arr[booked[i][0]][booked[i][1]] = 2
         }
 
-        for (var i = 0; i < this.state.chosen.length; i++) {
+        for (let i = 0; i < this.state.chosen.length; i++) {
             arr[this.state.chosen[i][0]][this.state.chosen[i][1]] = 3
         }
 
@@ -166,17 +191,18 @@ class SeatRes extends Component {
     }
 
     render() {
-        if (this.props.status === '' && localStorage.getItem('Username') === null) {
+        if (this.props.location.state === undefined || localStorage.getItem('Username') === null) {
             return (
                 <Redirect to='/' />
             )
         }
         return (
             <div className='container mt-5 mb-5 text-white orderSeat-container'>
-                {this.ChangeTitleWebsite(this.state.titleMovies)}
+                {this.purchaseTiketAlert(this.state.purchaseTicket)}
+                {this.ChangeTitleWebsite(this.props.location.state.title)}
                     {
-                        this.state.titleMovies !== '' ?
-                        <h1>{this.state.titleMovies}</h1>
+                        this.props.location.state.title !== '' ?
+                        <h1>{this.props.location.state.title}</h1>
                         :
                         <Loader
                             type='ThreeDots'
@@ -202,7 +228,9 @@ class SeatRes extends Component {
 
 const mapStateToProps = (state) => {
     return {
+        idUser: state.user.id,
         status: state.user.status,
+        transaction: state.user.transaction,
         cart: state.cart
     }
 }

@@ -9,6 +9,7 @@ var numeral = require('numeral')
 
 class Cart extends React.Component {
     state = {
+        idUser: 0,
         user: '',
         cart: [],
         totalBiaya: 0
@@ -19,7 +20,7 @@ class Cart extends React.Component {
         let username = localStorage.getItem('Username');
         if(username !== null) {
             username = JSON.parse(username);
-            this.setState({user: username.username, cart: this.props.cart})
+            this.setState({idUser: username.idUser, user: username.username, cart: this.props.cart})
         }
     } 
 
@@ -33,7 +34,7 @@ class Cart extends React.Component {
                 <TableRow>
                     <TableCell>{index + 1}</TableCell>
                     <TableCell>{val.titleMovie}</TableCell>
-                    <TableCell>{val.booked}</TableCell>
+                    <TableCell>{val.bookedSeat}</TableCell>
                     <TableCell>Rp. {numeral(val.price).format(0,0)}</TableCell>
                     {this.hitungBiaya(val.price)}
                     <TableCell><DeleteForeverOutlined className='hoverAction' onClick={() => this.deleteData(index)} /></TableCell>
@@ -70,7 +71,7 @@ class Cart extends React.Component {
                             {this.renderCart()}
                         </TableBody>
                     </Table>
-                    {this.state.totalBiaya}
+                    <h4>Total Biaya: Rp. {numeral(this.state.totalBiaya).format(0,0)}</h4>
                 </Paper>
             </div>
         )

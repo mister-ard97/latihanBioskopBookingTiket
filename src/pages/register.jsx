@@ -36,7 +36,8 @@ class Register extends React.Component {
                     } else {
                         let obj = {
                             username,
-                            password
+                            password,
+                            transaction: []
                         }
                         Axios.post('http://localhost:2000/users', obj)
                         .then((res) => {
@@ -44,8 +45,10 @@ class Register extends React.Component {
                                 id: res.data.id,
                                 username: res.data.username,
                                 password: res.data.password,
-                                status: 'Register'
+                                status: 'Register',
+                                transaction: res.data.transaction
                             }
+                            console.log(data)
                             this.props.onRegisterSuccess({...data});
                             localStorage.setItem('Username', JSON.stringify(data));
                         })
