@@ -22,6 +22,7 @@ class Cart extends React.Component {
             username = JSON.parse(username);
             this.setState({idUser: username.idUser, user: username.username, cart: this.props.cart})
         }
+        console.log(this.props.cart)
     } 
 
     hitungBiaya = (param) => {

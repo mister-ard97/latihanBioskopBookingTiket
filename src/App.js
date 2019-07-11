@@ -25,81 +25,89 @@ import { UrlApi } from './supports/UrlApi';
 class App extends React.Component {
   componentDidMount() {
     let username = localStorage.getItem('Username');
+    let spreadData = {...username}
+    // {"id":
+    let checkId = spreadData[0] + spreadData[1] + spreadData[2] + spreadData[3] + spreadData[4] + spreadData[5]
+    
+    if(checkId === '{"id":') {
+      if (username !== null) {
+        username = JSON.parse(username);
+        if (username.id !== undefined) {
+          if (username.status === "Login") {
 
-    if(username !== null) {
-      username = JSON.parse(username);
+            Axios.get(UrlApi + '/users?id=' + username.id)
+              .then((res) => {
+                if (res.data[0].role === 'admin') {
+                  let obj = {
+                    id: res.data[0].id,
+                    username: res.data[0].username,
+                    password: res.data[0].password,
+                    status: username.status,
+                    transaction: res.data[0].transaction,
+                    role: res.data[0].role
+                  }
+                  this.props.onRegisterSuccess({ ...obj })
+                } else {
+                  let obj = {
+                    id: res.data[0].id,
+                    username: res.data[0].username,
+                    password: res.data[0].password,
+                    status: username.status,
+                    transaction: res.data[0].transaction
+                  }
+                  this.props.onRegisterSuccess({ ...obj })
+                }
+              })
+              .catch((err) => {
+                console.log(err)
+              })
 
-      if (username.status === "Login") {
+          } else if (username.status === "Register") {
 
-        Axios.get(UrlApi + '/users?id=' + username.id)
-          .then((res) => {
-            if(res.data[0].role === 'admin') {
-              let obj = {
-                id: res.data[0].id,
-                username: res.data[0].username,
-                password: res.data[0].password,
-                status: username.status,
-                transaction: res.data[0].transaction,
-                role: res.data[0].role
-              }
-              this.props.onRegisterSuccess({ ...obj })
-            } else {
-              let obj = {
-                id: res.data[0].id,
-                username: res.data[0].username,
-                password: res.data[0].password,
-                status: username.status,
-                transaction: res.data[0].transaction
-              }
-              this.props.onRegisterSuccess({ ...obj })
-            }
-          })
-          .catch((err) => {
-            console.log(err)
-          })
-
-      } else if (username.status === "Register") {
-
-        Axios.get(UrlApi + '/users?username=' + username.username)
-          .then((res) => {
-            console.log(res.data)
-            let obj = {
-              id: res.data[0].id,
-              username: res.data[0].username,
-              password: res.data[0].password,
-              status: username.status,
-              transaction: res.data[0].transaction
-            }
-            console.log(obj)
-            this.props.onRegisterSuccess({ ...obj })
-          })
-          .catch((err) => {
-            console.log(err)
-          })
+            Axios.get(UrlApi + '/users?username=' + username.username)
+              .then((res) => {
+                console.log(res.data)
+                let obj = {
+                  id: res.data[0].id,
+                  username: res.data[0].username,
+                  password: res.data[0].password,
+                  status: username.status,
+                  transaction: res.data[0].transaction
+                }
+                console.log(obj)
+                this.props.onRegisterSuccess({ ...obj })
+              })
+              .catch((err) => {
+                console.log(err)
+              })
+          }
+        }
       }
+    } else {
+      localStorage.clear()
     }
   }
 
   render() {
-    return (
-      <div>
-        <Header />
+      return (
+        <div>
+          <Header />
           <Switch>
-                <Route path='/' exact>
-                  <Route path='/' component={Jumbotron} exact />
-                  <Route path='/' component={MovieList} exact />
-                </Route>
-                <Route path='/manage' component={ManageMovie} exact />
-                <Route path='/movie-detail' component={MovieDetail} />
-                <Route path='/register' component={Register} />
-                <Route path='/login' component={Login} />
-                <Route path='/order-seat' component={SeatRes} />
-                <Route path='/cart' component={Cart} />
-                <Route path='*' component={NotFound} />     
+            <Route path='/' exact>
+              <Route path='/' component={Jumbotron} exact />
+              <Route path='/' component={MovieList} exact />
+            </Route>
+            <Route path='/manage' component={ManageMovie} exact />
+            <Route path='/movie-detail' component={MovieDetail} />
+            <Route path='/register' component={Register} />
+            <Route path='/login' component={Login} />
+            <Route path='/order-seat' component={SeatRes} />
+            <Route path='/cart' component={Cart} />
+            <Route path='*' component={NotFound} />
           </Switch>
-        <Footer />
-      </div>
-    );
+          <Footer />
+        </div>
+      );   
   }
 }
 

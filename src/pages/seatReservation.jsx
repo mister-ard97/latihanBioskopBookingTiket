@@ -23,6 +23,13 @@ class SeatRes extends Component {
     componentDidMount() {
         window.scrollTo(0, 0);
         document.body.style.backgroundImage = 'linear-gradient(to right, #c31432, #240b36)';
+        Axios.get(UrlApi + '/movies/' + this.props.location.state.id)
+        .then((res) => {
+            this.setState({bookedSeat: res.data.booked})
+        })
+        .catch((err) => {
+            console.log(err)
+        })
     }
 
     ChangeTitleWebsite = (param) => {
@@ -108,7 +115,7 @@ class SeatRes extends Component {
                 Axios.patch(UrlApi + '/users/' + this.props.idUser, {
                     transaction: transaction
                 }).then((res) => {
-                    this.setState({purchaseTicket: true})
+                    this.setState({purchaseTicket: false, bookedSeat: [...this.state.bookedSeat, ...this.state.chosen], chosen: []})
                 })
             })
             .catch((err) => {
@@ -130,7 +137,7 @@ class SeatRes extends Component {
     }
 
     renderSeat = () => {
-        let { seats, booked } = this.props.location.state;
+        let { seats } = this.props.location.state;
         let arr = [];
         let arrAbjad = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
         for (let i = 0; i < seats / 20; i++) {
@@ -140,8 +147,8 @@ class SeatRes extends Component {
             }
         }
 
-        for (let i = 0; i < booked.length; i++) {
-            arr[booked[i][0]][booked[i][1]] = 2
+        for (let i = 0; i < this.state.bookedSeat.length; i++) {
+            arr[this.state.bookedSeat[i][0]][this.state.bookedSeat[i][1]] = 2
         }
 
         for (let i = 0; i < this.state.chosen.length; i++) {
