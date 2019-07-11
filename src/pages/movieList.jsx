@@ -2,6 +2,8 @@ import React from 'react';
 import Axios from 'axios';
 // component
 import { Link } from 'react-router-dom';
+import Loader from 'react-loader-spinner';
+
 
 class MovieList extends React.Component {
     state = {
@@ -52,9 +54,36 @@ class MovieList extends React.Component {
         return (
             <div className='container-fluid p-0 bgRoot'>
                 <div className='container py-4'>
-                    <h2 className='text-center'>List Movies</h2>
+                    {
+                        this.state.data.length === 0 ?
+                            <div className='text-center'>
+                               <p>
+                                    <Loader
+                                        type='ThreeDots'
+                                        color='#000000'
+                                        height='25'
+                                        width='25'
+                                    />
+                               </p>
+                            </div>
+                            :
+                            <h2 className='text-center'>List Movies</h2>
+                    }
+                    
                     <div className='row'>
-                        {this.onPrintMovies()}
+                        {   this.state.data.length === 0 ?
+                            <div className="col-12 d-flex justify-content-center">
+                                <Loader
+                                    type='ThreeDots'
+                                    color='#000000'
+                                    height='25'
+                                    width='25'
+                                />
+                            </div> 
+                            :
+                            this.onPrintMovies()
+                        }
+                           
                     </div>
                 </div>
             </div>

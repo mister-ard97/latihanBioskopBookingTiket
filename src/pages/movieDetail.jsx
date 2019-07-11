@@ -114,7 +114,7 @@ class MovieDetail extends React.Component {
     }
 
     render() {
-        if(this.state.data.length <= 0) {
+        if(this.state.data.length >= 0) {
             return (
                 <div className='container-fluid text-white'>
                     <div className='row justify-content-center'>

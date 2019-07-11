@@ -35,15 +35,28 @@ class Login extends React.Component {
                     if (res.data.length === 0) {
                         this.setState({ error: 'Username belum terdaftar. Silahkan daftar dahulu.', loading: false })
                     } else {
-                        let data = {
-                            id: res.data[0].id,
-                            username: res.data[0].username,
-                            password: res.data[0].password,
-                            status: 'Login',
-                            transaction: res.data[0].transaction
+                        if(res.data[0].role === 'admin') {
+                            let data = {
+                                id: res.data[0].id,
+                                username: res.data[0].username,
+                                password: res.data[0].password,
+                                status: 'Login',
+                                transaction: res.data[0].transaction,
+                                role: res.data[0].role
+                            }
+                            this.props.onRegisterSuccess({ ...data });
+                            localStorage.setItem('Username', JSON.stringify(data));
+                        } else {
+                            let data = {
+                                id: res.data[0].id,
+                                username: res.data[0].username,
+                                password: res.data[0].password,
+                                status: 'Login',
+                                transaction: res.data[0].transaction
+                            }
+                            this.props.onRegisterSuccess({ ...data });
+                            localStorage.setItem('Username', JSON.stringify(data));
                         }
-                        this.props.onRegisterSuccess({ ...data });
-                        localStorage.setItem('Username', JSON.stringify(data));
                     }
                 })
                 .catch((err) => {

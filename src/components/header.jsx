@@ -26,36 +26,36 @@ class Header extends React.Component {
 
     componentDidMount() {
         let user = localStorage.getItem('Username');
-        if(user !== null ) {
+        if (user !== null) {
             this.setState({ idUser: user.id })
         }
     }
-    
+
     CheckUsername = (param) => {
-        if(param !== '') {
+        if (param !== '') {
             document.getElementById('login').style.display = 'none';
             document.getElementById('register').style.display = 'none';
-           return (
-               <UncontrolledDropdown nav inNavbar>
-                   <DropdownToggle nav caret>
-                       {param}
-                </DropdownToggle>
-                   <DropdownMenu right>
-                       <DropdownItem>
-                           Check Profile
+            return (
+                <UncontrolledDropdown nav inNavbar>
+                    <DropdownToggle nav caret>
+                        {param}
+                    </DropdownToggle>
+                    <DropdownMenu right>
+                        <DropdownItem>
+                            Check Profile
                         </DropdownItem>
-                       <DropdownItem>
-                           <Link to={'/cart?userid='+this.props.id}>
-                               Cart Pemesanan
-                           </Link>
+                        <DropdownItem>
+                            <Link to={'/cart?userid=' + this.props.id}>
+                                <span className='text-dark'>Cart Pemesanan</span>
+                            </Link>
                         </DropdownItem>
-                       <DropdownItem divider />
-                       <DropdownItem onClick={() => this.LogOutBtn()}>
-                           Logout
+                        <DropdownItem divider />
+                        <DropdownItem onClick={() => this.LogOutBtn()}>
+                            Logout
                         </DropdownItem>
-                   </DropdownMenu>
-               </UncontrolledDropdown>
-           )
+                    </DropdownMenu>
+                </UncontrolledDropdown>
+            )
         }
     }
 
@@ -71,11 +71,11 @@ class Header extends React.Component {
         document.getElementById('login').style.display = 'block';
         document.getElementById('register').style.display = 'block';
     }
-   
+
     render() {
         return (
             <div className='Custnavbar'>
-               <div className='container-fluid px-5'>
+                <div className='container-fluid px-5'>
                     <Navbar dark expand="md">
                         <Link to='/'>
                             <NavbarBrand>MisterMovie</NavbarBrand>
@@ -83,11 +83,14 @@ class Header extends React.Component {
                         <NavbarToggler onClick={this.toggle} />
                         <Collapse isOpen={this.state.isOpen} navbar>
                             <Nav className="ml-auto" navbar>
-                                <NavItem>
-                                    <Link to='/manage'>
-                                        <NavLink>Manage Movie</NavLink>
-                                    </Link>
-                                </NavItem>
+                                {
+                                    this.props.role === 'admin' ?
+                                    <NavItem>
+                                        <Link to='/manage'>
+                                            <NavLink>Manage Movie</NavLink>
+                                        </Link>
+                                    </NavItem> : null    
+                                }
                                 <NavItem id='register'>
                                     <Link to='/register'>
                                         <NavLink>Register</NavLink>
@@ -102,7 +105,7 @@ class Header extends React.Component {
                             </Nav>
                         </Collapse>
                     </Navbar>
-               </div>
+                </div>
             </div>
         );
     }
@@ -112,7 +115,8 @@ const mapToStateProps = (state) => {
     return {
         id: state.user.id,
         username: state.user.username,
-        status: state.user.status
+        status: state.user.status,
+        role: state.user.role
     }
 }
 

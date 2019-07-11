@@ -2,6 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Carousel } from 'react-responsive-carousel';
 import { connect } from 'react-redux';
+import Loader from 'react-loader-spinner';
+
 
 class Jumbotron extends React.Component {
 
@@ -20,7 +22,7 @@ class Jumbotron extends React.Component {
                                 this.props.user.status === 'Register' ?
                                     <div class="alert alert-info" role="alert">
                                         Selamat Bergabung user {this.props.user.username}.
-                                    </div> 
+                                    </div>
                                     : null
                             }
                             {
@@ -31,7 +33,7 @@ class Jumbotron extends React.Component {
                             }
                             <h1 className="display-4">MisterMovie</h1>
                             {
-                                this.props.user.status === '' ? 
+                                this.props.user.status === '' ?
                                     <div>
                                         <p className="lead">Dengan mendaftar di MisterMovie, Kalian dapat booking tiket nonton yang kalian inginkan.</p>
                                         <p>BURUAN DAFTAR SEKARANG!</p>

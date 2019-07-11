@@ -33,16 +33,26 @@ class App extends React.Component {
 
         Axios.get(UrlApi + '/users?id=' + username.id)
           .then((res) => {
-            console.log(res.data)
-            let obj = {
-              id: res.data[0].id,
-              username: res.data[0].username,
-              password: res.data[0].password,
-              status: username.status,
-              transaction: res.data[0].transaction
+            if(res.data[0].role === 'admin') {
+              let obj = {
+                id: res.data[0].id,
+                username: res.data[0].username,
+                password: res.data[0].password,
+                status: username.status,
+                transaction: res.data[0].transaction,
+                role: res.data[0].role
+              }
+              this.props.onRegisterSuccess({ ...obj })
+            } else {
+              let obj = {
+                id: res.data[0].id,
+                username: res.data[0].username,
+                password: res.data[0].password,
+                status: username.status,
+                transaction: res.data[0].transaction
+              }
+              this.props.onRegisterSuccess({ ...obj })
             }
-            console.log(obj)
-            this.props.onRegisterSuccess({ ...obj })
           })
           .catch((err) => {
             console.log(err)
@@ -57,7 +67,8 @@ class App extends React.Component {
               id: res.data[0].id,
               username: res.data[0].username,
               password: res.data[0].password,
-              status: username.status
+              status: username.status,
+              transaction: res.data[0].transaction
             }
             console.log(obj)
             this.props.onRegisterSuccess({ ...obj })
