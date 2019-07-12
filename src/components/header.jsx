@@ -51,7 +51,7 @@ class Header extends React.Component {
                         </DropdownItem>
                         <DropdownItem>
                             <Link to={'/history_purchase?userid=' + this.props.id}>
-                                <span className='text-dark mr-2'>Purchase History</span><span className="badge badge-dark">14</span>
+                                <span className='text-dark mr-2'>Purchase History</span>
                             </Link>
                         </DropdownItem>
                         <DropdownItem divider />
