@@ -13,11 +13,12 @@ var numeral = require('numeral')
 
 class SeatRes extends Component {
     state = {
+        idUser: 0,
         titleMovies: '',
         chosen: [],
         bookedSeat: [],
-        modal: true,
-        purchaseTicket: null
+        modal: false,
+        addToCartTicket: null
     }
 
     componentDidMount() {
@@ -25,7 +26,7 @@ class SeatRes extends Component {
         document.body.style.backgroundImage = 'linear-gradient(to right, #c31432, #240b36)';
         Axios.get(UrlApi + '/movies/' + this.props.location.state.id)
         .then((res) => {
-            this.setState({bookedSeat: res.data.booked})
+            this.setState({bookedSeat: res.data.booked, idUser: this.props.idUser})
         })
         .catch((err) => {
             console.log(err)
@@ -88,52 +89,80 @@ class SeatRes extends Component {
     }
 
     addTicketToCart = () => {
+        let idMovie = this.props.location.state.id;
         let title = this.props.location.state.title;
         let bookedSeatPosition = this.state.chosen;
-        let transaction = this.props.transaction;
+        // let transaction = this.props.transaction;
         let price = this.state.chosen.length * 30000;
         let obj = {
+            idMovie: idMovie,
             titleMovie: title,
             bookedSeat: this.BookedSeat(),
             bookedPosition: bookedSeatPosition,
             price: price
         }
         
-        if(this.state.chosen !== 0) {
-            let booked = this.props.location.state.booked
-            let arrBooked = [...booked, ...this.state.chosen]
-            Axios.patch(UrlApi + '/movies/' + this.props.location.state.id, {
-                booked: arrBooked
-            })
-            .then((res) => {
-                var obj = {
-                    title: this.props.location.state.title,
-                    qty: this.state.chosen.length,
-                    total: this.state.chosen.length * 35000
-                }
-                transaction.push(obj)
-                Axios.patch(UrlApi + '/users/' + this.props.idUser, {
-                    transaction: transaction
-                }).then((res) => {
-                    this.setState({purchaseTicket: false, bookedSeat: [...this.state.bookedSeat, ...this.state.chosen], chosen: []})
-                })
-            })
-            .catch((err) => {
-                console.log(err)
+        if(this.state.chosen !== 0) { 
+               
+            // let booked = this.props.location.state.booked
+            // let arrBooked = [...booked, ...this.state.chosen]
+            // Axios.patch(UrlApi + '/movies/' + this.props.location.state.id, {
+            //     booked: arrBooked
+            // })
+            //     .then((res) => {
+            //         // var obj = {
+            //         //     title: this.props.location.state.title,
+            //         //     qty: this.state.chosen.length,
+            //         //     total: this.state.chosen.length * 35000
+            //         // }
+            //         // transaction.push(obj)
+            //         // Axios.patch(UrlApi + '/users/' + this.props.idUser, {
+            //         //     transaction: transaction
+            //         // }).then((res) => {
+            //         //     this.setState({purchaseTicket: false, bookedSeat: [...this.state.bookedSeat, ...this.state.chosen], chosen: []})
+            //         // })
+            //     })
+            //     .catch((err) => {
+            //         console.log(err)
+            //     })
+
+            this.setState({
+                addToCartTicket: true, 
+                bookedSeat: [...this.state.bookedSeat, ...this.state.chosen], 
+                chosen: [], 
+                modal: true 
             })
         }
-        this.props.AddToCart(obj);   
+        this.props.AddToCart(obj);
+        // let objCart = {
+        //     cart: this.props.cart,
+        //     count: this.props.cartCount
+        // }
+        // localStorage.setItem('CartUser', JSON.stringify(objCart))
     }
 
     purchaseTiketAlert = (param) => {
         if(param) {
             return (
-                <Redirect to='/'/>
-            )
+                <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
+                    <ModalHeader toggle={this.toggle}>Added To Cart</ModalHeader>
+                    <ModalBody>
+                        Tiket Booking telah ditambahkan ke Cart. <br/> 
+                        Setelah di Cart harap melakukan Checkout agar bangku bisa ke booked oleh Anda.
+                        <hr/>
+                        <p>Note: Ketika page direfresh, maka data Cart akan kosong. Karena belum melakukan Checkout maka Booking Seat tidak tersimpan dalam database.</p>
+                </ModalBody>
+                    <ModalFooter>
+                        <Button color="success" onClick={() => this.setState({ addToCartTicket: 'GoToCart' })}>Go To Cart</Button>{' '}
+                        <Button color="danger" onClick={this.toggle}>Cancel</Button>
+                    </ModalFooter>
+                </Modal>
+            ) 
         }
     }
+
     toggle = () => {
-        this.setState({modal: false})
+        this.setState({modal: !this.state.modal})
     }
 
     renderSeat = () => {
@@ -166,16 +195,16 @@ class SeatRes extends Component {
                                         type='button' 
                                         value={arrAbjad[index] + (i + 1)}
                                         disabled
-                                        style={{width: '40px', height: '40px', color: 'white', textAlign: 'center'}} 
-                                        className='mr-2 mt-2 bg-danger' />
+                                        style={{width: '45px', height: '45px', color: 'white', textAlign: 'center'}} 
+                                        className='p-2 mr-2 mt-2 btn btn-danger' />
                                 )
                             } else if(val1 === 3){
                                 return (
                                     <input
                                         type='button'
                                         value={arrAbjad[index] + (i + 1)}
-                                        style={{ width: '40px', height: '40px', color: 'white', textAlign: 'center' }}
-                                        className='mr-2 mt-2 bg-success' 
+                                        style={{ width: '45px', height: '45px', color: 'white', textAlign: 'center' }}
+                                        className='p-2 mr-2 mt-2 btn btn-success' 
                                         onClick={() => this.onCancelSeatClick([index, i])}
                                         />
                                 )
@@ -184,8 +213,8 @@ class SeatRes extends Component {
                                 <input 
                                     type='button' 
                                     value={arrAbjad[index] + (i + 1)} 
-                                    style={{ width: '40px', height: '40px', color: 'black', textAlign: 'center' }} 
-                                    className='mr-2 mt-2' 
+                                    style={{ width: '45px', height: '45px', color: 'black', textAlign: 'center' }} 
+                                    className='p-2 mr-2 mt-2 btn btn-outline-light' 
                                     onClick={() => this.onSeatClick([index, i])}
                                     />
                             )
@@ -203,9 +232,14 @@ class SeatRes extends Component {
                 <Redirect to='/' />
             )
         }
+        if(this.state.addToCartTicket === 'GoToCart') {
+            return (
+                <Redirect to={'/cart?userid=' + this.props.idUser} />
+            )
+        }
         return (
-            <div className='container mt-5 mb-5 text-white orderSeat-container'>
-                {this.purchaseTiketAlert(this.state.purchaseTicket)}
+            <div className='container mt-3 mb-5 text-white orderSeat-container'>
+                {this.purchaseTiketAlert(this.state.addToCartTicket)}
                 {this.ChangeTitleWebsite(this.props.location.state.title)}
                     {
                         this.props.location.state.title !== '' ?
@@ -237,8 +271,9 @@ const mapStateToProps = (state) => {
     return {
         idUser: state.user.id,
         status: state.user.status,
-        transaction: state.user.transaction,
-        cart: state.cart
+        // transaction: state.user.transaction,
+        cart: state.cart.cart,
+        cartCount: state.cart.count
     }
 }
 

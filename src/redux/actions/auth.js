@@ -17,3 +17,16 @@ export const AddToCart = (data) => {
         payload: data
     }
 }
+
+export const DeleteCart = (data) => {
+    return {
+        type: 'DELETE_CART',
+        payload: data
+    }
+}
+
+export const DeleteCartAll = () => {
+    return {
+        type: 'DELETE_CART_ALL'
+    }
+}

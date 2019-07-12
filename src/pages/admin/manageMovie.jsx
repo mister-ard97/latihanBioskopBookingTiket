@@ -165,7 +165,9 @@ class ManageMovie extends React.Component {
                 director,
                 poster,
                 linkTrailer: trailerMovie,
-                directorImage
+                directorImage,
+                seats: 100,
+                booked: []
             })
                 .then((res) => {
                     alert('Add Data Success');

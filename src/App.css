@@ -136,6 +136,10 @@ body, .bgStyle {
   height: 700px;
 }
 
+.CartStyle {
+  margin-bottom: 300px;
+}
+
 @media (max-width: 767px) {
   .customForm .col-md-6 {
     border-right: 0 !important;

@@ -15,7 +15,7 @@ import {
 import Loader from 'react-loader-spinner';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { onLogout } from '../redux/actions';
+import { onLogout, DeleteCartAll } from '../redux/actions';
 import { Redirect } from 'react-router-dom';
 
 class Header extends React.Component {
@@ -27,7 +27,9 @@ class Header extends React.Component {
     componentDidMount() {
         let user = localStorage.getItem('Username');
         if (user !== null) {
-            this.setState({ idUser: user.id })
+            // let cart = localStorage.getItem('CartUser');
+            // cart = JSON.parse(cart)
+            this.setState({ idUser: user.id})
         }
     }
 
@@ -46,7 +48,12 @@ class Header extends React.Component {
                         </DropdownItem>
                         <DropdownItem>
                             <Link to={'/cart?userid=' + this.props.id}>
-                                <span className='text-dark'>Cart Pemesanan</span>
+                                <span className='text-dark mr-2'>Cart Pemesanan</span><span className="badge badge-dark">{this.props.cartCount}</span>
+                            </Link>
+                        </DropdownItem>
+                        <DropdownItem>
+                            <Link to={'/purchaseHistory?userid=' + this.props.id}>
+                                <span className='text-dark mr-2'>Purchase History</span><span className="badge badge-dark">14</span>
                             </Link>
                         </DropdownItem>
                         <DropdownItem divider />
@@ -67,6 +74,7 @@ class Header extends React.Component {
 
     LogOutBtn = () => {
         this.props.onLogout();
+        this.props.DeleteCartAll();
         localStorage.removeItem('Username');
         document.getElementById('login').style.display = 'block';
         document.getElementById('register').style.display = 'block';
@@ -116,8 +124,9 @@ const mapToStateProps = (state) => {
         id: state.user.id,
         username: state.user.username,
         status: state.user.status,
-        role: state.user.role
+        role: state.user.role,
+        cartCount: state.cart.count
     }
 }
 
-export default connect(mapToStateProps, { onLogout })(Header);
+export default connect(mapToStateProps, { onLogout , DeleteCartAll})(Header);
