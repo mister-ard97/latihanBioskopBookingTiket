@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { AddToCart } from './../redux/actions'
@@ -11,7 +11,7 @@ import { UrlApi } from '../supports/UrlApi';
 
 var numeral = require('numeral')
 
-class SeatRes extends Component {
+class SeatRes extends React.Component {
     state = {
         idUser: 0,
         titleMovies: '',
@@ -92,7 +92,6 @@ class SeatRes extends Component {
         let idMovie = this.props.location.state.id;
         let title = this.props.location.state.title;
         let bookedSeatPosition = this.state.chosen;
-        // let transaction = this.props.transaction;
         let price = this.state.chosen.length * 30000;
         let obj = {
             idMovie: idMovie,
@@ -103,28 +102,6 @@ class SeatRes extends Component {
         }
         
         if(this.state.chosen !== 0) { 
-               
-            // let booked = this.props.location.state.booked
-            // let arrBooked = [...booked, ...this.state.chosen]
-            // Axios.patch(UrlApi + '/movies/' + this.props.location.state.id, {
-            //     booked: arrBooked
-            // })
-            //     .then((res) => {
-            //         // var obj = {
-            //         //     title: this.props.location.state.title,
-            //         //     qty: this.state.chosen.length,
-            //         //     total: this.state.chosen.length * 35000
-            //         // }
-            //         // transaction.push(obj)
-            //         // Axios.patch(UrlApi + '/users/' + this.props.idUser, {
-            //         //     transaction: transaction
-            //         // }).then((res) => {
-            //         //     this.setState({purchaseTicket: false, bookedSeat: [...this.state.bookedSeat, ...this.state.chosen], chosen: []})
-            //         // })
-            //     })
-            //     .catch((err) => {
-            //         console.log(err)
-            //     })
 
             this.setState({
                 addToCartTicket: true, 
@@ -134,11 +111,6 @@ class SeatRes extends Component {
             })
         }
         this.props.AddToCart(obj);
-        // let objCart = {
-        //     cart: this.props.cart,
-        //     count: this.props.cartCount
-        // }
-        // localStorage.setItem('CartUser', JSON.stringify(objCart))
     }
 
     purchaseTiketAlert = (param) => {

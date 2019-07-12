@@ -6,11 +6,15 @@ import { UrlApi } from '../supports/UrlApi';
 import { onRegisterSuccess } from '../redux/actions';
 import { Redirect } from 'react-router-dom';
 import Loader from 'react-loader-spinner'; 
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+
 
 class Login extends React.Component {
+
     state = {
         error: '',
-        loading: false
+        loading: false,
+        modal: false
     }
     componentDidMount() {
         document.title = 'Login Page'
@@ -22,18 +26,18 @@ class Login extends React.Component {
         let password = this.refs.password.value;
         if (username === '' || password === '') {
             if (username === '' && password === '') {
-                this.setState({ error: 'Username dan Password harus diisi.' })
+                this.setState({ error: 'Username dan Password harus diisi.', modal: true})
             } else if (username === '') {
-                this.setState({ error: 'Username tidak boleh kosong' })
+                this.setState({ error: 'Username tidak boleh kosong', modal: true })
             } else {
-                this.setState({ error: 'Password tidak boleh kosong' })
+                this.setState({ error: 'Password tidak boleh kosong', modal: true })
             }
         } else {
             this.setState({loading: true})
             Axios.get(UrlApi + '/users?username=' + username + '&password=' + password)
                 .then((res) => {
                     if (res.data.length === 0) {
-                        this.setState({ error: 'Username belum terdaftar. Silahkan daftar dahulu.', loading: false })
+                        this.setState({ error: 'Username belum terdaftar. Silahkan daftar dahulu.', loading: false , modal: true})
                     } else {
                         if(res.data[0].role === 'admin') {
                             let data = {
@@ -64,6 +68,26 @@ class Login extends React.Component {
                 })
         }
     }
+
+    modalAlertLogin = (param) => {
+        if(param) {
+            return (
+                <Modal isOpen={param} toggle={() => this.toggle()} className={this.props.className}>
+                    <ModalHeader toggle={() => this.toggle()}>Alert Login</ModalHeader>
+                    <ModalBody>
+                        <p>{this.state.error}</p>
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button color="danger" onClick={() => this.toggle()}>Ok</Button>{' '}
+                    </ModalFooter>
+                </Modal>
+            )
+        }
+    }
+
+    toggle = () => {
+        this.setState({modal: !this.state.modal})
+    }
     
     render() {
         if (this.props.user.username !== '') {
@@ -81,11 +105,12 @@ class Login extends React.Component {
                                     <input type="password" className="form-control my-3" placeholder='password' ref='password'/>
                                     {
                                         this.state.error === '' ? null :
-                                            <div className='alert alert-danger'>
-                                                {this.state.error}
-                                                <span style={{ float: "right", cursor: 'pointer', fontWeight: 'bold' }}
-                                                    onClick={() => this.setState({ error: '' })}> x </span>
-                                            </div>
+                                            //<div className='alert alert-danger'>
+                                                //{this.state.error}
+                                                //<span style={{ float: "right", cursor: 'pointer', fontWeight: 'bold' }}
+                                                  //  onClick={() => this.setState({ error: '' })}> x </span>
+                                            //</div>
+                                            this.modalAlertLogin(this.state.modal)
                                     }
                                     {
                                         this.state.loading === true ?

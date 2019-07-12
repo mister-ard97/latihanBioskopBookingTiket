@@ -27,8 +27,6 @@ class Header extends React.Component {
     componentDidMount() {
         let user = localStorage.getItem('Username');
         if (user !== null) {
-            // let cart = localStorage.getItem('CartUser');
-            // cart = JSON.parse(cart)
             this.setState({ idUser: user.id})
         }
     }
@@ -52,7 +50,7 @@ class Header extends React.Component {
                             </Link>
                         </DropdownItem>
                         <DropdownItem>
-                            <Link to={'/purchaseHistory?userid=' + this.props.id}>
+                            <Link to={'/history_purchase?userid=' + this.props.id}>
                                 <span className='text-dark mr-2'>Purchase History</span><span className="badge badge-dark">14</span>
                             </Link>
                         </DropdownItem>
@@ -76,6 +74,7 @@ class Header extends React.Component {
         this.props.onLogout();
         this.props.DeleteCartAll();
         localStorage.removeItem('Username');
+        localStorage.setItem('LogOut', 'Success')
         document.getElementById('login').style.display = 'block';
         document.getElementById('register').style.display = 'block';
     }
@@ -92,7 +91,15 @@ class Header extends React.Component {
                         <Collapse isOpen={this.state.isOpen} navbar>
                             <Nav className="ml-auto" navbar>
                                 {
-                                    this.props.role === 'admin' ?
+                                    this.props.username !== '' ?
+                                        <NavItem>
+                                            <Link to='/change_password'>
+                                                <NavLink>Change User Password</NavLink>
+                                            </Link>
+                                        </NavItem> : null
+                                }
+                                {
+                                    this.props.username !== '' ?
                                     <NavItem>
                                         <Link to='/manage'>
                                             <NavLink>Manage Movie</NavLink>

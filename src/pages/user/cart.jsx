@@ -14,7 +14,8 @@ class Cart extends React.Component {
         user: '',
         cart: [],
         totalBiaya: 0,
-        CheckOutPage: false
+        CheckOutPage: false,
+        BackToHome : false
     }
 
     componentDidMount() {
@@ -22,13 +23,6 @@ class Cart extends React.Component {
         let username = localStorage.getItem('Username');
         if(username !== null) {
             username = JSON.parse(username);
-            // //localStorage.setItem('CartUser', JSON.stringify(this.props.cart))
-            // let cart = localStorage.getItem('CartUser');
-            // if (cart !== null) {
-            //     cart = JSON.parse(cart)
-            // } else {
-                //     this.setState({idUser: username.id, user: username.username})
-                // }
             this.setState({ idUser: username.id, user: username.username, cart: this.props.cart})
         }
         console.log(this.props.cart)
@@ -59,9 +53,6 @@ class Cart extends React.Component {
     deleteDataCart = (index) => {
         let confirmDelete = window.confirm('Are you sure want to delete this Cart?')
         if(confirmDelete) {
-            // buat action type delete_cart dan delete_cart_all
-            // delete cart = hapus 1 data
-            // delete cart all = hapus semua data cart.
             let dataCart = this.state.cart;
             dataCart.splice(index, 1);
             this.props.DeleteCart(dataCart);
@@ -78,7 +69,7 @@ class Cart extends React.Component {
     }
 
     render() {
-        if (localStorage.getItem('Username') === null) {
+        if (localStorage.getItem('Username') === null || this.state.BackToHome === true) {
             return (
                 <Redirect to='/' />
             )
@@ -108,7 +99,7 @@ class Cart extends React.Component {
                                 this.props.cart.length === 0 ?
 
                                     <TableRow>
-                                        <TableCell colSpan='5' className='text-center'>Data Cart Kosong.</TableCell>
+                                        <TableCell colSpan='6' className='text-center'>Data Cart Kosong.</TableCell>
                                     </TableRow>
                                     :
                                     this.renderCart()
@@ -116,6 +107,7 @@ class Cart extends React.Component {
                         </TableBody>
                     </Table>
                     <h4 className='mb-3'>Total Biaya: Rp. {numeral(this.hitungBiaya()).format(0,0)}</h4>
+                    <input type="button" value='Lanjutkan Belanja' className='btn btn-warning mr-3' onClick={() => this.setState({BackToHome: true})} />
                     <input type="button" value='Checkout' className='btn btn-info' onClick={()=>this.Checkout()}/>
                 </Paper>
             </div>

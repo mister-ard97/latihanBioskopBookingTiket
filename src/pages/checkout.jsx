@@ -52,37 +52,57 @@ class CheckOutPage extends React.Component {
     // Bayar Booking Tiket Agar bisa di tersimpan di JSON SERVER
     BayarBookingTiket = () => {
         // looping patch movies
-        var regexSpace = / /g;
-        this.state.cart.forEach((val) => {
-            Axios.patch(UrlApi + '/movies/' + val.idMovie, {
-                booked: val.bookedPosition
-            })
-            .then((res) => {
+        //var regexSpace = / /g;
+         let DataTanggal = new Date();
+        var monthsName = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        let year = DataTanggal.getFullYear();
+        let month = DataTanggal.getMonth();
+        let day = DataTanggal.getDate();
+        let hours = DataTanggal.getHours();
+        let minutes = DataTanggal.getMinutes();
+        let seconds = DataTanggal.getSeconds();
 
-            })
-            .catch((err) => {
-                console.log(err)
-            })
+        let waktuCheckout = day + '-' + monthsName[month] + '-' + year + ' : ' + hours + ':' + minutes + ':' + seconds;
+
+        console.log()
+        this.state.cart.forEach((val) => {
+            Axios.get(UrlApi + '/movies/' + val.idMovie)
+                .then((res) => {
+                    let dataSeat = [...res.data.booked, ...val.bookedPosition];
+                    Axios.patch(UrlApi + '/movies/' + val.idMovie, {
+                        booked: dataSeat
+                    })
+                        .then((res) => {
+                            console.log(res.data)
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
         })
 
-       Axios.get(UrlApi + '/users/' + this.state.idUser)
-       .then((res) => {
-            let dataCart = res.data.transaction;
-            dataCart.push(this.state.cart)
-           Axios.patch(UrlApi + '/users/' + this.state.idUser, {
-               transaction: dataCart
-           })
+        Axios.get(UrlApi + '/users/' + this.state.idUser)
             .then((res) => {
-                this.props.DeleteCartAll();
-                this.setState({ CheckOutStatus: true, cart: [] })
+                let dataCart = res.data.transaction;
+                this.state.cart.push({ transactionTime: waktuCheckout, totalTransaction: this.hitungBiaya()})
+                dataCart.push(this.state.cart);
+                Axios.patch(UrlApi + '/users/' + this.state.idUser, {
+                    transaction: dataCart
+                })
+                    .then((res) => {
+                        this.props.DeleteCartAll();
+                        this.setState({ CheckOutStatus: true, cart: [] })
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                    })
             })
             .catch((err) => {
                 console.log(err)
             })
-       })
-       .catch((err) => {
-
-       })
     }
 
     ModalCheckOutStatus = (param) => {
@@ -123,7 +143,7 @@ class CheckOutPage extends React.Component {
             )
         } 
         return (
-            <div className='my-5 container-fluid px-0 text-white'>
+            <div className='my-5 container px-0 text-white'>
                 {this.ModalCheckOutStatus(this.state.CheckOutStatus)}
                 {this.changeTitleWebsite()}
                 <Paper className='p-5'>
@@ -134,7 +154,6 @@ class CheckOutPage extends React.Component {
                             <TableCell>Title</TableCell>
                             <TableCell>Booked Seat</TableCell>
                             <TableCell>Price</TableCell>
-                            <TableCell>Action</TableCell>
                         </TableHead>
                         <TableBody>
                             {

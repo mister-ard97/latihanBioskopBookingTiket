@@ -6,6 +6,7 @@ import { DeleteForeverOutlined, Edit } from '@material-ui/icons';
 // Reactstrap
 import { ModalAddMovieAdmin, ModalEditMovieAdmin } from '../../components/modal';
 import Axios from 'axios'
+import { Redirect } from 'react-router-dom';
 
 
 class ManageMovie extends React.Component {
@@ -315,6 +316,11 @@ class ManageMovie extends React.Component {
 
     // render
     render() {
+        if(localStorage.getItem('Username') === null) {
+            return (
+                <Redirect to='/' /> 
+            )
+        }
         return (
             <Container fixed className='bg-white text-dark py-4 rounded mt-4'>
                 <h1>Ini Manage Movie</h1>
