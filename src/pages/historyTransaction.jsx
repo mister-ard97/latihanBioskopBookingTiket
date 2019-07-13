@@ -14,7 +14,8 @@ class HistoryTransaction extends React.Component {
         username: '',
         HistoryTransaction: [],
         totalBiaya: 0,
-        selectedDetail: null
+        selectedDetail: null,
+        modal: false
     }
 
     componentDidMount() {
@@ -43,12 +44,61 @@ class HistoryTransaction extends React.Component {
                     <TableCell>{val.length - 1}</TableCell>
                     <TableCell>Rp. {val.map((val2) => { return val2.totalTransaction})}</TableCell>
                     <TableCell>
-                        <input type='button' className='btn btn-primary' value='Detail' onClick={() => this.setState({selectedDetail: index})}/>
+                        <input type='button' className='btn btn-primary' value='Detail' onClick={() => this.setState({selectedDetail: [val], modal: true})}/>
                     </TableCell>
                 </TableRow>
             )
         })
        return jsx;
+    }
+
+    ModalDetail = (param) => {
+        if(param !== null) {
+            return (
+                <Modal isOpen={this.state.modal} toggle={this.toggle} className='modal-xl'>
+                    <ModalHeader toggle={this.toggle}>History Detail</ModalHeader>
+                    <ModalBody>
+                        {param.map((val, index) => {
+                            return (
+                                <Table>
+                                    <TableHead>
+                                        <TableCell>No</TableCell>
+                                        <TableCell>Judul Film</TableCell>
+                                        <TableCell>Nomor Bangku</TableCell>
+                                        <TableCell>Total Bangku</TableCell>
+                                        <TableCell>Harga</TableCell>
+                                    </TableHead>
+                                    <TableBody>
+                                    {val.map((val2, index) => {
+                                            if (index === val.length - 1) {
+                                                return null
+                                            } else {
+                                                return (
+                                                        <TableRow>
+                                                        <TableCell>{index + 1}</TableCell>
+                                                        <TableCell>{val2.titleMovie}</TableCell>
+                                                        <TableCell>{val2.bookedSeat}</TableCell>
+                                                        <TableCell className='text-center'>{val2.bookedPosition.length}</TableCell>
+                                                        <TableCell>Rp. {val2.price}</TableCell>
+                                                        </TableRow>
+                                                )
+                                            }
+                                        })}
+                                 </TableBody>
+                            </Table>
+                            )
+                        })}
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button color="danger" onClick={this.toggle}>Close</Button>
+                    </ModalFooter>
+                </Modal>
+            )
+        }
+    }
+
+    toggle = () => {
+        this.setState({ modal: false});
     }
 
     render() {
@@ -59,9 +109,10 @@ class HistoryTransaction extends React.Component {
         }
         return (
             <div className='container'>
-                <p>Ini Page History Purchase</p>
-                <Paper>
-                    <Table>
+                <Paper className='p-3 my-5'>
+                <h2>Ini Page History Purchase</h2>
+                    {this.ModalDetail(this.state.selectedDetail)}
+                    <Table className='my-5'>
                         <TableHead>
                             <TableCell>No</TableCell>
                             <TableCell>Tanggal Transaksi</TableCell>

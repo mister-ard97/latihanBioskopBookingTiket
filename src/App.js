@@ -44,9 +44,7 @@ class App extends React.Component {
                   let obj = {
                     id: res.data[0].id,
                     username: res.data[0].username,
-                    password: res.data[0].password,
                     status: username.status,
-                    transaction: res.data[0].transaction,
                     role: res.data[0].role
                   }
                   this.props.onRegisterSuccess({ ...obj })
@@ -54,9 +52,8 @@ class App extends React.Component {
                   let obj = {
                     id: res.data[0].id,
                     username: res.data[0].username,
-                    password: res.data[0].password,
                     status: username.status,
-                    transaction: res.data[0].transaction
+                    role: 'user'
                   }
                   this.props.onRegisterSuccess({ ...obj })
                 }
@@ -73,11 +70,9 @@ class App extends React.Component {
                 let obj = {
                   id: res.data[0].id,
                   username: res.data[0].username,
-                  password: res.data[0].password,
                   status: username.status,
-                  transaction: res.data[0].transaction
+                  role: 'user'
                 }
-                console.log(obj)
                 this.props.onRegisterSuccess({ ...obj })
               })
               .catch((err) => {
