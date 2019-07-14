@@ -128,8 +128,8 @@ class MovieDetail extends React.Component {
                 </div>
             )
         }
-        if (localStorage.getItem('LogOut') === 'Success') {
-            localStorage.removeItem('LogOut');
+        if (sessionStorage.getItem('LogOut') === 'Success') {
+            sessionStorage.removeItem('LogOut');
             return (
                 <Redirect to='/' />
             )

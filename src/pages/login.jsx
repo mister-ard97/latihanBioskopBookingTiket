@@ -47,8 +47,8 @@ class Login extends React.Component {
                                 role: res.data[0].role
                             }
                             this.props.onRegisterSuccess({ ...data });
-                            localStorage.setItem('Username', JSON.stringify(data));
-                            localStorage.setItem('LogOut', 'False')
+                            sessionStorage.setItem('Username', JSON.stringify(data));
+                            sessionStorage.setItem('LogOut', 'False')
                         } else {
                             let data = {
                                 id: res.data[0].id,
@@ -57,8 +57,8 @@ class Login extends React.Component {
                                 role: 'user'
                             }
                             this.props.onRegisterSuccess({ ...data });
-                            localStorage.setItem('Username', JSON.stringify(data));
-                            localStorage.setItem('LogOut', 'False')
+                            sessionStorage.setItem('Username', JSON.stringify(data));
+                            sessionStorage.setItem('LogOut', 'False')
                         }
                     }
                 })

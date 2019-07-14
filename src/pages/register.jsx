@@ -49,8 +49,8 @@ class Register extends React.Component {
                             }
                             console.log(data)
                             this.props.onRegisterSuccess({...data});
-                            localStorage.setItem('Username', JSON.stringify(data));
-                            localStorage.setItem('LogOut', 'False')
+                            sessionStorage.setItem('Username', JSON.stringify(data));
+                            sessionStorage.setItem('LogOut', 'False')
                         })
                         .catch((err) => {
                             console.log(err)

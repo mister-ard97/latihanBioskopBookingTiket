@@ -24,13 +24,15 @@ class SeatRes extends React.Component {
     componentDidMount() {
         window.scrollTo(0, 0);
         document.body.style.backgroundImage = 'linear-gradient(to right, #c31432, #240b36)';
-        Axios.get(UrlApi + '/movies/' + this.props.location.state.id)
-        .then((res) => {
-            this.setState({bookedSeat: res.data.booked, idUser: this.props.idUser})
-        })
-        .catch((err) => {
-            console.log(err)
-        })
+        if(this.props.location.id !== undefined) {
+            Axios.get(UrlApi + '/movies/' + this.props.location.state.id)
+                .then((res) => {
+                    this.setState({ bookedSeat: res.data.booked, idUser: this.props.idUser })
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
+        }
     }
 
     ChangeTitleWebsite = (param) => {
@@ -199,7 +201,7 @@ class SeatRes extends React.Component {
     }
 
     render() {
-        if (this.props.location.state === undefined || localStorage.getItem('Username') === null) {
+        if (this.props.location.state === undefined || sessionStorage.getItem('Username') === null) {
             return (
                 <Redirect to='/' />
             )

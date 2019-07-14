@@ -25,7 +25,7 @@ class Header extends React.Component {
     }
 
     componentDidMount() {
-        let user = localStorage.getItem('Username');
+        let user = sessionStorage.getItem('Username');
         if (user !== null) {
             this.setState({ idUser: user.id})
         }
@@ -78,8 +78,8 @@ class Header extends React.Component {
     LogOutBtn = () => {
         this.props.onLogout();
         this.props.DeleteCartAll();
-        localStorage.removeItem('Username');
-        localStorage.setItem('LogOut', 'Success')
+        sessionStorage.removeItem('Username');
+        sessionStorage.setItem('LogOut', 'Success')
         document.getElementById('login').style.display = 'block';
         document.getElementById('register').style.display = 'block';
     }

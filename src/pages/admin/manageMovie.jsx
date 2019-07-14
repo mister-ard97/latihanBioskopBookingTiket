@@ -316,7 +316,7 @@ class ManageMovie extends React.Component {
 
     // render
     render() {
-        if(localStorage.getItem('Username') === null) {
+        if(sessionStorage.getItem('Username') === null) {
             return (
                 <Redirect to='/' /> 
             )

@@ -22,7 +22,7 @@ class CheckOutPage extends React.Component {
 
     componentDidMount() {
         window.scrollTo(0, 0);
-        let username = localStorage.getItem('Username');
+        let username = sessionStorage.getItem('Username');
         if (username !== null) {
             username = JSON.parse(username);
             this.setState({ idUser: username.id, user: username.username, cart: this.props.cart, cartCount: this.props.cartCount})
@@ -137,7 +137,7 @@ class CheckOutPage extends React.Component {
     }
 
     render() {
-        if (localStorage.getItem('Username') === null || this.state.CheckOutStatus === 'GoToHomePage') {
+        if (sessionStorage.getItem('Username') === null || this.state.CheckOutStatus === 'GoToHomePage') {
             return (
                 <Redirect to='/' />
             )

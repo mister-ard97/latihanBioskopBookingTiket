@@ -21,7 +21,7 @@ class HistoryTransaction extends React.Component {
 
     componentDidMount() {
         window.scrollTo(0, 0);
-        let username = localStorage.getItem('Username');
+        let username = sessionStorage.getItem('Username');
         if (username !== null) {
             username = JSON.parse(username);
             this.setState({ idUser: username.id, username: username.username})
@@ -107,7 +107,7 @@ class HistoryTransaction extends React.Component {
     }
 
     render() {
-        if(localStorage.getItem('Username') === null ) {
+        if(sessionStorage.getItem('Username') === null ) {
             return (
                 <Redirect to='/' />
             )

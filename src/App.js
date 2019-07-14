@@ -27,7 +27,7 @@ import { UrlApi } from './supports/UrlApi';
 
 class App extends React.Component {
   componentDidMount() {
-    let username = localStorage.getItem('Username');
+    let username = sessionStorage.getItem('Username');
     let spreadData = {...username}
     // {"id":
     let checkId = spreadData[0] + spreadData[1] + spreadData[2] + spreadData[3] + spreadData[4] + spreadData[5]
@@ -82,7 +82,7 @@ class App extends React.Component {
         }
       }
     } else {
-      localStorage.clear()
+      sessionStorage.clear()
     }
   }
 
