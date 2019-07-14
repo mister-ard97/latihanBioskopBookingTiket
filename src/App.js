@@ -91,10 +91,8 @@ class App extends React.Component {
         <div>
           <Header />
           <Switch>
-            <Route path='/' exact>
-              <Route path='/' component={Jumbotron} exact />
-              <Route path='/' component={MovieList} exact />
-            </Route>
+            <Route path='/' component={Jumbotron} exact />
+            <Route path='/movies-list' component={MovieList} />
             <Route path='/manage' component={ManageMovie} exact />
             <Route path='/movie-detail' component={MovieDetail} />
             <Route path='/register' component={Register} />

@@ -5,7 +5,7 @@ class Footer extends React.Component {
     render() {
         return (
             <div className='bg-dark'>
-                <div className='container-fluid mt-5'>
+                <div className='container-fluid'>
                     <div className="row text-muted">
                         <div className="col-12 text-center py-4 font-italic mt-3">
                             <p>- Created By Muhammad Reza Ardiansyah -</p>

@@ -128,14 +128,14 @@ class MovieDetail extends React.Component {
                 </div>
             )
         }
-        if (localStorage.getItem('LogOut') !== null) {
+        if (localStorage.getItem('LogOut') === 'Success') {
             localStorage.removeItem('LogOut');
             return (
                 <Redirect to='/' />
             )
         } else {
             return (
-                <div className='container-fluid text-white'>
+                <div className='container-fluid mt-2 mb-5 text-white'>
                     {this.changeTitleWebsite(this.state.titleMovies)}
                     <div className="row px-5 pb-4">
                         <div className="col-md-3 mt-4 mr-md-5 mr-0 text-center text-md-left">

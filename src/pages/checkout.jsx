@@ -143,7 +143,7 @@ class CheckOutPage extends React.Component {
             )
         } 
         return (
-            <div className='my-5 container px-0 text-white'>
+            <div className='my-5 container text-white'>
                 {this.ModalCheckOutStatus(this.state.CheckOutStatus)}
                 {this.changeTitleWebsite()}
                 <Paper className='p-5'>

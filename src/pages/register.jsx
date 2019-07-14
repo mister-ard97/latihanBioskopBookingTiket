@@ -44,13 +44,13 @@ class Register extends React.Component {
                             let data = {
                                 id: res.data.id,
                                 username: res.data.username,
-                                password: res.data.password,
                                 status: 'Register',
-                                transaction: res.data.transaction
+                                role: 'user'
                             }
                             console.log(data)
                             this.props.onRegisterSuccess({...data});
                             localStorage.setItem('Username', JSON.stringify(data));
+                            localStorage.setItem('LogOut', 'False')
                         })
                         .catch((err) => {
                             console.log(err)
@@ -71,7 +71,7 @@ class Register extends React.Component {
         return (
          <div className="container">
              <div className="row justify-content-center">
-                 <div className="col-md-10 mt-5">
+                 <div className="col-md-10 my-5">
                         <Paper className='p-4'>
                             <div className="row customForm">
                                 <div className="col-md-6 border-right">

@@ -322,7 +322,7 @@ class ManageMovie extends React.Component {
             )
         }
         return (
-            <Container fixed className='bg-white text-dark py-4 rounded mt-4'>
+            <Container fixed className='bg-white text-dark py-4 rounded my-4'>
                 <h1>Ini Manage Movie</h1>
                 <input
                     type='button'

@@ -50,6 +50,11 @@ class Header extends React.Component {
                             </Link>
                         </DropdownItem>
                         <DropdownItem>
+                            <Link to='/change_password'>
+                                <span className='text-dark mr-2'>Change User Password</span>
+                            </Link>
+                        </DropdownItem>
+                        <DropdownItem>
                             <Link to={'/history_purchase?userid=' + this.props.id}>
                                 <span className='text-dark mr-2'>Purchase History</span>
                             </Link>
@@ -81,7 +86,7 @@ class Header extends React.Component {
 
     render() {
         return (
-            <div className='Custnavbar'>
+            <div className='Custnavbar sticky-top'>
                 <div className='container-fluid px-5'>
                     <Navbar dark expand="md">
                         <Link to='/'>
@@ -92,20 +97,17 @@ class Header extends React.Component {
                             <Nav className="ml-auto" navbar>
                                 {
                                     this.props.username !== '' ?
-                                        <NavItem>
-                                            <Link to='/change_password'>
-                                                <NavLink>Change User Password</NavLink>
-                                            </Link>
-                                        </NavItem> : null
-                                }
-                                {
-                                    this.props.username !== '' ?
                                     <NavItem>
                                         <Link to='/manage'>
                                             <NavLink>Manage Movie</NavLink>
                                         </Link>
                                     </NavItem> : null    
                                 }
+                                <NavItem>
+                                    <Link to='/movies-list'>
+                                        <NavLink>Movies List</NavLink>
+                                    </Link>
+                                </NavItem>
                                 <NavItem id='register'>
                                     <Link to='/register'>
                                         <NavLink>Register</NavLink>
@@ -113,7 +115,7 @@ class Header extends React.Component {
                                 </NavItem>
                                 <NavItem id='login'>
                                     <Link to='/login'>
-                                        <NavLink className='rounded-pill px-3 py-2 loginBtn text-center font-weight-bold'>Login</NavLink>
+                                        <NavLink className='ml-2 rounded-pill px-3 py-2 loginBtn text-center font-weight-bold'>Login</NavLink>
                                     </Link>
                                 </NavItem>
                                 {this.CheckUsername(this.props.username)}

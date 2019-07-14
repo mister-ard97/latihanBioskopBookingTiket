@@ -4,6 +4,7 @@ import { UrlApi } from '../supports/UrlApi';
 import { Redirect } from 'react-router-dom';
 import { Table, TableBody, TableCell, TableRow, Paper, Container, TableHead } from '@material-ui/core';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import Loader from 'react-loader-spinner'; 
 
 var numeral = require('numeral')
 
@@ -12,7 +13,7 @@ class HistoryTransaction extends React.Component {
     state = {
         idUser: 0,
         username: '',
-        HistoryTransaction: [],
+        HistoryTransaction: null,
         totalBiaya: 0,
         selectedDetail: null,
         modal: false
@@ -42,7 +43,11 @@ class HistoryTransaction extends React.Component {
                     <TableCell>{index + 1}</TableCell>
                     <TableCell>{val.map((val2) => { return val2.transactionTime })}</TableCell>
                     <TableCell>{val.length - 1}</TableCell>
-                    <TableCell>Rp. {val.map((val2) => { return val2.totalTransaction})}</TableCell>
+                    <TableCell>Rp. {val.map((val2, index) => {
+                        if(index === val.length - 1) {
+                            return numeral(val2.totalTransaction).format(0,0)
+                        } 
+                    })}</TableCell>
                     <TableCell>
                         <input type='button' className='btn btn-primary' value='Detail' onClick={() => this.setState({selectedDetail: [val], modal: true})}/>
                     </TableCell>
@@ -79,7 +84,7 @@ class HistoryTransaction extends React.Component {
                                                         <TableCell>{val2.titleMovie}</TableCell>
                                                         <TableCell>{val2.bookedSeat}</TableCell>
                                                         <TableCell className='text-center'>{val2.bookedPosition.length}</TableCell>
-                                                        <TableCell>Rp. {val2.price}</TableCell>
+                                                        <TableCell>Rp. {numeral(val2.price).format(0,0)}</TableCell>
                                                         </TableRow>
                                                 )
                                             }
@@ -109,7 +114,7 @@ class HistoryTransaction extends React.Component {
         }
         return (
             <div className='container'>
-                <Paper className='p-3 my-5'>
+                <Paper className='p-5 my-5'>
                 <h2>Ini Page History Purchase</h2>
                     {this.ModalDetail(this.state.selectedDetail)}
                     <Table className='my-5'>
@@ -121,7 +126,20 @@ class HistoryTransaction extends React.Component {
                             <TableCell>Detail Transaction</TableCell>
                         </TableHead>
                         <TableBody>
-                            {this.renderTransaction()}
+                            {   
+                                this.state.HistoryTransaction === null ?
+                                    <TableRow>
+                                        <TableCell colSpan='6' className='text-center'>
+                                            <Loader type='ThreeDots' color='black' width='40px' />
+                                        </TableCell>
+                                    </TableRow>
+                                :
+                                    this.state.HistoryTransaction.length === 0 ?
+                                        <TableRow>
+                                            <TableCell colSpan='6' className='text-center'>Data Transaksi Kosong.</TableCell>
+                                        </TableRow>
+                                    :
+                                    this.renderTransaction()}
                         </TableBody>
                     </Table>
                 </Paper>

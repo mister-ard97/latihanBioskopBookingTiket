@@ -83,7 +83,7 @@ class Cart extends React.Component {
         return (
             <div className='my-5 container-fluid px-0 text-white'>
                {this.changeTitleWebsite()}
-                <Paper className='p-5 bgRoot CartStyle'>
+                <Paper className='p-5 bgRoot'>
                     <h2>Cart Movies</h2>
                     <Table className='mb-3'>
                         <TableHead>

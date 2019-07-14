@@ -43,23 +43,22 @@ class Login extends React.Component {
                             let data = {
                                 id: res.data[0].id,
                                 username: res.data[0].username,
-                                password: res.data[0].password,
                                 status: 'Login',
-                                transaction: res.data[0].transaction,
                                 role: res.data[0].role
                             }
                             this.props.onRegisterSuccess({ ...data });
                             localStorage.setItem('Username', JSON.stringify(data));
+                            localStorage.setItem('LogOut', 'False')
                         } else {
                             let data = {
                                 id: res.data[0].id,
                                 username: res.data[0].username,
-                                password: res.data[0].password,
                                 status: 'Login',
-                                transaction: res.data[0].transaction
+                                role: 'user'
                             }
                             this.props.onRegisterSuccess({ ...data });
                             localStorage.setItem('Username', JSON.stringify(data));
+                            localStorage.setItem('LogOut', 'False')
                         }
                     }
                 })
@@ -96,7 +95,7 @@ class Login extends React.Component {
         return (
             <div className="container">
                 <div className="row justify-content-center">
-                    <div className="col-md-10 mt-5">
+                    <div className="col-md-10 my-5">
                         <Paper className='p-4'>
                             <div className="row customForm">
                                 <div className="col-md-6 border-right py-3">
