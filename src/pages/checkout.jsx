@@ -2,10 +2,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import Axios from 'axios';
-import { Table, TableBody, TableCell, TableRow, Paper, Container, TableHead } from '@material-ui/core';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Table, TableBody, TableCell, TableRow, Paper, TableHead } from '@material-ui/core';
+import { Button } from 'reactstrap';
 import { UrlApi } from '../supports/UrlApi';
 import { DeleteCartAll } from './../redux/actions'
+import { ModalMisterMovie } from '../components/modal'
 
 var numeral = require('numeral')
 
@@ -108,24 +109,34 @@ class CheckOutPage extends React.Component {
     ModalCheckOutStatus = (param) => {
         if (param) {
             return (
-                <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
-                    <ModalHeader toggle={this.toggle}>Checkout Success</ModalHeader>
-                    <ModalBody className='text-center'>
-                        <img 
-                            src="https://c7.uihere.com/files/167/795/819/check-mark-checkbox-computer-icons-clip-art-checklist.jpg" 
-                            alt="checklist"
-                            style={{width: '50px'}}    
-                        />
-                        Proses Checkout Berhasil. <br />
-                        Terima Kasih Telah Menggunakan Aplikasi Booking Ticket MisterMovie
-                    </ModalBody>
-                    <ModalFooter>
-                        <Button color="success" onClick={() => this.setState({ CheckOutStatus: 'GoToHomePage' })}>Back To Homepage</Button>{' '}
-                        <Button color="danger" onClick={this.toggle}>Cancel</Button>
-                    </ModalFooter>
-                </Modal>
+                <ModalMisterMovie
+                    className='modal-md'
+                    closeModal={this.toggle}
+                    modal={this.state.modal}
+                    ModalHeader='Checkout Success'
+                    ModalBody={this.contentModal()}
+                    ModalFooter={this.btnModal()}
+                />
             )
         }
+    }
+
+    contentModal = () => {
+        return (
+            <div className='d-block text-center'>
+                Proses Checkout Berhasil. <br />
+                Terima Kasih Telah Menggunakan Aplikasi Booking Ticket MisterMovie
+            </div>
+        )
+    }
+
+    btnModal = () => {
+        return (
+            <div>
+                <Button color="success" onClick={() => this.setState({ CheckOutStatus: 'GoToHomePage' })}>Back To Homepage</Button>{' '}
+                <Button color="danger" onClick={this.toggle}>Cancel</Button>
+            </div>
+        )
     }
 
     toggle = () => {

@@ -5,7 +5,8 @@ import { AddToCart } from './../redux/actions'
 import Axios from 'axios';
 import { Paper } from '@material-ui/core';
 import Loader from 'react-loader-spinner';
-import {Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import {Button} from 'reactstrap';
+import { ModalMisterMovie } from '../components/modal'
 import { UrlApi } from '../supports/UrlApi';
 
 
@@ -16,15 +17,24 @@ class SeatRes extends React.Component {
         idUser: 0,
         titleMovies: '',
         chosen: [],
+        temporarySeat: [],
         bookedSeat: [],
         modal: false,
-        addToCartTicket: null
+        addToCartTicket: null,
+        cart: []
     }
 
     componentDidMount() {
         window.scrollTo(0, 0);
         document.body.style.backgroundImage = 'linear-gradient(to right, #c31432, #240b36)';
-        if(this.props.location.id !== undefined) {
+        if(this.props.cart !== 0) {
+            let FindTitle = this.props.cart.find((val) => val.titleMovie === this.props.location.state.title)
+            if(FindTitle !== undefined) {
+                let bookedPosition = FindTitle.bookedPosition;
+                this.setState({temporarySeat: bookedPosition})
+            }
+        }
+        if (this.props.location.state.id !== undefined) {
             Axios.get(UrlApi + '/movies/' + this.props.location.state.id)
                 .then((res) => {
                     this.setState({ bookedSeat: res.data.booked, idUser: this.props.idUser })
@@ -107,7 +117,8 @@ class SeatRes extends React.Component {
 
             this.setState({
                 addToCartTicket: true, 
-                bookedSeat: [...this.state.bookedSeat, ...this.state.chosen], 
+                // bookedSeat: [...this.state.bookedSeat, ...this.state.chosen],
+                temporarySeat: [...this.state.temporarySeat, ...this.state.chosen],
                 chosen: [], 
                 modal: true 
             })
@@ -118,21 +129,37 @@ class SeatRes extends React.Component {
     purchaseTiketAlert = (param) => {
         if(param) {
             return (
-                <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
-                    <ModalHeader toggle={this.toggle}>Added To Cart</ModalHeader>
-                    <ModalBody>
-                        Tiket Booking telah ditambahkan ke Cart. <br/> 
-                        Setelah di Cart harap melakukan Checkout agar bangku bisa ke booked oleh Anda.
-                        <hr/>
-                        <p>Note: Ketika page direfresh, maka data Cart akan kosong. Karena belum melakukan Checkout maka Booking Seat tidak tersimpan dalam database.</p>
-                </ModalBody>
-                    <ModalFooter>
-                        <Button color="success" onClick={() => this.setState({ addToCartTicket: 'GoToCart' })}>Go To Cart</Button>{' '}
-                        <Button color="danger" onClick={this.toggle}>Cancel</Button>
-                    </ModalFooter>
-                </Modal>
+                <ModalMisterMovie 
+                    className='modal-md'
+                    closeModal={this.toggle}
+                    modal={this.state.modal}
+                    ModalHeader='Added To Cart'
+                    ModalBody={this.ModalBodySeatReservation()}
+                    ModalFooter={this.ModalFooterSeatReservation()}
+                />
             ) 
         }
+    }
+
+    ModalBodySeatReservation = () => {
+        return (
+            <div>
+                Tiket Booking telah ditambahkan ke Cart. <br />
+                Setelah di Cart harap melakukan Checkout agar bangku bisa ke booked oleh Anda.
+                <hr />
+                <p>Note: Data sementara berwarna kuning, Ketika sudah melakukan checkout maka bangku berwarna merah karena statusnya telah dibooking.<br/>
+                Ketika page direfresh, maka data Cart akan kosong. Karena belum melakukan Checkout maka Booking Seat tidak tersimpan dalam database.</p>
+            </div>
+        )
+    }
+
+    ModalFooterSeatReservation = () => {
+        return (
+           <div>
+                <Button color="success" onClick={() => this.setState({ addToCartTicket: 'GoToCart' })}>Go To Cart</Button>{' '}
+                <Button color="danger" onClick={this.toggle}>Cancel</Button>
+           </div>
+        )
     }
 
     toggle = () => {
@@ -148,6 +175,10 @@ class SeatRes extends React.Component {
             for (let j = 0; j < seats/ (seats/20); j++) {
                 arr[i].push(true)
             }
+        }
+
+        for (let i = 0; i < this.state.temporarySeat.length; i++) {
+            arr[this.state.temporarySeat[i][0]][this.state.temporarySeat[i][1]] = 4
         }
 
         for (let i = 0; i < this.state.bookedSeat.length; i++) {
@@ -181,6 +212,16 @@ class SeatRes extends React.Component {
                                         className='p-2 mr-2 mt-2 btn btn-success' 
                                         onClick={() => this.onCancelSeatClick([index, i])}
                                         />
+                                )
+                            } else if (val1 === 4) {
+                                return (
+                                    <input
+                                        type='button'
+                                        disabled
+                                        value={arrAbjad[index] + (i + 1)}
+                                        style={{ width: '45px', height: '45px', color: 'dark', textAlign: 'center' }}
+                                        className='p-2 mr-2 mt-2 btn btn-warning'
+                                    />
                                 )
                             }
                             return (
@@ -245,7 +286,6 @@ const mapStateToProps = (state) => {
     return {
         idUser: state.user.id,
         status: state.user.status,
-        // transaction: state.user.transaction,
         cart: state.cart.cart,
         cartCount: state.cart.count
     }

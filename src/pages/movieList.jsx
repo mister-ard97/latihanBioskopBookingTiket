@@ -59,8 +59,10 @@ class MovieList extends React.Component {
         Axios.get(UrlApi + '/movies?title_like=' + searchByTitle)
             .then((res) => {
                 if(res.data.length === 0) {
+                    this.refs.searchMovie.value = ''
                     this.setState({NoResult: 'Movie tidak ditemukan', loadingData: false, data: []})
                 } else {
+                    this.refs.searchMovie.value = ''
                     this.setState({data: res.data, loadingData: false})
                 }
             })

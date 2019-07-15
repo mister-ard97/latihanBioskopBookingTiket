@@ -6,7 +6,8 @@ import { UrlApi } from '../supports/UrlApi';
 import { onRegisterSuccess } from '../redux/actions';
 import { Redirect } from 'react-router-dom';
 import Loader from 'react-loader-spinner'; 
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { ModalMisterMovie } from '../components/modal';
+import { Button } from 'reactstrap';
 
 
 class Login extends React.Component {
@@ -71,15 +72,14 @@ class Login extends React.Component {
     modalAlertLogin = (param) => {
         if(param) {
             return (
-                <Modal isOpen={param} toggle={() => this.toggle()} className={this.props.className}>
-                    <ModalHeader toggle={() => this.toggle()}>Alert Login</ModalHeader>
-                    <ModalBody>
-                        <p>{this.state.error}</p>
-                    </ModalBody>
-                    <ModalFooter>
-                        <Button color="danger" onClick={() => this.toggle()}>Ok</Button>{' '}
-                    </ModalFooter>
-                </Modal>
+                <ModalMisterMovie 
+                    className='modal-md'
+                    closeModal={this.toggle}
+                    modal={this.state.modal}
+                    ModalHeader='Alert Login'
+                    ModalBody={<p>{this.state.error}</p>}
+                    ModalFooter={<Button color="danger" onClick={() => this.toggle()}>Ok</Button>}
+                />
             )
         }
     }

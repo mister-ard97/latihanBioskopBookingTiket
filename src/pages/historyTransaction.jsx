@@ -2,8 +2,9 @@ import React from 'react';
 import Axios from 'axios';
 import { UrlApi } from '../supports/UrlApi';
 import { Redirect } from 'react-router-dom';
-import { Table, TableBody, TableCell, TableRow, Paper, Container, TableHead } from '@material-ui/core';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Table, TableBody, TableCell, TableRow, Paper, TableHead } from '@material-ui/core';
+import { Button } from 'reactstrap';
+import { ModalMisterMovie } from '../components/modal'
 import Loader from 'react-loader-spinner'; 
 
 var numeral = require('numeral')
@@ -14,7 +15,6 @@ class HistoryTransaction extends React.Component {
         idUser: 0,
         username: '',
         HistoryTransaction: null,
-        totalBiaya: 0,
         selectedDetail: null,
         modal: false
     }
@@ -58,48 +58,52 @@ class HistoryTransaction extends React.Component {
     }
 
     ModalDetail = (param) => {
-        if(param !== null) {
+        if(param) {
             return (
-                <Modal isOpen={this.state.modal} toggle={this.toggle} className='modal-xl'>
-                    <ModalHeader toggle={this.toggle}>History Detail</ModalHeader>
-                    <ModalBody>
-                        {param.map((val, index) => {
-                            return (
-                                <Table>
-                                    <TableHead>
-                                        <TableCell>No</TableCell>
-                                        <TableCell>Judul Film</TableCell>
-                                        <TableCell>Nomor Bangku</TableCell>
-                                        <TableCell>Total Bangku</TableCell>
-                                        <TableCell>Harga</TableCell>
-                                    </TableHead>
-                                    <TableBody>
-                                    {val.map((val2, index) => {
-                                            if (index === val.length - 1) {
-                                                return null
-                                            } else {
-                                                return (
-                                                        <TableRow>
-                                                        <TableCell>{index + 1}</TableCell>
-                                                        <TableCell>{val2.titleMovie}</TableCell>
-                                                        <TableCell>{val2.bookedSeat}</TableCell>
-                                                        <TableCell className='text-center'>{val2.bookedPosition.length}</TableCell>
-                                                        <TableCell>Rp. {numeral(val2.price).format(0,0)}</TableCell>
-                                                        </TableRow>
-                                                )
-                                            }
-                                        })}
-                                 </TableBody>
-                            </Table>
-                            )
-                        })}
-                    </ModalBody>
-                    <ModalFooter>
-                        <Button color="danger" onClick={this.toggle}>Close</Button>
-                    </ModalFooter>
-                </Modal>
+                <ModalMisterMovie
+                    className='modal-xl'
+                    closeModal={this.toggle}
+                    modal={this.state.modal}
+                    ModalHeader='History Detail'
+                    ModalBody={this.contentModal()}
+                    ModalFooter={<Button color="danger" onClick={this.toggle}>Close</Button>}
+                />
             )
         }
+    }
+
+    contentModal = () => {
+     let jsx = this.state.selectedDetail.map((val) => {
+            return (
+                <Table>
+                    <TableHead>
+                        <TableCell>No</TableCell>
+                        <TableCell>Judul Film</TableCell>
+                        <TableCell>Nomor Bangku</TableCell>
+                        <TableCell>Total Bangku</TableCell>
+                        <TableCell>Harga</TableCell>
+                    </TableHead>
+                    <TableBody>
+                        {val.map((val2, index) => {
+                            if (index === val.length - 1) {
+                                return null
+                            } else {
+                                return (
+                                    <TableRow>
+                                        <TableCell>{index + 1}</TableCell>
+                                        <TableCell>{val2.titleMovie}</TableCell>
+                                        <TableCell>{val2.bookedSeat}</TableCell>
+                                        <TableCell className='text-center'>{val2.bookedPosition.length}</TableCell>
+                                        <TableCell>Rp. {numeral(val2.price).format(0, 0)}</TableCell>
+                                    </TableRow>
+                                )
+                            }
+                        })}
+                    </TableBody>
+                </Table>
+            )})
+
+        return jsx
     }
 
     toggle = () => {
@@ -116,7 +120,7 @@ class HistoryTransaction extends React.Component {
             <div className='container'>
                 <Paper className='p-5 my-5'>
                 <h2>Ini Page History Purchase</h2>
-                    {this.ModalDetail(this.state.selectedDetail)}
+                    {this.ModalDetail(this.state.modal)}
                     <Table className='my-5'>
                         <TableHead>
                             <TableCell>No</TableCell>

@@ -4,10 +4,10 @@ import Loader from 'react-loader-spinner';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlayCircle } from '@fortawesome/free-solid-svg-icons'
+import { ModalMisterMovie } from '../components/modal';
+import { Button } from 'reactstrap';
 
 class MovieDetail extends React.Component {
     state = {
@@ -15,8 +15,8 @@ class MovieDetail extends React.Component {
         linkTrailer: '',
         titleMovies: '',
         login: null,
-        modalTrailer: false,
-        modalAlertLogin: false
+        modalTrailer: null,
+        modalAlertLogin: null
     }
     
     componentDidMount() {
@@ -71,18 +71,14 @@ class MovieDetail extends React.Component {
             )
         } else {
             return (
-                <Modal isOpen={this.state.modalAlertLogin} toggle={this.toggle} className={this.props.className}>
-                    <ModalHeader toggle={this.toggle}>Alert</ModalHeader>
-                    <ModalBody>
-                        Silahkan Login Terlebih Dahulu Untuk Dapat Melakukan Pembelian Ticket Nonton.
-                        <Link to='/login'>
-                            <p className='LinkLoginBtn'>Klik Disini untuk Login</p>
-                        </Link>
-                    </ModalBody>
-                    <ModalFooter>
-                        <Button color="secondary" onClick={this.toggle}>Ok</Button>
-                    </ModalFooter>
-                </Modal>
+                <ModalMisterMovie
+                    className='modal-md'
+                    closeModal={this.toggle}
+                    modal={this.state.modalAlertLogin}
+                    ModalHeader='Login Required'
+                    ModalBody={this.contentModal()}
+                    ModalFooter={this.btnModal()}
+                />
             )
         }
     }
@@ -99,19 +95,48 @@ class MovieDetail extends React.Component {
 
     showModalTrailer = () => {
         return (
-            <Modal isOpen={this.state.modalTrailer} toggle={this.toggle} className='container'>
-                <ModalHeader toggle={this.toggle}>Trailer Movie</ModalHeader>
-                <ModalBody>
-                    <div className="embed-responsive embed-responsive-16by9">
-                        <iframe title='trailer-movie' class="embed-responsive-item" src={'https://www.youtube.com/embed/' + this.linkTrailer(this.state.linkTrailer)} allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
-                    </div>
-                </ModalBody>
-                <ModalFooter>
-                    <Button color="danger" onClick={this.toggle}>Close</Button>
-                </ModalFooter>
-            </Modal>
+            <ModalMisterMovie 
+                className='modal-lg'
+                closeModal={this.toggle}
+                modal={this.state.modalTrailer}
+                ModalHeader='Trailer Movie'
+                ModalBody={this.contentModal()}
+                ModalFooter={this.btnModal()}
+            />
         )
     }
+    // ModalBody dan ModalFooter
+    contentModal = () => {
+        if(this.state.modalTrailer !== null) {
+            return (
+                 <div className="embed-responsive embed-responsive-16by9">
+                    <iframe title='trailer-movie' class="embed-responsive-item" src={'https://www.youtube.com/embed/' + this.linkTrailer(this.state.linkTrailer)} allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
+                </div>
+            )
+        } else if(this.state.modalAlertLogin !== null) {
+            return (
+                <div>
+                    Silahkan Login Terlebih Dahulu Untuk Dapat Melakukan Pembelian Ticket Nonton.
+                    <Link to='/login'>
+                        <p className='LinkLoginBtn'>Klik Disini untuk Login</p>
+                    </Link>
+                </div>
+            )
+        }
+    }
+
+    btnModal = () => {
+        if (this.state.modalTrailer !== null) {
+            return (
+                <Button color="danger" onClick={this.toggle}>Close</Button>
+            )
+        } else if (this.state.modalAlertLogin !== null) {
+            return (
+                <Button color="secondary" onClick={this.toggle}>Ok</Button>
+            )
+        }
+    }
+    // End ModalBody dan ModalFooter
 
     render() {
         if(this.state.data.length >= 0) {
