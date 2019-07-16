@@ -34,6 +34,8 @@ class ChangePasswordPage extends React.Component {
                 password: password
             })
             .then((res) => {
+                // pacth res = res.status === 200, res.statusText === 'OK'
+                // alert to modal
                 alert('Password Berhasil Diganti');
             })
             .catch((err) => {
@@ -66,7 +68,7 @@ class ChangePasswordPage extends React.Component {
                         this.state.loading === true ?
                             <Loader type='ThreeDots' color='black' width='40px' />
                             :
-                            <input type="button" value='Change Password' className='btn btn-info' onClick={() => this.ChangeUserPassword()} />
+                            <input type="button" value='Change Password' className='btn btn-info mt-3' onClick={() => this.ChangeUserPassword()} />
                     }
                    
                 </Paper>

@@ -19,6 +19,7 @@ import Cart from './pages/user/cart';
 import Checkout from './pages/checkout';
 import HistoryTransaction from './pages/historyTransaction';
 import ChangePasswordPage from './pages/user/changePassword';
+import ChangeUsername from './pages/user/changeUser';
 import NotFound from './pages/notFound';
 import { onRegisterSuccess } from './redux/actions/'
 // Link URL API
@@ -98,6 +99,7 @@ class App extends React.Component {
             <Route path='/register' component={Register} />
             <Route path='/login' component={Login} />
             <Route path='/change_password' component={ChangePasswordPage} />
+            <Route path='/change_username' component={ChangeUsername} />
             <Route path='/order-seat' component={SeatRes} />
             <Route path='/cart' component={Cart} />
             <Route path='/checkout' component={Checkout} />
