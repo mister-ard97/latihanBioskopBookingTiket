@@ -55,11 +55,6 @@ class Header extends React.Component {
                             </Link>
                         </DropdownItem>
                         <DropdownItem>
-                            <Link to='/change_username'>
-                                <span className='text-dark mr-2'>Change Username</span>
-                            </Link>
-                        </DropdownItem>
-                        <DropdownItem>
                             <Link to={'/history_purchase?userid=' + this.props.id}>
                                 <span className='text-dark mr-2'>Purchase History</span>
                             </Link>

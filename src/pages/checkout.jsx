@@ -44,18 +44,23 @@ class CheckOutPage extends React.Component {
         return jsx;
     }
 
-    hitungBiaya = (param) => {
+    hitungBiaya = () => {
         let totalBiaya = 0;
         this.state.cart.findIndex((val) => { totalBiaya += val.price })
         return totalBiaya
     }
 
+    hitungKursi = () => {
+        let totalKursi = 0;
+        this.state.cart.findIndex((val) => { totalKursi += val.bookedPosition.length })
+        return totalKursi;
+    }
+
     // Bayar Booking Tiket Agar bisa di tersimpan di JSON SERVER
     BayarBookingTiket = () => {
         // looping patch movies
-        //var regexSpace = / /g;
-         let DataTanggal = new Date();
-        var monthsName = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        let DataTanggal = new Date();
+        let monthsName = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
         let year = DataTanggal.getFullYear();
         let month = DataTanggal.getMonth();
         let day = DataTanggal.getDate();
@@ -63,9 +68,9 @@ class CheckOutPage extends React.Component {
         let minutes = DataTanggal.getMinutes();
         let seconds = DataTanggal.getSeconds();
 
+        let codeTransaction = 'MistMovTrx' + year + month + day + hours + minutes + seconds;
         let waktuCheckout = day + '-' + monthsName[month] + '-' + year + ' : ' + hours + ':' + minutes + ':' + seconds;
 
-        console.log()
         this.state.cart.forEach((val) => {
             Axios.get(UrlApi + '/movies/' + val.idMovie)
                 .then((res) => {
@@ -85,24 +90,36 @@ class CheckOutPage extends React.Component {
                 })
         })
 
-        Axios.get(UrlApi + '/users/' + this.state.idUser)
+        this.state.cart.findIndex((val) => {
+            val.codeTransaction = codeTransaction
+            val.userId = this.state.idUser 
+        })
+        
+        let objTransaction = {
+            codeTransaction: codeTransaction,
+            userId: this.state.idUser,
+            totalSeats: this.hitungKursi(),
+            transactionTime: waktuCheckout,
+            totalTransaction: this.hitungBiaya()
+        }
+
+        Axios.post(UrlApi + '/transaction', objTransaction)
             .then((res) => {
-                let dataCart = res.data.transaction;
-                this.state.cart.push({ transactionTime: waktuCheckout, totalTransaction: this.hitungBiaya()})
-                dataCart.push(this.state.cart);
-                Axios.patch(UrlApi + '/users/' + this.state.idUser, {
-                    transaction: dataCart
+                console.log(res)
+                this.state.cart.forEach((val) => {
+                    Axios.post(UrlApi + '/transactionDetail', val)
+                        .then(() => {
+                            
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        })
                 })
-                    .then((res) => {
-                        this.props.DeleteCartAll();
-                        this.setState({ CheckOutStatus: true, cart: [] })
-                    })
-                    .catch((err) => {
-                        console.log(err)
-                    })
+                this.props.DeleteCartAll();
+                this.setState({ CheckOutStatus: true, cart: [] });
             })
             .catch((err) => {
-                console.log(err)
+                console.log(err);
             })
     }
 

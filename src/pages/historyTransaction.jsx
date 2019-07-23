@@ -16,6 +16,7 @@ class HistoryTransaction extends React.Component {
         username: '',
         HistoryTransaction: null,
         selectedDetail: null,
+        purchaseDetail: null,
         modal: false
     }
 
@@ -25,9 +26,9 @@ class HistoryTransaction extends React.Component {
         if (username !== null) {
             username = JSON.parse(username);
             this.setState({ idUser: username.id, username: username.username})
-            Axios.get(UrlApi + '/users/' + username.id)
+            Axios.get(UrlApi + '/transaction?userId=' + username.id)
                 .then((res) => {
-                    this.setState({HistoryTransaction: res.data.transaction})
+                    this.setState({HistoryTransaction: res.data})
                 })
                 .catch((err) => {
                     console.log(err)
@@ -41,20 +42,27 @@ class HistoryTransaction extends React.Component {
             return (
                 <TableRow>
                     <TableCell>{index + 1}</TableCell>
-                    <TableCell>{val.map((val2) => { return val2.transactionTime })}</TableCell>
-                    <TableCell>{val.length - 1}</TableCell>
-                    <TableCell>Rp. {val.map((val2, index) => {
-                        if(index === val.length - 1) {
-                            return numeral(val2.totalTransaction).format(0,0)
-                        } 
-                    })}</TableCell>
+                    <TableCell>{val.codeTransaction}</TableCell>
+                    <TableCell>{val.transactionTime }</TableCell>
+                    <TableCell>{val.totalSeats}</TableCell>
+                    <TableCell>Rp. {numeral(val.totalTransaction).format(0,0)}</TableCell>
                     <TableCell>
-                        <input type='button' className='btn btn-primary' value='Detail' onClick={() => this.setState({selectedDetail: [val], modal: true})}/>
+                        <input type='button' className='btn btn-primary' value='Detail' onClick={() => this.getPurchaseDetail(val.codeTransaction)}/>
                     </TableCell>
                 </TableRow>
             )
         })
        return jsx;
+    }
+
+    getPurchaseDetail = (param) => {
+        Axios.get(UrlApi + '/transactionDetail?codeTransaction=' + param)
+            .then((res) => {
+                 this.setState({ purchaseDetail: [res.data], modal: true});
+            })
+            .catch((err) => {
+                console.log(err)
+            })
     }
 
     ModalDetail = (param) => {
@@ -73,7 +81,7 @@ class HistoryTransaction extends React.Component {
     }
 
     contentModal = () => {
-     let jsx = this.state.selectedDetail.map((val) => {
+        let jsx = this.state.purchaseDetail.map((val) => {
             return (
                 <Table>
                     <TableHead>
@@ -84,30 +92,32 @@ class HistoryTransaction extends React.Component {
                         <TableCell>Harga</TableCell>
                     </TableHead>
                     <TableBody>
-                        {val.map((val2, index) => {
-                            if (index === val.length - 1) {
-                                return null
-                            } else {
+                        {
+                            val.map((valDetail, index) => {
                                 return (
                                     <TableRow>
                                         <TableCell>{index + 1}</TableCell>
-                                        <TableCell>{val2.titleMovie}</TableCell>
-                                        <TableCell>{val2.bookedSeat}</TableCell>
-                                        <TableCell className='text-center'>{val2.bookedPosition.length}</TableCell>
-                                        <TableCell>Rp. {numeral(val2.price).format(0, 0)}</TableCell>
+                                        <TableCell>{valDetail.titleMovie}</TableCell>
+                                        <TableCell>{valDetail.bookedSeat}</TableCell>
+                                        <TableCell className='text-center'>{valDetail.bookedPosition.length}</TableCell>
+                                        <TableCell>Rp. {numeral(valDetail.price).format(0, 0)}</TableCell>
                                     </TableRow>
                                 )
-                            }
-                        })}
+                            })
+                        }
                     </TableBody>
                 </Table>
-            )})
+            )
+        })
 
-        return jsx
+        return jsx;
     }
 
     toggle = () => {
-        this.setState({ modal: false});
+        this.setState({ modal: false, 
+            selectedDetail: null,
+            purchaseDetail: null
+        });
     }
 
     render() {
@@ -119,14 +129,15 @@ class HistoryTransaction extends React.Component {
         return (
             <div className='container'>
                 <Paper className='p-5 my-5'>
-                <h2>Ini Page History Purchase</h2>
                     {this.ModalDetail(this.state.modal)}
+                <h2>Ini Page History Purchase</h2>
                     <Table className='my-5'>
                         <TableHead>
                             <TableCell>No</TableCell>
-                            <TableCell>Tanggal Transaksi</TableCell>
-                            <TableCell>Qty</TableCell>
-                            <TableCell>Total Biaya Transaction</TableCell>
+                            <TableCell>Code Transaction</TableCell>
+                            <TableCell>Tanggal Transaction</TableCell>
+                            <TableCell>Seats</TableCell>
+                            <TableCell>Total Price Transaction</TableCell>
                             <TableCell>Detail Transaction</TableCell>
                         </TableHead>
                         <TableBody>
@@ -143,7 +154,8 @@ class HistoryTransaction extends React.Component {
                                             <TableCell colSpan='6' className='text-center'>Data Transaksi Kosong.</TableCell>
                                         </TableRow>
                                     :
-                                    this.renderTransaction()}
+                                    this.renderTransaction()
+                            }
                         </TableBody>
                     </Table>
                 </Paper>

@@ -110,14 +110,15 @@ class SeatRes extends React.Component {
             titleMovie: title,
             bookedSeat: this.BookedSeat(),
             bookedPosition: bookedSeatPosition,
-            price: price
+            price: price,
+            codeTransaction: '',
+            userId: ''
         }
         
         if(this.state.chosen !== 0) { 
 
             this.setState({
                 addToCartTicket: true, 
-                // bookedSeat: [...this.state.bookedSeat, ...this.state.chosen],
                 temporarySeat: [...this.state.temporarySeat, ...this.state.chosen],
                 chosen: [], 
                 modal: true 
@@ -286,8 +287,7 @@ const mapStateToProps = (state) => {
     return {
         idUser: state.user.id,
         status: state.user.status,
-        cart: state.cart.cart,
-        cartCount: state.cart.count
+        cart: state.cart.cart
     }
 }
 

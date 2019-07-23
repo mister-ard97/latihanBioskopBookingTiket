@@ -104,11 +104,6 @@ class Login extends React.Component {
                                     <input type="password" className="form-control my-3" placeholder='password' ref='password'/>
                                     {
                                         this.state.error === '' ? null :
-                                            //<div className='alert alert-danger'>
-                                                //{this.state.error}
-                                                //<span style={{ float: "right", cursor: 'pointer', fontWeight: 'bold' }}
-                                                  //  onClick={() => this.setState({ error: '' })}> x </span>
-                                            //</div>
                                             this.modalAlertLogin(this.state.modal)
                                     }
                                     {

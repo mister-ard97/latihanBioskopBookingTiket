@@ -11,7 +11,7 @@ export default (state = INITIAL_STATE, action) => {
             state.count = state.count + 1
             return state;
         } else {
-            let data = { ...action.payload }
+            let data = action.payload
             let title = data.titleMovie;
             let bookedSeat = data.bookedSeat;
             let bookedPosition = data.bookedPosition
