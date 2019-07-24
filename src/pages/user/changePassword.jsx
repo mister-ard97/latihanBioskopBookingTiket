@@ -10,7 +10,8 @@ class ChangePasswordPage extends React.Component {
         error: '',
         idUser: 0,
         username: '',
-        loading: false
+        loading: false,
+        success: ''
     }
 
 
@@ -25,17 +26,44 @@ class ChangePasswordPage extends React.Component {
     }
 
     ChangeUserPassword = () => {
+        let passwordLama = this.refs.passwordLama.value;
         let password = this.refs.password.value;
         let confirmPassword = this.refs.confirmPassword.value;
-        if(password !== confirmPassword) {
-            this.setState({error: 'Password dan Confirm Password harus sama.'})
+        if(passwordLama === '' || password === '' || confirmPassword === '') {
+            if(passwordLama === '') {
+                this.setState({ error: 'Password Lama Harus di isi dlu' })
+            } else if(password === '') {
+                this.setState({ error: 'Password Baru Harus di isi dlu' })
+            } else {
+                this.setState({ error: 'Confirm Password Baru Harus di isi dlu' })
+            }
+           
+        } else if(passwordLama !== '' && password !== confirmPassword) {
+
+            this.setState({ error: 'Password dan Confirm Password harus sama.' })
+
         } else {
-            Axios.patch(UrlApi + '/users/' + this.state.idUser, {
-                password: password
-            })
+            this.setState({loading: true})
+            Axios.get((UrlApi + '/users/' + this.state.idUser))
             .then((res) => {
-                alert('Password Berhasil Diganti');
-            })
+                if(res.data.password === passwordLama) {
+                        Axios.patch(UrlApi + '/users/' + this.state.idUser, {
+                            password: password
+                        })
+                        .then((res) => {
+                            this.refs.passwordLama.value = '';
+                            this.refs.password.value = '';
+                            this.refs.confirmPassword.value = '';
+                            this.setState({error: '', loading: false, success: 'Password Berhasil Diubah'})
+
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+                } else {
+                    this.setState({error: 'Password lama tidak cocok dengan data di database', loading: false})
+                }
+            }) 
             .catch((err) => {
                 console.log(err)
             })
@@ -52,8 +80,19 @@ class ChangePasswordPage extends React.Component {
             <div className='my-5 container px-0 text-white'>
                 <Paper className='p-5 bgRoot CartStyle'>
                     <h2>Change Password</h2>
-                    <input type="password" className="form-control mt-3" placeholder='password' ref='password' />
-                    <input type="text" className="form-control my-3" placeholder='confirm password' ref='confirmPassword' />
+                    {
+                        this.state.success !== '' ? 
+                            <div className='alert alert-success'>
+                                {this.state.success}
+                                <span style={{ float: "right", cursor: 'pointer', fontWeight: 'bold' }}
+                                    onClick={() => this.setState({ success: '' })}> x </span>
+                            </div>
+                        :
+                            null
+                    }
+                    <input type="password" className="form-control mt-3" placeholder='Password Lama' ref='passwordLama' />
+                    <input type="password" className="form-control mt-3" placeholder='Password Baru' ref='password' />
+                    <input type="text" className="form-control my-3" placeholder='Confirm Password Baru' ref='confirmPassword' />
                     {
                         this.state.error === '' ? null :
                             <div className='alert alert-warning'>

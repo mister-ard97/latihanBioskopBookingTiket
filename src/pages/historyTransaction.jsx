@@ -130,7 +130,7 @@ class HistoryTransaction extends React.Component {
             <div className='container'>
                 <Paper className='p-5 my-5'>
                     {this.ModalDetail(this.state.modal)}
-                <h2>Ini Page History Purchase</h2>
+                <h2>History Purchase</h2>
                     <Table className='my-5'>
                         <TableHead>
                             <TableCell>No</TableCell>
