@@ -35,12 +35,15 @@ class Login extends React.Component {
             }
         } else {
             this.setState({loading: true})
-            Axios.get(UrlApi + '/users?username=' + username + '&password=' + password)
+            Axios.get(UrlApi + '/users?username=' + username)
                 .then((res) => {
                     if (res.data.length === 0) {
                         this.setState({ error: 'Username belum terdaftar. Silahkan daftar dahulu.', loading: false , modal: true})
                     } else {
-                        if(res.data[0].role === 'admin') {
+                        if (password !== res.data[0].password) {
+                            this.setState({ error: 'Password yang dimasukkan salah. Silahkan Coba kembali', loading: false, modal: true })
+                        
+                        } else if (res.data[0].role === 'admin') {
                             let data = {
                                 id: res.data[0].id,
                                 username: res.data[0].username,
@@ -50,6 +53,7 @@ class Login extends React.Component {
                             this.props.onRegisterSuccess({ ...data });
                             sessionStorage.setItem('Username', JSON.stringify(data));
                             sessionStorage.setItem('LogOut', 'False')
+                        
                         } else {
                             let data = {
                                 id: res.data[0].id,
@@ -61,6 +65,7 @@ class Login extends React.Component {
                             sessionStorage.setItem('Username', JSON.stringify(data));
                             sessionStorage.setItem('LogOut', 'False')
                         }
+                        
                     }
                 })
                 .catch((err) => {

@@ -79,7 +79,7 @@ class ChangePasswordPage extends React.Component {
         return (
             <div className='my-5 container px-0 text-white'>
                 <Paper className='p-5 bgRoot CartStyle'>
-                    <h2>Change Password</h2>
+                    <h2>Change Password Username: {this.state.username}</h2>
                     {
                         this.state.success !== '' ? 
                             <div className='alert alert-success'>
