@@ -16,18 +16,25 @@ import Loader from 'react-loader-spinner';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { onLogout, DeleteCartAll } from '../redux/actions';
-import { Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom'; 
 
 class Header extends React.Component {
     state = {
         isOpen: false,
-        idUser: 0
+        idUser: 0,
+        loading: true
+    }
+
+    componentWillMount() {
+        this.setState({loading : true})
     }
 
     componentDidMount() {
         let user = sessionStorage.getItem('Username');
         if (user !== null) {
-            this.setState({ idUser: user.id})
+            this.setState({ idUser: user.id, loading: false})
+        } else {
+            this.setState({loading: false})
         }
     }
 
@@ -85,46 +92,68 @@ class Header extends React.Component {
     }
 
     render() {
-        return (
-            <div className='Custnavbar sticky-top'>
-                <div className='container-fluid px-5'>
-                    <Navbar dark expand="md">
-                        <Link to='/'>
-                            <NavbarBrand>MisterMovie</NavbarBrand>
-                        </Link>
-                        <NavbarToggler onClick={this.toggle} />
-                        <Collapse isOpen={this.state.isOpen} navbar>
-                            <Nav className="ml-auto" navbar>
-                                {
-                                    this.props.username !== '' ?
+        if(this.state.loading === true) {
+            return (
+                <div className='Custnavbar sticky-top'>
+                    <div className='container-fluid px-5'>
+                        <Navbar dark expand="md">
+                            <Link to='/'>
+                                <NavbarBrand>MisterMovie</NavbarBrand>
+                            </Link>
+                            <NavbarToggler onClick={this.toggle} />
+                            <Collapse isOpen={this.state.isOpen} navbar>
+                                <Nav className="ml-auto" navbar>
                                     <NavItem>
-                                        <Link to='/manage'>
-                                            <NavLink>Manage Movie</NavLink>
-                                        </Link>
-                                    </NavItem> : null    
-                                }
-                                <NavItem>
-                                    <Link to='/movies-list'>
-                                        <NavLink>Movies List</NavLink>
-                                    </Link>
-                                </NavItem>
-                                <NavItem id='register'>
-                                    <Link to='/register'>
-                                        <NavLink>Register</NavLink>
-                                    </Link>
-                                </NavItem>
-                                <NavItem id='login'>
-                                    <Link to='/login'>
-                                        <NavLink className='ml-2 rounded-pill px-3 py-2 loginBtn text-center font-weight-bold'>Login</NavLink>
-                                    </Link>
-                                </NavItem>
-                                {this.CheckUsername(this.props.username)}
-                            </Nav>
-                        </Collapse>
-                    </Navbar>
+                                        <Loader type='ThreeDots' color='white' width='20px' height='30px' />
+                                    </NavItem>
+                                </Nav>
+                            </Collapse>
+                        </Navbar>
+                    </div>
                 </div>
-            </div>
-        );
+            )
+        } else {
+            return (
+                <div className='Custnavbar sticky-top'>
+                    <div className='container-fluid px-5'>
+                        <Navbar dark expand="md">
+                            <Link to='/'>
+                                <NavbarBrand>MisterMovie</NavbarBrand>
+                            </Link>
+                            <NavbarToggler onClick={this.toggle} />
+                            <Collapse isOpen={this.state.isOpen} navbar>
+                                <Nav className="ml-auto" navbar>
+                                    {
+                                        this.props.username !== '' ?
+                                            <NavItem>
+                                                <Link to='/manage'>
+                                                    <NavLink>Manage Movie</NavLink>
+                                                </Link>
+                                            </NavItem> : null
+                                    }
+                                    <NavItem>
+                                        <Link to='/movies-list'>
+                                            <NavLink>Movies List</NavLink>
+                                        </Link>
+                                    </NavItem>
+                                    <NavItem id='register'>
+                                        <Link to='/register'>
+                                            <NavLink>Register</NavLink>
+                                        </Link>
+                                    </NavItem>
+                                    <NavItem id='login'>
+                                        <Link to='/login'>
+                                            <NavLink className='ml-2 rounded-pill px-3 py-2 loginBtn text-center font-weight-bold'>Login</NavLink>
+                                        </Link>
+                                    </NavItem>
+                                    {this.CheckUsername(this.props.username)}
+                                </Nav>
+                            </Collapse>
+                        </Navbar>
+                    </div>
+                </div>
+            );
+        }
     }
 }
 
