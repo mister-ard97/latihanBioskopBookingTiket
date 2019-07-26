@@ -2,8 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Carousel } from 'react-responsive-carousel';
 import { connect } from 'react-redux';
-import Loader from 'react-loader-spinner';
-
+import Loader from 'react-loader-spinner'; 
 
 class Jumbotron extends React.Component {
 
@@ -33,7 +32,8 @@ class Jumbotron extends React.Component {
                             }
                             <h1 className="display-4">MisterMovie</h1>
                             {
-                                this.props.user.status === '' ?
+                                    this.props.user.username === '' ?
+
                                     <div>
                                         <p className="lead">Dengan mendaftar di MisterMovie, Kalian dapat booking tiket nonton yang kalian inginkan.</p>
                                         <p>BURUAN DAFTAR SEKARANG!</p>
@@ -42,10 +42,18 @@ class Jumbotron extends React.Component {
                                         </Link>
                                     </div>
                                     :
+                                    null
+
+                            }
+                            {
+                               this.props.user.username !== '' ?
                                     <div>
                                         <p className="lead">Bagi Kalian yang sudah bergabung, dapat melakukan 'Buy Ticket' pada Movie yang kalian ingin tonton</p>
                                         <p>Cek Movie yang kalian ingin tonton di List Movies Yah !!!</p>
                                     </div>
+                               :
+                                    null
+
                             }
                        </div>
                        <div className="d-none d-lg-block col-md-3 pr-5">

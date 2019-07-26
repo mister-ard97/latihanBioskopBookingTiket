@@ -1,37 +1,3 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
-  pointer-events: none;
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 body, .bgStyle {
   background-image: linear-gradient(to right, #c31432, #240b36) !important;
 } 
@@ -67,10 +33,6 @@ body, .bgStyle {
 .mycard img {
   height: 385px;
   transition: 0.3s;
-}
-
-.mycard img:hover {
-  cursor: pointer;
 }
 
 .mycard h5 {
@@ -115,10 +77,6 @@ body, .bgStyle {
   cursor: default;
 }
 
-.hoverAction:hover {
-  cursor: pointer;
-}
-
 .customForm {
   height: 420px;
 }
@@ -140,9 +98,48 @@ body, .bgStyle {
   margin-bottom: 300px;
 }
 
+.cursorSeat, .cursorSeat:hover, .hoverAction:hover{
+  cursor: pointer;
+}
+
+.seatAlpha {
+  display: inline;
+  position: absolute;
+  padding-top: 5px;
+}
+
+.seatAlpha span {
+  position: relative;
+  left: -70%;
+}
+
+.numberSeat {
+    position: relative;
+    left: 2%;
+    margin-right: 2.5rem;
+  }
+
+
+@media (max-width: 992px) {
+  .iconSmall {
+    font-size: 22px;
+  }
+
+  .numberSeat {
+    font-size: 15px;
+  }
+}
+
 @media (max-width: 767px) {
   .customForm .col-md-6 {
     border-right: 0 !important;
   }
-}
 
+  .iconSmall {
+    font-size: 20px;
+  }
+
+  .numberSeat {
+    margin: 0 7px;
+  }
+}

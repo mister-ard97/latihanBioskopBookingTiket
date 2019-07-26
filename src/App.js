@@ -1,7 +1,7 @@
 import React from 'react';
 import Axios from 'axios';
 import { connect } from 'react-redux';
-//import logo from './logo.svg';
+
 import './App.css';
 // Route 
 import { Route, Switch, Router } from 'react-router-dom';
@@ -26,6 +26,7 @@ import { UrlApi } from './supports/UrlApi';
 
 
 class App extends React.Component {
+
   componentDidMount() {
     let username = sessionStorage.getItem('Username');
     let spreadData = {...username}

@@ -1,7 +1,6 @@
 const INITIAL_STATE = {
     id: 0,
     username: '',
-    password: '',
     status: ''
 }
 //Password harus di hashing terlebih dahulu

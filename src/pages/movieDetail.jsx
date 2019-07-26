@@ -76,7 +76,7 @@ class MovieDetail extends React.Component {
                     closeModal={this.toggle}
                     modal={this.state.modalAlertLogin}
                     ModalHeader='Login Required'
-                    ModalBody={this.contentModal()}
+                    ModalBody={this.contentModalAlert()}
                     ModalFooter={this.btnModal()}
                 />
             )
@@ -100,20 +100,24 @@ class MovieDetail extends React.Component {
                 closeModal={this.toggle}
                 modal={this.state.modalTrailer}
                 ModalHeader='Trailer Movie'
-                ModalBody={this.contentModal()}
+                ModalBody={this.contentModalTrailer()}
                 ModalFooter={this.btnModal()}
             />
         )
     }
     // ModalBody dan ModalFooter
-    contentModal = () => {
-        if(this.state.modalTrailer !== null) {
+    contentModalTrailer = () => {
+        if(this.state.modalTrailer) {
             return (
                  <div className="embed-responsive embed-responsive-16by9">
                     <iframe title='trailer-movie' class="embed-responsive-item" src={'https://www.youtube.com/embed/' + this.linkTrailer(this.state.linkTrailer)} allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
                 </div>
             )
-        } else if(this.state.modalAlertLogin !== null) {
+        }
+    }
+
+    contentModalAlert = () => {
+       if (this.state.modalAlertLogin) {
             return (
                 <div>
                     Silahkan Login Terlebih Dahulu Untuk Dapat Melakukan Pembelian Ticket Nonton.
@@ -126,11 +130,11 @@ class MovieDetail extends React.Component {
     }
 
     btnModal = () => {
-        if (this.state.modalTrailer !== null) {
+        if (this.state.modalTrailer !== false) {
             return (
                 <Button color="danger" onClick={this.toggle}>Close</Button>
             )
-        } else if (this.state.modalAlertLogin !== null) {
+        } else if (this.state.modalAlertLogin !== false) {
             return (
                 <Button color="secondary" onClick={this.toggle}>Ok</Button>
             )

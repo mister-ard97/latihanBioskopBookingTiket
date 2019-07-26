@@ -1,11 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { AddToCart } from './../redux/actions'
 import Axios from 'axios';
-import { Paper } from '@material-ui/core';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCouch } from '@fortawesome/free-solid-svg-icons';
 import Loader from 'react-loader-spinner';
 import {Button} from 'reactstrap';
+import { AddToCart } from './../redux/actions'
 import { ModalMisterMovie } from '../components/modal'
 import { UrlApi } from '../supports/UrlApi';
 
@@ -47,7 +48,7 @@ class SeatRes extends React.Component {
 
     ChangeTitleWebsite = (param) => {
         if(param !== '') {
-            document.title = param + ' - Order Seat -';
+            document.title ='- Order Seat - ' + param;
         }
     }
 
@@ -167,6 +168,20 @@ class SeatRes extends React.Component {
         this.setState({modal: !this.state.modal})
     }
 
+    // renderNumberSeat = () => {
+    //     let arrNumberSeat = []
+    //     for (let i = 0; i < this.props.location.state.seats / (this.props.location.state.seats / 20); i++) {
+    //         arrNumberSeat.push(i)
+    //     }
+    //     let jsx = arrNumberSeat.map((val) => {
+    //         return (
+    //             <span className='numberSeat font-weight-bold text-light'>{val + 1}</span>
+    //         )
+    //     })
+
+    //     return jsx
+    // }
+
     renderSeat = () => {
         let { seats } = this.props.location.state;
         let arr = [];
@@ -193,46 +208,30 @@ class SeatRes extends React.Component {
         var jsx = arr.map((val, index) => {
             return (
                 <tr>
+                    <div className='seatAlpha'>
+                        <span className='mr-3 font-weight-bold text-light'>{arrAbjad[index]} - </span>
+                    </div>
                     {
                         val.map((val1, i) => {
                             if (val1 === 2) {
                                 return (
-                                    <input 
-                                        type='button' 
-                                        value={arrAbjad[index] + (i + 1)}
-                                        disabled
-                                        style={{width: '45px', height: '45px', color: 'white', textAlign: 'center'}} 
-                                        className='p-2 mr-2 mt-2 btn btn-danger' />
+                                    
+                                    <FontAwesomeIcon icon={faCouch} size='2x' className='text-danger mx-1 cursorSeat iconSmall'/>
                                 )
                             } else if(val1 === 3){
                                 return (
-                                    <input
-                                        type='button'
-                                        value={arrAbjad[index] + (i + 1)}
-                                        style={{ width: '45px', height: '45px', color: 'white', textAlign: 'center' }}
-                                        className='p-2 mr-2 mt-2 btn btn-success' 
-                                        onClick={() => this.onCancelSeatClick([index, i])}
-                                        />
+                                    
+                                    <FontAwesomeIcon icon={faCouch} size='2x' className='text-success mx-1 cursorSeat iconSmall' onClick={() => this.onCancelSeatClick([index, i])}/>
                                 )
                             } else if (val1 === 4) {
                                 return (
-                                    <input
-                                        type='button'
-                                        disabled
-                                        value={arrAbjad[index] + (i + 1)}
-                                        style={{ width: '45px', height: '45px', color: 'dark', textAlign: 'center' }}
-                                        className='p-2 mr-2 mt-2 btn btn-warning'
-                                    />
+                                    
+                                    <FontAwesomeIcon icon={faCouch} size='2x' className='text-warning mx-1 cursorSeat iconSmall' />
                                 )
                             }
                             return (
-                                <input 
-                                    type='button' 
-                                    value={arrAbjad[index] + (i + 1)} 
-                                    style={{ width: '45px', height: '45px', color: 'black', textAlign: 'center' }} 
-                                    className='p-2 mr-2 mt-2 btn btn-outline-light' 
-                                    onClick={() => this.onSeatClick([index, i])}
-                                    />
+                                
+                                <FontAwesomeIcon icon={faCouch} size='2x' className='text-white mx-1 cursorSeat iconSmall' onClick={() => this.onSeatClick([index, i])}/>
                             )
                         })
                     }
@@ -268,11 +267,20 @@ class SeatRes extends React.Component {
                             width='50'
                         />
                     }
-                    <h2 className='text-center'>Order Seat Here</h2>
-                    <div className='row justify-content-center'>
-                        <table>
+                    <div className='row justify-content-center pt-5 pb-1'>
+                        <table className='mb-3'>
                             {this.renderSeat()}
                         </table>
+                    <div className='mt-5 text-dark' style={{
+                        backgroundColor: 'white'
+                        , width: '100%'
+                        , height: '30px'
+                        , border: '0.5px solid grey'
+                        , textAlign: 'center',
+                        fontWeight: 'bolder'
+                    }}>
+                        LAYAR BIOSKOP
+                    </div>  
                     </div>
                     <div className='container mt-4 text-white'>
                         <h3>{Array(this.BookedSeat()).join('-')}</h3>

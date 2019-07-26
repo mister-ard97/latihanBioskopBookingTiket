@@ -25,15 +25,16 @@ class Header extends React.Component {
         loading: true
     }
 
-    componentWillMount() {
-        this.setState({loading : true})
-    }
-
     componentDidMount() {
         let user = sessionStorage.getItem('Username');
         if (user !== null) {
+            user = JSON.parse(user)
+            document.getElementById('login').style.display = 'none';
+            document.getElementById('register').style.display = 'none';
             this.setState({ idUser: user.id, loading: false})
         } else {
+            document.getElementById('login').style.display = 'block';
+            document.getElementById('register').style.display = 'block';
             this.setState({loading: false})
         }
     }
@@ -50,7 +51,7 @@ class Header extends React.Component {
                     <DropdownMenu right>
                         <DropdownItem>
                             Check Profile
-                        </DropdownItem>
+                    </DropdownItem>
                         <DropdownItem>
                             <Link to={'/cart?userid=' + this.props.id}>
                                 <span className='text-dark mr-2'>Cart Pemesanan</span><span className="badge badge-dark">{this.props.cartCount}</span>
@@ -69,7 +70,7 @@ class Header extends React.Component {
                         <DropdownItem divider />
                         <DropdownItem onClick={() => this.LogOutBtn()}>
                             Logout
-                        </DropdownItem>
+                    </DropdownItem>
                     </DropdownMenu>
                 </UncontrolledDropdown>
             )
@@ -92,68 +93,46 @@ class Header extends React.Component {
     }
 
     render() {
-        if(this.state.loading === true) {
-            return (
-                <div className='Custnavbar sticky-top'>
-                    <div className='container-fluid px-5'>
-                        <Navbar dark expand="md">
-                            <Link to='/'>
-                                <NavbarBrand>MisterMovie</NavbarBrand>
-                            </Link>
-                            <NavbarToggler onClick={this.toggle} />
-                            <Collapse isOpen={this.state.isOpen} navbar>
-                                <Nav className="ml-auto" navbar>
-                                    <NavItem>
-                                        <Loader type='ThreeDots' color='white' width='20px' height='30px' />
-                                    </NavItem>
-                                </Nav>
-                            </Collapse>
-                        </Navbar>
-                    </div>
+        return (
+            <div className='Custnavbar sticky-top'>
+                <div className='container-fluid px-5'>
+                    <Navbar dark expand="md">
+                        <Link to='/'>
+                            <NavbarBrand>MisterMovie</NavbarBrand>
+                        </Link>
+                        <NavbarToggler onClick={this.toggle} />
+                        <Collapse isOpen={this.state.isOpen} navbar>
+                            <Nav className="ml-auto" navbar>
+                                {
+                                    this.props.username !== '' ?
+                                        <NavItem>
+                                            <Link to='/manage'>
+                                                <NavLink>Manage Movie</NavLink>
+                                            </Link>
+                                        </NavItem> : null
+                                }
+                                <NavItem>
+                                    <Link to='/movies-list'>
+                                        <NavLink>Movies List</NavLink>
+                                    </Link>
+                                </NavItem>
+                                <NavItem id='register'>
+                                    <Link to='/register'>
+                                        <NavLink>Register</NavLink>
+                                    </Link>
+                                </NavItem>
+                                <NavItem id='login'>
+                                    <Link to='/login'>
+                                        <NavLink className='ml-2 rounded-pill px-3 py-2 loginBtn text-center font-weight-bold'>Login</NavLink>
+                                    </Link>
+                                </NavItem>
+                                {this.CheckUsername(this.props.username)}
+                            </Nav>
+                        </Collapse>
+                    </Navbar>
                 </div>
-            )
-        } else {
-            return (
-                <div className='Custnavbar sticky-top'>
-                    <div className='container-fluid px-5'>
-                        <Navbar dark expand="md">
-                            <Link to='/'>
-                                <NavbarBrand>MisterMovie</NavbarBrand>
-                            </Link>
-                            <NavbarToggler onClick={this.toggle} />
-                            <Collapse isOpen={this.state.isOpen} navbar>
-                                <Nav className="ml-auto" navbar>
-                                    {
-                                        this.props.username !== '' ?
-                                            <NavItem>
-                                                <Link to='/manage'>
-                                                    <NavLink>Manage Movie</NavLink>
-                                                </Link>
-                                            </NavItem> : null
-                                    }
-                                    <NavItem>
-                                        <Link to='/movies-list'>
-                                            <NavLink>Movies List</NavLink>
-                                        </Link>
-                                    </NavItem>
-                                    <NavItem id='register'>
-                                        <Link to='/register'>
-                                            <NavLink>Register</NavLink>
-                                        </Link>
-                                    </NavItem>
-                                    <NavItem id='login'>
-                                        <Link to='/login'>
-                                            <NavLink className='ml-2 rounded-pill px-3 py-2 loginBtn text-center font-weight-bold'>Login</NavLink>
-                                        </Link>
-                                    </NavItem>
-                                    {this.CheckUsername(this.props.username)}
-                                </Nav>
-                            </Collapse>
-                        </Navbar>
-                    </div>
-                </div>
-            );
-        }
+            </div>
+        );
     }
 }
 
