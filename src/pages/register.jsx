@@ -1,10 +1,11 @@
 import React from 'react';
 import Paper from '@material-ui/core/Paper';
 import { connect } from 'react-redux';
+import Axios from 'axios';
+import { Link } from 'react-router-dom';
 import { Redirect } from 'react-router-dom';
 import { onRegisterSuccess } from '../redux/actions';
 import Loader from 'react-loader-spinner'; 
-import Axios from 'axios';
 
 class Register extends React.Component {
     state = {
@@ -49,8 +50,8 @@ class Register extends React.Component {
                             }
                             console.log(data)
                             this.props.onRegisterSuccess({...data});
-                            sessionStorage.setItem('Username', JSON.stringify(data));
-                            sessionStorage.setItem('LogOut', 'False')
+                            localStorage.setItem('Username', JSON.stringify(data));
+                            localStorage.setItem('LogOut', 'False')
                         })
                         .catch((err) => {
                             console.log(err)
@@ -95,7 +96,7 @@ class Register extends React.Component {
                                     }
 
                                     <p className='font-italic mt-3'>
-                                        Sudah Daftar ? <a className='font-weight-bold' href='/login'>&raquo; Login Sekarang</a>
+                                        Sudah Daftar ?  <Link to='/login'>&raquo; Login Sekarang</Link>
                                     </p>
                                 </div>
                                 <div className='d-none d-md-block col-md-6 text-center'>

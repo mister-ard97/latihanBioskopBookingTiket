@@ -242,7 +242,7 @@ class SeatRes extends React.Component {
     }
 
     render() {
-        if (this.props.location.state === undefined || sessionStorage.getItem('Username') === null) {
+        if (this.props.location.state === undefined || localStorage.getItem('Username') === null) {
             return (
                 <Redirect to='/' />
             )

@@ -20,7 +20,7 @@ class Cart extends React.Component {
 
     componentDidMount() {
         window.scrollTo(0, 0);
-        let username = sessionStorage.getItem('Username');
+        let username = localStorage.getItem('Username');
         if(username !== null) {
             username = JSON.parse(username);
             this.setState({ idUser: username.id, user: username.username, cart: this.props.cart})
@@ -68,7 +68,7 @@ class Cart extends React.Component {
     }
 
     render() {
-        if (sessionStorage.getItem('Username') === null || this.state.BackToHome === true) {
+        if (localStorage.getItem('Username') === null || this.state.BackToHome === true) {
             return (
                 <Redirect to='/' />
             )
@@ -83,7 +83,7 @@ class Cart extends React.Component {
             <div className='my-5 container-fluid px-0 text-white'>
                {this.changeTitleWebsite()}
                 <Paper className='p-5 bgRoot'>
-                    <h2>Cart Movies</h2>
+                    <h2>Cart Movies: {this.state.user}</h2>
                     <Table className='mb-3'>
                         <TableHead>
                             <TableCell>No</TableCell>

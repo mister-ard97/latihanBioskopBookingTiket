@@ -16,7 +16,8 @@ class MovieDetail extends React.Component {
         titleMovies: '',
         login: null,
         modalTrailer: null,
-        modalAlertLogin: null
+        modalAlertLogin: null,
+        notFoundMovies: null
     }
     
     componentDidMount() {
@@ -29,6 +30,7 @@ class MovieDetail extends React.Component {
         })
         .catch((err) => {
             console.log(err);
+            this.setState({notFoundMovies: 'Error 404'})
         })
     }
 
@@ -143,6 +145,11 @@ class MovieDetail extends React.Component {
     // End ModalBody dan ModalFooter
 
     render() {
+        if (this.state.notFoundMovies === 'Error 404') {
+            return (
+                <Redirect to='/404'/>
+            )
+        }
         if(this.state.data.length >= 0) {
             return (
                 <div className='container-fluid text-white'>
@@ -157,8 +164,8 @@ class MovieDetail extends React.Component {
                 </div>
             )
         }
-        if (sessionStorage.getItem('LogOut') === 'Success') {
-            sessionStorage.removeItem('LogOut');
+        if (localStorage.getItem('LogOut') === 'Success') {
+            localStorage.removeItem('LogOut');
             return (
                 <Redirect to='/' />
             )

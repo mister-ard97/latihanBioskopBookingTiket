@@ -23,7 +23,7 @@ class CheckOutPage extends React.Component {
 
     componentDidMount() {
         window.scrollTo(0, 0);
-        let username = sessionStorage.getItem('Username');
+        let username = localStorage.getItem('Username');
         if (username !== null) {
             username = JSON.parse(username);
             this.setState({ idUser: username.id, user: username.username, cart: this.props.cart, cartCount: this.props.cartCount})
@@ -165,47 +165,51 @@ class CheckOutPage extends React.Component {
     }
 
     render() {
-        if (sessionStorage.getItem('Username') === null || this.state.CheckOutStatus === 'GoToHomePage') {
+        if (localStorage.getItem('Username') === null || this.state.CheckOutStatus === 'GoToHomePage') {
             return (
                 <Redirect to='/' />
             )
         } 
         return (
             <div className='my-5 container text-white'>
-                {this.ModalCheckOutStatus(this.state.CheckOutStatus)}
-                {this.changeTitleWebsite()}
-                <Paper className='p-5'>
-                    <h2>Checkout Page</h2>
-                    <Table>
-                        <TableHead>
-                            <TableCell>No</TableCell>
-                            <TableCell>Title</TableCell>
-                            <TableCell>Booked Seat</TableCell>
-                            <TableCell>Price</TableCell>
-                        </TableHead>
-                        <TableBody>
-                            {
-                                this.state.cart.length === 0 ?
-                                    <TableRow>
-                                        <TableCell colSpan='5' className='text-center'>Data Checkout Kosong.</TableCell>
-                                    </TableRow>
-                            :
+               <div className='row'>
+                    <div className='col-md-12 my-5'>
+                        {this.ModalCheckOutStatus(this.state.CheckOutStatus)}
+                        {this.changeTitleWebsite()}
+                        <Paper className='p-5'>
+                            <h2>Checkout Page</h2>
+                            <Table>
+                                <TableHead>
+                                    <TableCell>No</TableCell>
+                                    <TableCell>Title</TableCell>
+                                    <TableCell>Booked Seat</TableCell>
+                                    <TableCell>Price</TableCell>
+                                </TableHead>
+                                <TableBody>
+                                    {
+                                        this.state.cart.length === 0 ?
+                                            <TableRow>
+                                                <TableCell colSpan='5' className='text-center'>Data Checkout Kosong.</TableCell>
+                                            </TableRow>
+                                            :
 
-                            this.renderDataCheckOut()
-                            }
-                        </TableBody>
-                    </Table>
-                    <h4 className='mb-3'>Total Biaya: Rp. {numeral(this.hitungBiaya()).format(0, 0)}</h4>
-                    <div className='d-flex justify-content-end'>
-                        { 
-                            this.state.cart.length !== 0 ?
-                                <input type="button" value='Pay' className='btn btn-success' onClick={() => this.BayarBookingTiket()} />
-                            :
-                                null
-                        
-                        }
+                                            this.renderDataCheckOut()
+                                    }
+                                </TableBody>
+                            </Table>
+                            <h4 className='mb-3'>Total Biaya: Rp. {numeral(this.hitungBiaya()).format(0, 0)}</h4>
+                            <div className='d-flex justify-content-end'>
+                                {
+                                    this.state.cart.length !== 0 ?
+                                        <input type="button" value='Pay' className='btn btn-success' onClick={() => this.BayarBookingTiket()} />
+                                        :
+                                        null
+
+                                }
+                            </div>
+                        </Paper>
                     </div>
-                </Paper>
+               </div>
             </div>
         )
     }

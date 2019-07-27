@@ -17,7 +17,7 @@ class ChangePasswordPage extends React.Component {
 
     componentDidMount() {
         
-        let user = sessionStorage.getItem('Username');
+        let user = localStorage.getItem('Username');
         if (user !== null) {
             user = JSON.parse(user);
             this.setState({ idUser: user.id, username: user.username})
@@ -71,7 +71,7 @@ class ChangePasswordPage extends React.Component {
     }
 
     render() {
-        if(sessionStorage.getItem('Username') === null ) {
+        if(localStorage.getItem('Username') === null ) {
             return (
                 <Redirect to='/' />
             )

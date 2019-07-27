@@ -5,7 +5,9 @@ import Axios from 'axios';
 import { connect } from 'react-redux';
 import { UrlApi } from '../../supports/UrlApi';
 import Loader from 'react-loader-spinner';
-import { onRegisterSuccess } from '../../redux/actions/';
+import { onRegisterSuccess } from '../../redux/actions';
+import { ModalMisterMovie } from '../../components/modal';
+import { Button } from 'reactstrap';
 
 class ChangeUsernamePage extends React.Component {
     state = {
@@ -13,12 +15,13 @@ class ChangeUsernamePage extends React.Component {
         idUser: 0,
         username: '',
         statusUser: '',
-        loading: false
+        loading: false,
+        modal: false,
+        success: ''
     }
 
-
     componentDidMount() {
-        let user = sessionStorage.getItem('Username');
+        let user = localStorage.getItem('Username');
         if (user !== null) {
             user = JSON.parse(user);
             this.setState({ idUser: user.id, username: user.username, statusUser: user.status})
@@ -46,10 +49,8 @@ class ChangeUsernamePage extends React.Component {
                             role: 'user'
                         }
                         this.props.onRegisterSuccess({ ...data });
-                        sessionStorage.setItem('Username', JSON.stringify(data));
-                        this.setState({username: newUsername})
-                        // alert to modal
-                        alert('Username telah diubah')
+                        localStorage.setItem('Username', JSON.stringify(data));
+                        this.setState({username: newUsername, success: 'Username has been changed', modal: true})
                     }
                 })
                 .catch((err) => {
@@ -58,8 +59,26 @@ class ChangeUsernamePage extends React.Component {
         }
     }
 
+    modalAlertUser = () => {
+        this.refs.changeUsername.value = '';
+        return (
+            <ModalMisterMovie 
+                className='modal-md'
+                closeModal={this.toggle}
+                modal={this.state.modal}
+                ModalHeader='Username Changed'
+                ModalBody={<p>{this.state.success}</p>}
+                ModalFooter={<Button color="success" onClick={() => this.toggle()}>Ok</Button>}
+            />
+        )
+    }
+
+    toggle = () => {
+        this.setState({ modal: !this.state.modal })
+    }
+
     render() {
-        if (sessionStorage.getItem('Username') === null) {
+        if (localStorage.getItem('Username') === null) {
             return (
                 <Redirect to='/' />
             )
@@ -85,7 +104,12 @@ class ChangeUsernamePage extends React.Component {
                             :
                             <input type="button" value='Change Username' className='btn btn-info mt-3' onClick={() => this.ChangeUsername()} />
                     }
-
+                    {
+                        this.state.success !== '' ?
+                            this.modalAlertUser()
+                        :
+                            null
+                    }
                 </Paper>
             </div>
         )

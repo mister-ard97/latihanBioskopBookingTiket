@@ -7,7 +7,7 @@ import './App.css';
 import { Route, Switch, Router } from 'react-router-dom';
 // components
 import Header from './components/header';
-import Jumbotron from './components/jumbotron';
+import Homepage from './components/homepage';
 import Footer from './components/footer';
 import MovieList from './pages/movieList';
 import ManageMovie from './pages/admin/manageMovie';
@@ -19,6 +19,7 @@ import Cart from './pages/user/cart';
 import Checkout from './pages/checkout';
 import HistoryTransaction from './pages/historyTransaction';
 import ChangePasswordPage from './pages/user/changePassword';
+import ChangeUsernamePage from './pages/user/changeUsername';
 import NotFound from './pages/notFound';
 import { onRegisterSuccess } from './redux/actions/'
 // Link URL API
@@ -28,7 +29,7 @@ import { UrlApi } from './supports/UrlApi';
 class App extends React.Component {
 
   componentDidMount() {
-    let username = sessionStorage.getItem('Username');
+    let username = localStorage.getItem('Username');
     let spreadData = {...username}
     // {"id":
     let checkId = spreadData[0] + spreadData[1] + spreadData[2] + spreadData[3] + spreadData[4] + spreadData[5]
@@ -83,7 +84,7 @@ class App extends React.Component {
         }
       }
     } else {
-      sessionStorage.clear()
+      localStorage.clear()
     }
   }
 
@@ -92,13 +93,14 @@ class App extends React.Component {
         <div>
           <Header />
           <Switch>
-            <Route path='/' component={Jumbotron} exact />
+            <Route path='/' component={Homepage} exact />
             <Route path='/movies-list' component={MovieList} />
             <Route path='/manage' component={ManageMovie} exact />
             <Route path='/movie-detail' component={MovieDetail} />
             <Route path='/register' component={Register} />
             <Route path='/login' component={Login} />
             <Route path='/change_password' component={ChangePasswordPage} />
+            <Route path='/change_username' component={ChangeUsernamePage} />
             <Route path='/order-seat' component={SeatRes} />
             <Route path='/cart' component={Cart} />
             <Route path='/checkout' component={Checkout} />

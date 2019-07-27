@@ -22,7 +22,7 @@ class HistoryTransaction extends React.Component {
 
     componentDidMount() {
         window.scrollTo(0, 0);
-        let username = sessionStorage.getItem('Username');
+        let username = localStorage.getItem('Username');
         if (username !== null) {
             username = JSON.parse(username);
             this.setState({ idUser: username.id, username: username.username})
@@ -35,6 +35,11 @@ class HistoryTransaction extends React.Component {
                 })
         }
     }
+
+    changeTitleWebsite = () => {
+        document.title = 'History Transaction user ' + this.state.username;
+    }
+
 
     renderTransaction = () => {
         let dataMovie = this.state.HistoryTransaction 
@@ -121,7 +126,7 @@ class HistoryTransaction extends React.Component {
     }
 
     render() {
-        if(sessionStorage.getItem('Username') === null ) {
+        if(localStorage.getItem('Username') === null ) {
             return (
                 <Redirect to='/' />
             )
@@ -129,8 +134,9 @@ class HistoryTransaction extends React.Component {
         return (
             <div className='container'>
                 <Paper className='p-5 my-5'>
+                    {this.changeTitleWebsite()}
                     {this.ModalDetail(this.state.modal)}
-                <h2>History Purchase</h2>
+                <h2>History Purchase : {this.state.username}</h2>
                     <Table className='my-5'>
                         <TableHead>
                             <TableCell>No</TableCell>

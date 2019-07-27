@@ -19,7 +19,8 @@ class ManageMovie extends React.Component {
         input: false,
         idSelected: null,
         selected: null,
-        DelSelected: null
+        DelSelected: null,
+        showPoster: null
     }
 
     // lifecycle
@@ -88,6 +89,13 @@ class ManageMovie extends React.Component {
 
     showFrameTrailer = (param) => {
         if (param) {
+            if (document.getElementById('linkMovie') === null) {
+               return (
+                   <div>
+                       <p>Link Harus Link Trailer dari Youtube</p>
+                   </div>
+               )
+            }
             let linkVideo = document.getElementById('linkMovie').value;
             let youtubeLink = /youtube.com/g.test(linkVideo);
             if (youtubeLink === false) {
@@ -110,6 +118,13 @@ class ManageMovie extends React.Component {
 
     showDirectorPhoto = (param) => {
         if (param) {
+            if (document.getElementById('linkDirectorImage') === null) {
+                return(
+                    <div className='my-3'>
+                        <p>Link Foto Sutradara</p>
+                    </div>
+                )
+            }
             let linkImage = document.getElementById('linkDirectorImage').value;
             if (linkImage === '') {
                 return (
@@ -123,6 +138,36 @@ class ManageMovie extends React.Component {
                         <img
                             src={linkImage}
                             alt="director-movie"
+                            style={{ width: '200px' }}
+                        />
+                    </div>
+                )
+            }
+        }
+    }
+
+    showPoster = (param) => {
+        if (param) {
+            if (document.getElementById('linkDirectorImage') === null) {
+                return (
+                    <div className='my-3'>
+                        <p>Link Poster Movie</p>
+                    </div>
+                )
+            }
+            let linkImage = document.getElementById('linkPoster').value;
+            if (linkImage === '') {
+                return (
+                    <div className='my-3'>
+                        <p>Link Poster Movie tidak boleh kosong.</p>
+                    </div>
+                )
+            } else {
+                return (
+                    <div className='my-3'>
+                        <img
+                            src={linkImage}
+                            alt="poster-movie"
                             style={{ width: '200px' }}
                         />
                     </div>
@@ -330,7 +375,7 @@ class ManageMovie extends React.Component {
                     closeModal={this.closeModal}
                     modal={this.state.modal}
                     ModalHeader='Add Movie'
-                    ModalBody={this.contentManageMovie()}
+                    ModalBody={this.contentAddDataManageMovie()}
                     ModalFooter={this.btnModalManageAdmin()}
                 />
             )
@@ -345,7 +390,7 @@ class ManageMovie extends React.Component {
                     closeModal={this.closeModal}
                     modal={this.state.modal}
                     ModalHeader='Edit Movie'
-                    ModalBody={this.contentManageMovie()}
+                    ModalBody={this.contentEditManageMovie()}
                     ModalFooter={this.btnModalManageAdmin()}
                 />
             )
@@ -360,7 +405,7 @@ class ManageMovie extends React.Component {
                    closeModal={this.closeModal}
                    modal={this.state.modal}
                    ModalHeader='Hapus Movie'
-                   ModalBody={this.contentManageMovie()}
+                   ModalBody={<p>Apakah anda ingin menghapus data ini?</p>}
                    ModalFooter={this.btnModalManageAdmin()}
                />
            )
@@ -423,184 +468,186 @@ class ManageMovie extends React.Component {
         }
     }
 
-    contentManageMovie = () => {
-        if(this.state.selected !== null) {
-            const title = this.state.data[this.state.selected].title;
-            const rated = this.state.data[this.state.selected].rated;
-            const runtime = this.state.data[this.state.selected].runtime;
-            const genre = this.state.data[this.state.selected].genre;
-            const plot = this.state.data[this.state.selected].plot;
-            const playingAt = this.state.data[this.state.selected].playingAt.join(', ');
-            const director = this.state.data[this.state.selected].director;
-            const poster = this.state.data[this.state.selected].poster;
-            const linkTrailer = this.state.data[this.state.selected].linkTrailer;
-            const directorImage = this.state.data[this.state.selected].directorImage;
+    contentEditManageMovie = () => {
+        const title = this.state.data[this.state.selected].title;
+        const rated = this.state.data[this.state.selected].rated;
+        const runtime = this.state.data[this.state.selected].runtime;
+        const genre = this.state.data[this.state.selected].genre;
+        const plot = this.state.data[this.state.selected].plot;
+        const playingAt = this.state.data[this.state.selected].playingAt.join(', ');
+        const director = this.state.data[this.state.selected].director;
+        const poster = this.state.data[this.state.selected].poster;
+        const linkTrailer = this.state.data[this.state.selected].linkTrailer;
+        const directorImage = this.state.data[this.state.selected].directorImage;
+        
+        return (
+            <Form id='editDataMovie'>
+                Title :
+                    <input
+                    type='text'
+                    name='title'
+                    className='form-control mb-3'
+                    placeholder='Title'
+                    defaultValue={title}
+                />
+                Rated :
+                    <input
+                    type='text'
+                    name='rated'
+                    className='form-control mb-3'
+                    placeholder='Rated'
+                    defaultValue={rated}
+                />
+                Runtime :
+                    <input
+                    type='number'
+                    className='form-control mb-3'
+                    placeholder='Runtime (minutes)'
+                    defaultValue={runtime}
+                />
+                Genre :
+                    <input
+                    type='text'
+                    name='genre'
+                    className='form-control mb-3'
+                    placeholder='Genre'
+                    defaultValue={genre}
+                />
+                Plot :
+                    <textarea class="form-control mb-3" rows="3" defaultValue={plot}></textarea>
+                <div className='my-2'>
+                    <span>Playing At : Data Sebelumnya = {playingAt}<br /></span>
+                    <input name='radio0' type="radio" value="9" /> <span> 09:00 </span>
+                    <input name='radio1' type="radio" value="14" /> <span> 14:00 </span>
+                    <input name='radio2' type="radio" value="16" /> <span> 16:00 </span>
+                    <input name='radio3' type="radio" value="20" /> <span> 20:00 </span>
+                    <input name='radio4' type="radio" value="22" /> <span> 22:00 </span>
+                </div>
+                Sutradara :
+                    <input
+                    type='text'
+                    name='sutradara'
+                    className='form-control mb-3'
+                    placeholder='Sutradara'
+                    defaultValue={director}
+                />
+                Image :
+                {this.showPoster(this.state.showPoster)}
+                    <input
+                    type='text'
+                    name='image'
+                    id='linkPoster'
+                    className='form-control mb-3'
+                    placeholder='Image'
+                    defaultValue={poster}
+                    onChange={() => this.setState({ showPoster: true })}
+                />
+                Trailer :
+                    {this.showFrameTrailer(this.state.showVideo)}
+                <input
+                    type='text'
+                    name='movie'
+                    id='linkMovie'
+                    className='form-control my-3'
+                    placeholder='Link Trailer (example : https://www.youtube.com/watch?v=1nVRj7Jr0G0)'
+                    defaultValue={linkTrailer}
+                    onChange={() => this.setState({ showVideo: true })}
+                />
+                Foto Sutradara :
+                    {this.showDirectorPhoto(this.state.showDirectorPhoto)}
+                <input
+                    type='text'
+                    name='director-movie'
+                    id='linkDirectorImage'
+                    className='form-control mb-3'
+                    placeholder='Foto Sutradara'
+                    defaultValue={directorImage}
+                    onChange={() => this.setState({ showDirectorPhoto: true })}
+                />
+            </Form>
+        )
+    }
 
-            return (
-                <Form id='editDataMovie'>
-                    Title :
+    contentAddDataManageMovie = () => {
+        return (
+            <Form id='addDataMovie'>
+                Title :
                         <input
-                        type='text'
-                        name='title'
-                        className='form-control'
-                        placeholder='Title'
-                        defaultValue={title}
-                    />
-                    Rated :
+                    type='text'
+                    name='title'
+                    className='form-control mb-3'
+                    placeholder='Title'
+                />
+                Rated :
                         <input
-                        type='text'
-                        name='rated'
-                        className='form-control'
-                        placeholder='Rated'
-                        defaultValue={rated}
-                    />
-                    Runtime :
+                    type='text'
+                    name='rated'
+                    className='form-control mb-3'
+                    placeholder='Rated'
+                />
+                Runtime :
                         <input
-                        type='number'
-                        className='form-control'
-                        placeholder='Runtime (minutes)'
-                        defaultValue={runtime}
-                    />
-                    Genre :
+                    type='number'
+                    name='runtime'
+                    className='form-control mb-3'
+                    placeholder='Runtime (minutes)'
+                />
+                Genre :
                         <input
-                        type='text'
-                        name='genre'
-                        className='form-control'
-                        placeholder='Genre'
-                        defaultValue={genre}
-                    />
-                    Plot :
-                        <textarea class="form-control" rows="3" defaultValue={plot}></textarea>
-                    <div className='my-2'>
-                        <span>Playing At : Data Sebelumnya = {playingAt}<br /></span>
-                        <input name='radio0' type="radio" value="9" /> <span> 09:00 </span>
-                        <input name='radio1' type="radio" value="14" /> <span> 14:00 </span>
-                        <input name='radio2' type="radio" value="16" /> <span> 16:00 </span>
-                        <input name='radio3' type="radio" value="20" /> <span> 20:00 </span>
-                        <input name='radio4' type="radio" value="22" /> <span> 22:00 </span>
-                    </div>
-                    Sutradara :
+                    type='text'
+                    name='genre'
+                    className='form-control mb-3'
+                    placeholder='Genre'
+                />
+                Plot :
+                <textarea placeholder='Plot Film' class="form-control mb-3" rows="3"></textarea>
+                <div className='my-2'>
+                    <span>Playing At : </span>
+                    <input name='radio0' type="radio" value="9" /> <span> 09:00 </span>
+                    <input name='radio1' type="radio" value="14" /> <span> 14:00 </span>
+                    <input name='radio2' type="radio" value="16" /> <span> 16:00 </span>
+                    <input name='radio3' type="radio" value="20" /> <span> 20:00 </span>
+                    <input name='radio4' type="radio" value="22" /> <span> 22:00 </span>
+                </div>
+                Sutradara :
                         <input
-                        type='text'
-                        name='sutradara'
-                        className='form-control'
-                        placeholder='Sutradara'
-                        defaultValue={director}
-                    />
-                    Image :
-                        <input
-                        type='text'
-                        name='image'
-                        className='form-control'
-                        placeholder='Image'
-                        defaultValue={poster}
-                    />
-                    Trailer :
+                    type='text'
+                    name='sutradara'
+                    className='form-control mb-3'
+                    placeholder='Sutradara'
+                />
+                Image :
+                {this.showPoster(this.state.showPoster)}
+                <input
+                    type='text'
+                    name='image'
+                    id='linkPoster'
+                    className='form-control mb-3'
+                    placeholder='Image'
+                    onChange={() => this.setState({ showPoster: true })}
+                />
+                Trailer :
                         {this.showFrameTrailer(this.state.showVideo)}
-                    <input
-                        type='text'
-                        name='movie'
-                        id='linkMovie'
-                        className='form-control my-3'
-                        placeholder='Link Trailer (example : https://www.youtube.com/watch?v=1nVRj7Jr0G0)'
-                        defaultValue={linkTrailer}
-                        onChange={() => this.setState({ showVideo: true })}
-                    />
-                    Foto Sutradara :
+                <input
+                    type='text'
+                    name='movie'
+                    id='linkMovie'
+                    className='form-control my-3'
+                    placeholder='Link Trailer (example : https://www.youtube.com/watch?v=1nVRj7Jr0G0)'
+                    onChange={() => this.setState({ showVideo: true })}
+                />
+                Foto Sutradara :
                         {this.showDirectorPhoto(this.state.showDirectorPhoto)}
-                    <input
-                        type='text'
-                        name='director-movie'
-                        id='linkDirectorImage'
-                        className='form-control'
-                        placeholder='Foto Sutradara'
-                        defaultValue={directorImage}
-                        onChange={() => this.setState({ showDirectorPhoto: true })}
-                    />
-                </Form>
-            )
-        } else if(this.state.DelSelected !== null) {
-           return (
-               <p>Apakah anda ingin menghapus data ini?</p>
-           )
-        } else {
-            return (
-                <Form id='addDataMovie'>
-                    Title :
-                        <input
-                        type='text'
-                        name='title'
-                        className='form-control'
-                        placeholder='Title'
-                    />
-                    Rated :
-                        <input
-                        type='text'
-                        name='rated'
-                        className='form-control'
-                        placeholder='Rated'
-                    />
-                    Runtime :
-                        <input
-                        type='number'
-                        name='runtime'
-                        className='form-control'
-                        placeholder='Runtime (minutes)'
-                    />
-                    Genre :
-                        <input
-                        type='text'
-                        name='genre'
-                        className='form-control'
-                        placeholder='Genre'
-                    />
-                    Plot :
-                        <textarea placeholder='Plot Film' class="form-control" rows="3"></textarea>
-                    <div className='my-2'>
-                        <span>Playing At : </span>
-                        <input name='radio0' type="radio" value="9" /> <span> 09:00 </span>
-                        <input name='radio1' type="radio" value="14" /> <span> 14:00 </span>
-                        <input name='radio2' type="radio" value="16" /> <span> 16:00 </span>
-                        <input name='radio3' type="radio" value="20" /> <span> 20:00 </span>
-                        <input name='radio4' type="radio" value="22" /> <span> 22:00 </span>
-                    </div>
-                    Sutradara :
-                        <input
-                        type='text'
-                        name='sutradara'
-                        className='form-control'
-                        placeholder='Sutradara'
-                    />
-                    Image :
-                        <input
-                        type='text'
-                        name='image'
-                        className='form-control'
-                        placeholder='Image'
-                    />
-                    Trailer :
-                        {this.showFrameTrailer(this.state.showVideo)}
-                    <input
-                        type='text'
-                        name='movie'
-                        id='linkMovie'
-                        className='form-control my-3'
-                        placeholder='Link Trailer (example : https://www.youtube.com/watch?v=1nVRj7Jr0G0)'
-                        onChange={() => this.setState({ showVideo: true })}
-                    />
-                    Foto Sutradara :
-                        {this.showDirectorPhoto(this.state.showDirectorPhoto)}
-                    <input
-                        type='text'
-                        name='director-movie'
-                        id='linkDirectorImage'
-                        className='form-control'
-                        placeholder='Foto Sutradara'
-                        onChange={() => this.setState({ showDirectorPhoto: true })}
-                    />
-                </Form>
-            )
-        }
+                <input
+                    type='text'
+                    name='director-movie'
+                    id='linkDirectorImage'
+                    className='form-control mb-3'
+                    placeholder='Foto Sutradara'
+                    onChange={() => this.setState({ showDirectorPhoto: true })}
+                />
+            </Form>
+        )
     }
 
     closeModal = () => {
@@ -609,7 +656,7 @@ class ManageMovie extends React.Component {
 
     // render
     render() {
-        if(sessionStorage.getItem('Username') === null) {
+        if(localStorage.getItem('Username') === null) {
             return (
                 <Redirect to='/' /> 
             )

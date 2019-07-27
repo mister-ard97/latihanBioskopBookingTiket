@@ -18,6 +18,64 @@ class MovieList extends React.Component {
         this.getDataMovies();
     }
 
+    renderMoviesList = () => {
+        return (
+            <div className='container-fluid p-0 bgRoot'>
+                <div className='container py-4'>
+                    {
+                        this.state.loadingData === true ?
+                            <div className='text-center'>
+                                <p>
+                                    <Loader
+                                        type='ThreeDots'
+                                        color='#000000'
+                                        height='25'
+                                        width='25'
+                                    />
+                                </p>
+                            </div>
+                            :
+                            <div className='d-flex justify-content-between mb-4'>
+                                <h2 className='text-center'>List Movies</h2>
+                                <div className='form-inline'>
+                                    <input className="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search Movie" ref='searchMovie' />
+                                    <button className="btn btn-outline-danger my-2 my-sm-0" type="submit" onClick={() => this.SearchMovieByTitle()}>Search Movie</button>
+                                </div>
+                            </div>
+                    }
+                    <div className='row'>
+                        {
+                            this.state.loadingData === true ?
+                                <div className="col-12 d-flex justify-content-center">
+                                    <Loader
+                                        type='ThreeDots'
+                                        color='#000000'
+                                        height='25'
+                                        width='25'
+                                    />
+                                </div>
+                                :
+
+                                this.state.data.length === 0 ?
+                                    <div className="col-12 text-center p-0">
+                                        <div id="notfound">
+                                            <div className="notfound">
+                                                <div className="notfound-404">
+                                                    <h1>-<span className='img-fluid' />-</h1>
+                                                </div>
+                                                <p className='my-5 text-dark'>{this.state.NoResult}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    :
+                                    this.onPrintMovies()
+                        }
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
     getDataMovies = () => {
         Axios.get( UrlApi +'/movies')
             .then((res) => {
@@ -72,66 +130,14 @@ class MovieList extends React.Component {
     }
 
     render() {
-        if (sessionStorage.getItem('LogOut') === 'Success') {
-            sessionStorage.removeItem('LogOut');
+        if (localStorage.getItem('LogOut') === 'Success') {
+            localStorage.removeItem('LogOut');
             return (
                 <Redirect to='/' />
             )
         } else {
             return (
-                <div className='container-fluid p-0 bgRoot'>
-                    <div className='container py-4'>
-                        {
-                            this.state.loadingData === true ?
-                                <div className='text-center'>
-                                    <p>
-                                        <Loader
-                                            type='ThreeDots'
-                                            color='#000000'
-                                            height='25'
-                                            width='25'
-                                        />
-                                    </p>
-                                </div>
-                                :
-                                <div className='d-flex justify-content-between mb-4'>
-                                    <h2 className='text-center'>List Movies</h2>
-                                    <div className='form-inline'>
-                                        <input className="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search Movie" ref='searchMovie' />
-                                        <button className="btn btn-outline-danger my-2 my-sm-0" type="submit" onClick={() => this.SearchMovieByTitle()}>Search Movie</button>
-                                    </div>
-                                </div>
-                        }
-                        <div className='row'>
-                            {
-                                this.state.loadingData === true ?
-                                    <div className="col-12 d-flex justify-content-center">
-                                        <Loader
-                                            type='ThreeDots'
-                                            color='#000000'
-                                            height='25'
-                                            width='25'
-                                        />
-                                    </div>
-                                    :
-
-                                    this.state.data.length === 0 ?
-                                        <div className="col-12 text-center p-0">
-                                            <div id="notfound">
-                                                <div className="notfound">
-                                                    <div className="notfound-404">
-                                                        <h1>-<span className='img-fluid' />-</h1>
-                                                    </div>
-                                                    <p className='my-5 text-dark'>{this.state.NoResult}</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        :
-                                        this.onPrintMovies()
-                            }
-                        </div>
-                    </div>
-                </div>
+                this.renderMoviesList()
             );
         }
     }
