@@ -57,7 +57,6 @@ class Homepage extends React.Component {
                                     </div> : null
                                 }
                                 <h1 className="display-4">MisterMovie</h1>
-                                {console.log(this.props.user.role)}
                                 {
                                         this.state.idUser === 0 && this.props.user.role === undefined ?
                                             <div id='welcomeGuest'>

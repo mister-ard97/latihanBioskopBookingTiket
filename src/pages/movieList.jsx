@@ -24,15 +24,13 @@ class MovieList extends React.Component {
                 <div className='container py-4'>
                     {
                         this.state.loadingData === true ?
-                            <div className='text-center'>
-                                <p>
+                            <div className='d-flex justify-content-center'>
                                     <Loader
                                         type='ThreeDots'
                                         color='#000000'
                                         height='25'
                                         width='25'
                                     />
-                                </p>
                             </div>
                             :
                             <div className='d-flex justify-content-between mb-4'>
@@ -47,12 +45,14 @@ class MovieList extends React.Component {
                         {
                             this.state.loadingData === true ?
                                 <div className="col-12 d-flex justify-content-center">
-                                    <Loader
-                                        type='ThreeDots'
-                                        color='#000000'
-                                        height='25'
-                                        width='25'
-                                    />
+                                    <div className="mycard text-center">
+                                        <Loader
+                                            type='ThreeDots'
+                                            color='#000000'
+                                            height='25'
+                                            width='25'
+                                        />
+                                    </div>
                                 </div>
                                 :
 
