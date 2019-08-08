@@ -88,11 +88,11 @@ class ChangeUsernamePage extends React.Component {
                 {this.ChangeTitleWebsite()}
                 <Paper className='p-5 bgRoot CartStyle'>
                     <h2>Change Username</h2>
-                    <p>Username Sekarang <h5>{this.state.username}</h5></p>
+                    <h5>Username Sekarang: <span>{this.state.username}</span></h5>
                     <input type="text" className="form-control mt-3" placeholder='Change Username' ref='changeUsername' />
                     {
                         this.state.error === '' ? null :
-                            <div className='alert alert-warning'>
+                            <div className='alert alert-warning mt-3'>
                                 {this.state.error}
                                 <span style={{ float: "right", cursor: 'pointer', fontWeight: 'bold' }}
                                     onClick={() => this.setState({ error: '' })}> x </span>

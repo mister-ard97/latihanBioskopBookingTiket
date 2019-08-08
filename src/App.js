@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import './App.css';
 // Route 
-import { Route, Switch, Router } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 // components
 import Header from './components/header';
 import Homepage from './components/homepage';
@@ -68,7 +68,6 @@ class App extends React.Component {
 
             Axios.get(UrlApi + '/users?username=' + username.username)
               .then((res) => {
-                console.log(res.data)
                 let obj = {
                   id: res.data[0].id,
                   username: res.data[0].username,

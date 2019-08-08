@@ -54,7 +54,6 @@ class ManageMovie extends React.Component {
     }
 
     showPlot = (id) => {
-        console.log(id)
         let dots = document.getElementById('dots' + id);
         let more = document.getElementById('more' + id);
         let btnReadMore = document.getElementById('readMore' + id);
@@ -109,7 +108,7 @@ class ManageMovie extends React.Component {
                 linkVideo = linkVideo.split('=')[1];
                 return (
                     <div className="embed-responsive embed-responsive-1by1">
-                        <iframe title='trailer-movie' className="embed-responsive-item" src={'https://www.youtube.com/embed/' + linkVideo} allowfullscreen></iframe>
+                        <iframe title='trailer-movie' className="embed-responsive-item" src={'https://www.youtube.com/embed/' + linkVideo} allowFullScreen></iframe>
                     </div>
                 )
             }
@@ -184,7 +183,7 @@ class ManageMovie extends React.Component {
     PrintDataMovies = () => {
         var jsx = this.state.data.map((val, index) => {
             return (
-                <TableRow>
+                <TableRow key={index}>
                     <TableCell>{index + 1}</TableCell>
                     <TableCell>{val.title}</TableCell>
                     <TableCell>{val.director}</TableCell>
@@ -514,7 +513,7 @@ class ManageMovie extends React.Component {
                     defaultValue={genre}
                 />
                 Plot :
-                    <textarea class="form-control mb-3" rows="3" defaultValue={plot}></textarea>
+                <textarea className="form-control mb-3" rows="3" defaultValue={plot}></textarea>
                 <div className='my-2'>
                     <span>Playing At : Data Sebelumnya = {playingAt}<br /></span>
                     <input name='radio0' type="radio" value="9" /> <span> 09:00 </span>
@@ -600,7 +599,7 @@ class ManageMovie extends React.Component {
                     placeholder='Genre'
                 />
                 Plot :
-                <textarea placeholder='Plot Film' class="form-control mb-3" rows="3"></textarea>
+                <textarea placeholder='Plot Film' className="form-control mb-3" rows="3"></textarea>
                 <div className='my-2'>
                     <span>Playing At : </span>
                     <input name='radio0' type="radio" value="9" /> <span> 09:00 </span>
@@ -676,16 +675,18 @@ class ManageMovie extends React.Component {
                 <Paper>
                     <Table>
                         <TableHead>
-                            <TableCell>No</TableCell>
-                            <TableCell>Title</TableCell>
-                            <TableCell>Sutradara</TableCell>
-                            <TableCell>Image</TableCell>
-                            <TableCell>Genre</TableCell>
-                            <TableCell>Schedule (Jam)</TableCell>
-                            <TableCell>Duration</TableCell>
-                            <TableCell>Sinopsis</TableCell>
-                            <TableCell>Trailer</TableCell>
-                            <TableCell colSpan={2} className='text-center'>Action</TableCell>
+                            <TableRow>
+                                <TableCell>No</TableCell>
+                                <TableCell>Title</TableCell>
+                                <TableCell>Sutradara</TableCell>
+                                <TableCell>Image</TableCell>
+                                <TableCell>Genre</TableCell>
+                                <TableCell>Schedule (Jam)</TableCell>
+                                <TableCell>Duration</TableCell>
+                                <TableCell>Sinopsis</TableCell>
+                                <TableCell>Trailer</TableCell>
+                                <TableCell colSpan={2} className='text-center'>Action</TableCell>
+                            </TableRow>
                         </TableHead>
                         <TableBody>
                             {this.PrintDataMovies()}

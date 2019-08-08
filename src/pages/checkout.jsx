@@ -30,10 +30,61 @@ class CheckOutPage extends React.Component {
         }
     }
 
+    renderCheckOutUI = () => {
+        if (localStorage.getItem('Username') === null || this.state.CheckOutStatus === 'GoToHomePage') {
+            return (
+                <Redirect to='/' />
+            )
+        }
+        return (
+            <div className='my-5 container text-white'>
+                <div className='row'>
+                    <div className='col-md-12 my-5'>
+                        {this.ModalCheckOutStatus(this.state.CheckOutStatus)}
+                        {this.changeTitleWebsite()}
+                        <Paper className='p-5'>
+                            <h2>Checkout Page</h2>
+                            <Table>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell>No</TableCell>
+                                        <TableCell>Title</TableCell>
+                                        <TableCell>Booked Seat</TableCell>
+                                        <TableCell>Price</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {
+                                        this.state.cart.length === 0 ?
+                                            <TableRow>
+                                                <TableCell colSpan='5' className='text-center'>Data Checkout Kosong.</TableCell>
+                                            </TableRow>
+                                            :
+
+                                            this.renderDataCheckOut()
+                                    }
+                                </TableBody>
+                            </Table>
+                            <h4 className='mb-3'>Total Biaya: Rp. {numeral(this.hitungBiaya()).format(0, 0)}</h4>
+                            <div className='d-flex justify-content-end'>
+                                {
+                                    this.state.cart.length !== 0 ?
+                                        <input type="button" value='Pay' className='btn btn-success' onClick={() => this.BayarBookingTiket()} />
+                                        :
+                                        null
+                                }
+                            </div>
+                        </Paper>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
     renderDataCheckOut = () => {
         let jsx = this.state.cart.map((val, index) => {
             return (
-                <TableRow>
+                <TableRow key={index}>
                     <TableCell>{index + 1}</TableCell>
                     <TableCell>{val.titleMovie}</TableCell>
                     <TableCell>{val.bookedSeat}</TableCell>
@@ -46,13 +97,17 @@ class CheckOutPage extends React.Component {
 
     hitungBiaya = () => {
         let totalBiaya = 0;
-        this.state.cart.findIndex((val) => { totalBiaya += val.price })
+        this.state.cart.forEach((val) => {
+            totalBiaya += val.price
+        })
         return totalBiaya
     }
 
     hitungKursi = () => {
         let totalKursi = 0;
-        this.state.cart.findIndex((val) => { totalKursi += val.bookedPosition.length })
+        this.state.cart.forEach((val) => {
+            totalKursi += val.bookedPosition.length
+        })
         return totalKursi;
     }
 
@@ -79,7 +134,7 @@ class CheckOutPage extends React.Component {
                         booked: dataSeat
                     })
                         .then((res) => {
-                            console.log(res.data)
+                            
                         })
                         .catch((err) => {
                             console.log(err)
@@ -89,8 +144,8 @@ class CheckOutPage extends React.Component {
                     console.log(err)
                 })
         })
-
-        this.state.cart.findIndex((val) => {
+        
+        this.state.cart.forEach((val) => {
             val.codeTransaction = codeTransaction
             val.userId = this.state.idUser 
         })
@@ -105,7 +160,6 @@ class CheckOutPage extends React.Component {
 
         Axios.post(UrlApi + '/transaction', objTransaction)
             .then((res) => {
-                console.log(res)
                 this.state.cart.forEach((val) => {
                     Axios.post(UrlApi + '/transactionDetail', val)
                         .then(() => {
@@ -165,52 +219,8 @@ class CheckOutPage extends React.Component {
     }
 
     render() {
-        if (localStorage.getItem('Username') === null || this.state.CheckOutStatus === 'GoToHomePage') {
-            return (
-                <Redirect to='/' />
-            )
-        } 
         return (
-            <div className='my-5 container text-white'>
-               <div className='row'>
-                    <div className='col-md-12 my-5'>
-                        {this.ModalCheckOutStatus(this.state.CheckOutStatus)}
-                        {this.changeTitleWebsite()}
-                        <Paper className='p-5'>
-                            <h2>Checkout Page</h2>
-                            <Table>
-                                <TableHead>
-                                    <TableCell>No</TableCell>
-                                    <TableCell>Title</TableCell>
-                                    <TableCell>Booked Seat</TableCell>
-                                    <TableCell>Price</TableCell>
-                                </TableHead>
-                                <TableBody>
-                                    {
-                                        this.state.cart.length === 0 ?
-                                            <TableRow>
-                                                <TableCell colSpan='5' className='text-center'>Data Checkout Kosong.</TableCell>
-                                            </TableRow>
-                                            :
-
-                                            this.renderDataCheckOut()
-                                    }
-                                </TableBody>
-                            </Table>
-                            <h4 className='mb-3'>Total Biaya: Rp. {numeral(this.hitungBiaya()).format(0, 0)}</h4>
-                            <div className='d-flex justify-content-end'>
-                                {
-                                    this.state.cart.length !== 0 ?
-                                        <input type="button" value='Pay' className='btn btn-success' onClick={() => this.BayarBookingTiket()} />
-                                        :
-                                        null
-
-                                }
-                            </div>
-                        </Paper>
-                    </div>
-               </div>
-            </div>
+            this.renderCheckOutUI()
         )
     }
 }

@@ -17,21 +17,73 @@ class MovieDetail extends React.Component {
         login: null,
         modalTrailer: null,
         modalAlertLogin: null,
-        notFoundMovies: null
+        notFoundMovies: null,
+        loadingMovie: true
     }
     
     componentDidMount() {
         let id = this.props.location.search.split('=')[1];
         window.scrollTo(0, 0);
         document.body.style.backgroundImage = 'linear-gradient(to right, #c31432, #240b36)'
-        Axios.get('http://localhost:2000/movies/'+id)
+        Axios.get('http://localhost:2000/movies/' + id)
         .then((res) => {
-            this.setState({data: res.data, linkTrailer: res.data.linkTrailer, titleMovies: res.data.title});
+            this.setState({
+                data: res.data, 
+                linkTrailer: res.data.linkTrailer, 
+                titleMovies: res.data.title,
+                loadingMovie: false
+            });
         })
         .catch((err) => {
             console.log(err);
-            this.setState({notFoundMovies: 'Error 404'})
+            this.setState({notFoundMovies: 'Error 404', loadingMovie: false})
         })
+    }
+
+    renderMovieDetail = () => {
+        return (
+            <div className='container-fluid mt-2 mb-5 text-white'>
+                {this.changeTitleWebsite(this.state.titleMovies)}
+                <div className="row px-5 pb-4">
+                    <div className="col-md-3 mt-4 mr-md-5 mr-0 text-center text-md-left">
+                        <p className='font-weight-bold'>OFFICIAL POSTER</p>
+                        <img src={this.state.data.poster} alt="poster-movies" className='img-fluid' />
+                    </div>
+                    <div className="col-md-8 mt-3">
+                        <h1>{this.state.data.title}</h1>
+                        <p className='font-weight-bold'>{this.state.data.genre}</p>
+                        <div className='d-flex justify-content-start text-dark mb-3'>
+                            <div className='card text-center mr-4' style={{ width: '5rem', backgroundImage: 'linear-gradient(to bottom, #FFB75E, #ED8F03)' }}>
+                                <h5>{this.state.data.runtime} minutes</h5>
+                            </div>
+                            <div className='card text-center' style={{ width: '5rem', backgroundImage: 'linear-gradient(to bottom, #FFB75E, #ED8F03)' }}>
+                                <span>RATED</span>
+                                <h5>{this.state.data.rated}</h5>
+                            </div>
+                        </div>
+                        <img
+                            src={this.state.data.directorImage}
+                            alt="director-movies"
+                            className='rounded-circle ml-3'
+                            style={{ width: '50px' }}
+                        />
+                        <p>{this.state.data.director}</p>
+                        <div className='iconTrailer' onClick={() => this.setState({ modalTrailer: true })} style={{ width: '120px' }}>
+                            <FontAwesomeIcon icon={faPlayCircle} className='mr-1' />
+                            <span>Watch Trailer</span>
+                        </div>
+                        {this.showModalTrailer()}
+                        <p className='font-weight-bold mt-3'>
+                            <span className='font-weight-normal'>Playing At: </span><br />
+                            {this.playingAtSplit(Array(this.state.data.playingAt))}
+                        </p>
+                        <p className='font-italic'>{this.state.data.plot}</p>
+                        <input type="button" className='btn btn-outline-success' value='Buy Ticket' onClick={this.btnBuyTicket} />
+                        {this.alertBuyTicket(this.state.login)}
+                    </div>
+                </div>
+            </div>
+        )
     }
 
     changeTitleWebsite = (param) => {
@@ -112,7 +164,7 @@ class MovieDetail extends React.Component {
         if(this.state.modalTrailer) {
             return (
                  <div className="embed-responsive embed-responsive-16by9">
-                    <iframe title='trailer-movie' class="embed-responsive-item" src={'https://www.youtube.com/embed/' + this.linkTrailer(this.state.linkTrailer)} allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
+                    <iframe title='trailer-movie' className="embed-responsive-item" src={'https://www.youtube.com/embed/' + this.linkTrailer(this.state.linkTrailer)} allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
                 </div>
             )
         }
@@ -150,7 +202,7 @@ class MovieDetail extends React.Component {
                 <Redirect to='/404'/>
             )
         }
-        if(this.state.data.length >= 0) {
+        if(this.state.loadingMovie) {
             return (
                 <div className='container-fluid text-white'>
                     <div className='row justify-content-center'>
@@ -171,47 +223,7 @@ class MovieDetail extends React.Component {
             )
         } else {
             return (
-                <div className='container-fluid mt-2 mb-5 text-white'>
-                    {this.changeTitleWebsite(this.state.titleMovies)}
-                    <div className="row px-5 pb-4">
-                        <div className="col-md-3 mt-4 mr-md-5 mr-0 text-center text-md-left">
-                            <p className='font-weight-bold'>OFFICIAL POSTER</p>
-                            <img src={this.state.data.poster} alt="poster-movies" className='img-fluid' />
-                        </div>
-                        <div className="col-md-8 mt-3">
-                            <h1>{this.state.data.title}</h1>
-                            <p className='font-weight-bold'>{this.state.data.genre}</p>
-                            <div className='d-flex justify-content-start text-dark mb-3'>
-                                <div className='card text-center mr-4' style={{ width: '5rem', backgroundImage: 'linear-gradient(to bottom, #FFB75E, #ED8F03)' }}>
-                                    <h5>{this.state.data.runtime} minutes</h5>
-                                </div>
-                                <div className='card text-center' style={{ width: '5rem', backgroundImage: 'linear-gradient(to bottom, #FFB75E, #ED8F03)' }}>
-                                    <span>RATED</span>
-                                    <h5>{this.state.data.rated}</h5>
-                                </div>
-                            </div>
-                            <img
-                                src={this.state.data.directorImage}
-                                alt="director-movies"
-                                className='rounded-circle ml-3'
-                                style={{ width: '50px' }}
-                            />
-                            <p>{this.state.data.director}</p>
-                            <div className='iconTrailer' onClick={() => this.setState({ modalTrailer: true })} style={{ width: '120px' }}>
-                                <FontAwesomeIcon icon={faPlayCircle} size='md' className='mr-1' />
-                                <span>Watch Trailer</span>
-                            </div>
-                            {this.showModalTrailer()}
-                            <p className='font-weight-bold mt-3'>
-                                <span className='font-weight-normal'>Playing At: </span><br />
-                                {this.playingAtSplit(Array(this.state.data.playingAt))}
-                            </p>
-                            <p className='font-italic'>{this.state.data.plot}</p>
-                            <input type="button" className='btn btn-outline-success' value='Buy Ticket' onClick={this.btnBuyTicket} />
-                            {this.alertBuyTicket(this.state.login)}
-                        </div>
-                    </div>
-                </div>
+                this.renderMovieDetail()
             )
         }
         

@@ -18,6 +18,7 @@ body, .bgStyle {
 .Custnavbar {
   background-image: linear-gradient(to right, #c31432, #240b36) !important;
   color: white !important;
+  background-color: transparent !important;
 }
 
 .Custnavbar a{

@@ -21,7 +21,7 @@ export default (state = INITIAL_STATE, action) => {
                 state.cart.push(data)
                 state.count = state.count + 1
             } else {
-                state.cart.findIndex((val) =>
+                state.cart.forEach((val) =>
                 {
                     if(val.titleMovie === title) {
                         val.bookedSeat += ', ' + bookedSeat;

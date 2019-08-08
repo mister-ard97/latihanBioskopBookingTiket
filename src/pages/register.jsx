@@ -48,7 +48,7 @@ class Register extends React.Component {
                                 status: 'Register',
                                 role: 'user'
                             }
-                            console.log(data)
+                            
                             this.props.onRegisterSuccess({...data});
                             localStorage.setItem('Username', JSON.stringify(data));
                             localStorage.setItem('LogOut', 'False')

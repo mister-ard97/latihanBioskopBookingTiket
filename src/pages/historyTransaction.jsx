@@ -45,7 +45,7 @@ class HistoryTransaction extends React.Component {
         let dataMovie = this.state.HistoryTransaction 
         var jsx = dataMovie.map((val, index) => {
             return (
-                <TableRow>
+                <TableRow key={index}>
                     <TableCell>{index + 1}</TableCell>
                     <TableCell>{val.codeTransaction}</TableCell>
                     <TableCell>{val.transactionTime }</TableCell>
@@ -86,21 +86,23 @@ class HistoryTransaction extends React.Component {
     }
 
     contentModal = () => {
-        let jsx = this.state.purchaseDetail.map((val) => {
+        let jsx = this.state.purchaseDetail.map((val, index) => {
             return (
-                <Table>
+                <Table key={index}>
                     <TableHead>
-                        <TableCell>No</TableCell>
-                        <TableCell>Judul Film</TableCell>
-                        <TableCell>Nomor Bangku</TableCell>
-                        <TableCell>Total Bangku</TableCell>
-                        <TableCell>Harga</TableCell>
+                        <TableRow>
+                            <TableCell>No</TableCell>
+                            <TableCell>Judul Film</TableCell>
+                            <TableCell>Nomor Bangku</TableCell>
+                            <TableCell>Total Bangku</TableCell>
+                            <TableCell>Harga</TableCell>
+                        </TableRow>
                     </TableHead>
                     <TableBody>
                         {
                             val.map((valDetail, index) => {
                                 return (
-                                    <TableRow>
+                                    <TableRow key={index}>
                                         <TableCell>{index + 1}</TableCell>
                                         <TableCell>{valDetail.titleMovie}</TableCell>
                                         <TableCell>{valDetail.bookedSeat}</TableCell>
@@ -139,12 +141,14 @@ class HistoryTransaction extends React.Component {
                 <h2>History Purchase : {this.state.username}</h2>
                     <Table className='my-5'>
                         <TableHead>
-                            <TableCell>No</TableCell>
-                            <TableCell>Code Transaction</TableCell>
-                            <TableCell>Tanggal Transaction</TableCell>
-                            <TableCell>Seats</TableCell>
-                            <TableCell>Total Price Transaction</TableCell>
-                            <TableCell>Detail Transaction</TableCell>
+                            <TableRow>
+                                <TableCell>No</TableCell>
+                                <TableCell>Code Transaction</TableCell>
+                                <TableCell>Tanggal Transaction</TableCell>
+                                <TableCell>Seats</TableCell>
+                                <TableCell>Total Price Transaction</TableCell>
+                                <TableCell>Detail Transaction</TableCell>
+                            </TableRow>
                         </TableHead>
                         <TableBody>
                             {   

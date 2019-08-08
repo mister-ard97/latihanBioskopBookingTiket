@@ -91,9 +91,9 @@ class MovieList extends React.Component {
     }
 
     onPrintMovies= () => {
-        var jsx = this.state.data.map((val) => {
+        var jsx = this.state.data.map((val, id) => {
             return (
-                <div className="col-sm-6 col-md-4 col-lg-3 mt-4 d-flex justify-content-center justify-content-md-start">
+                <div className="col-sm-6 col-md-4 col-lg-3 mt-4 d-flex justify-content-center justify-content-md-start" key={id}>
                     <div className="card mycard">
                         <div className="durationbox rounded-circle text-center"><span>{val.runtime} min</span></div>
                             <img className="card-img-top" src={val.poster} alt={'Poster-' + val.id} />

@@ -45,14 +45,14 @@ class Homepage extends React.Component {
                             <div className="col-md-9 pt-5 pb-5 pb-lg-0 mb-5">
                                 {
                                     this.props.user.status === 'Register' ?
-                                        <div class="alert alert-info" role="alert">
+                                        <div className="alert alert-info" role="alert">
                                             Selamat Bergabung user {this.props.user.username}.
                                     </div>
                                         : null
                                 }
                                 {
                                     this.props.user.status === 'Login' ?
-                                        <div class="alert alert-info" role="alert">
+                                        <div className="alert alert-info" role="alert">
                                             Selamat Datang Kembali {this.props.user.username}.
                                     </div> : null
                                 }
@@ -123,7 +123,6 @@ class Homepage extends React.Component {
     render() {
         if (localStorage.getItem('LogOut') === 'Success') {
             localStorage.removeItem('LogOut')
-            this.setState({idUser: 0})
         }
         return (
             this.renderHomepage()

@@ -3,16 +3,13 @@ import {
     Collapse,
     Navbar,
     NavbarToggler,
-    NavbarBrand,
     Nav,
     NavItem,
-    NavLink,
     UncontrolledDropdown,
     DropdownToggle,
     DropdownMenu,
     DropdownItem
 } from 'reactstrap';
-import Loader from 'react-loader-spinner';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { onLogout, DeleteCartAll } from '../redux/actions';
@@ -41,8 +38,8 @@ class Header extends React.Component {
             <div className='Custnavbar sticky-top'>
                 <div className='container-fluid px-5'>
                     <Navbar dark expand="md">
-                        <Link to='/'>
-                            <NavbarBrand>MisterMovie</NavbarBrand>
+                        <Link to='/' className='navbar-brand'>
+                            MisterMovie
                         </Link>
                         <NavbarToggler onClick={this.toggle} />
                         <Collapse isOpen={this.state.isOpen} navbar>
@@ -50,24 +47,24 @@ class Header extends React.Component {
                                 {
                                     this.props.username !== '' ?
                                         <NavItem>
-                                            <Link to='/manage'>
-                                                <NavLink>Manage Movie</NavLink>
+                                            <Link to='/manage' className='nav-link'>
+                                                Manage Movie
                                             </Link>
                                         </NavItem> : null
                                 }
                                 <NavItem>
-                                    <Link to='/movies-list'>
-                                        <NavLink>Movies List</NavLink>
+                                    <Link to='/movies-list' className='nav-link'>
+                                        Movies List
                                     </Link>
                                 </NavItem>
                                 <NavItem id='register'>
-                                    <Link to='/register'>
-                                        <NavLink>Register</NavLink>
+                                    <Link to='/register' className='nav-link'>
+                                        Register
                                     </Link>
                                 </NavItem>
                                 <NavItem id='login'>
-                                    <Link to='/login'>
-                                        <NavLink className='ml-2 rounded-pill px-3 py-2 loginBtn text-center font-weight-bold'>Login</NavLink>
+                                    <Link to='/login' className='nav-link ml-2 rounded-pill px-3 py-2 loginBtn text-center font-weight-bold'>
+                                        Login
                                     </Link>
                                 </NavItem>
                                 {this.CheckUsername(this.props.username)}

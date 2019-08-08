@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 // action
 import { DeleteCart, DeleteCartAll} from './../../redux/actions'
-import { Table, TableBody, TableCell, TableRow, Paper, Container, TableHead } from '@material-ui/core';
-import { DeleteForeverOutlined, Edit } from '@material-ui/icons';
+import { Table, TableBody, TableCell, TableRow, Paper, TableHead } from '@material-ui/core';
+import { DeleteForeverOutlined } from '@material-ui/icons';
 
 var numeral = require('numeral')
 
@@ -29,14 +29,19 @@ class Cart extends React.Component {
 
     hitungBiaya = () => {
         let totalBiaya = 0;
-        this.state.cart.findIndex((val) => { totalBiaya += val.price})
+        // Foreach just loop in my array cart
+        // FindIndex must return something
+        this.state.cart.forEach((val) => {
+            totalBiaya += val.price
+        })
+        //this.state.cart.findIndex((val) => totalBiaya += val.price)
         return totalBiaya
     }
 
     renderCart = () => {
         let jsx = this.state.cart.map((val, index) => {
             return (
-                <TableRow>
+                <TableRow key={index}>
                     <TableCell>{index + 1}</TableCell>
                     <TableCell>{val.titleMovie}</TableCell>
                     <TableCell>{val.bookedPosition.length} Seats</TableCell>
@@ -74,7 +79,10 @@ class Cart extends React.Component {
             )
         }
         if(this.state.CheckOutPage) {
-            this.setState({cart : []})
+            // Cannot update during an existing state transition (such as within `render`). 
+            // Render methods should be a pure function of props and state.
+            // when we want to update state.cart.length become 0, we can't use it in render.
+            // we can use it in the next redirect, in this cart in checkout page
             return (
                 <Redirect to={'/checkout?userid=' + this.state.idUser} />
             )
@@ -86,12 +94,14 @@ class Cart extends React.Component {
                     <h2>Cart Movies: {this.state.user}</h2>
                     <Table className='mb-3'>
                         <TableHead>
-                            <TableCell>No</TableCell>
-                            <TableCell>Title</TableCell>
-                            <TableCell>Qty</TableCell>
-                            <TableCell>Booked Seat</TableCell>
-                            <TableCell>Price</TableCell>
-                            <TableCell>Action</TableCell>
+                            <TableRow>
+                                <TableCell>No</TableCell>
+                                <TableCell>Title</TableCell>
+                                <TableCell>Qty</TableCell>
+                                <TableCell>Booked Seat</TableCell>
+                                <TableCell>Price</TableCell>
+                                <TableCell>Action</TableCell>
+                            </TableRow>
                         </TableHead>
                         <TableBody>
                             {

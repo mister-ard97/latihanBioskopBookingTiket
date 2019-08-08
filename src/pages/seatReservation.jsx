@@ -207,31 +207,37 @@ class SeatRes extends React.Component {
 
         var jsx = arr.map((val, index) => {
             return (
-                <tr>
-                    <div className='seatAlpha'>
-                        <span className='mr-3 font-weight-bold text-light'>{arrAbjad[index]} - </span>
-                    </div>
+                <tr key={index}>
+                    <td>
+                        <div>
+                            <span className='mr-3 font-weight-bold text-light'>{arrAbjad[index]} - </span>
+                        </div>
+                    </td>
                     {
                         val.map((val1, i) => {
                             if (val1 === 2) {
                                 return (
-                                    
-                                    <FontAwesomeIcon icon={faCouch} size='2x' className='text-danger mx-1 cursorSeat iconSmall'/>
+                                    <td key={i}>
+                                        <FontAwesomeIcon key={i} icon={faCouch} size='2x' className='text-danger mx-1 cursorSeat iconSmall' />
+                                    </td>
                                 )
                             } else if(val1 === 3){
                                 return (
-                                    
-                                    <FontAwesomeIcon icon={faCouch} size='2x' className='text-success mx-1 cursorSeat iconSmall' onClick={() => this.onCancelSeatClick([index, i])}/>
+                                    <td key={i}>
+                                        <FontAwesomeIcon key={i} icon={faCouch} size='2x' className='text-success mx-1 cursorSeat iconSmall' onClick={() => this.onCancelSeatClick([index, i])} />
+                                    </td>
                                 )
                             } else if (val1 === 4) {
                                 return (
-                                    
-                                    <FontAwesomeIcon icon={faCouch} size='2x' className='text-warning mx-1 cursorSeat iconSmall' />
+                                    <td key={i}>
+                                        <FontAwesomeIcon icon={faCouch} size='2x' className='text-warning mx-1 cursorSeat iconSmall' />
+                                    </td>
                                 )
                             }
                             return (
-                                
-                                <FontAwesomeIcon icon={faCouch} size='2x' className='text-white mx-1 cursorSeat iconSmall' onClick={() => this.onSeatClick([index, i])}/>
+                                <td key={i}>
+                                    <FontAwesomeIcon icon={faCouch} size='2x' className='text-white mx-1 cursorSeat iconSmall' onClick={() => this.onSeatClick([index, i])} />
+                                </td>
                             )
                         })
                     }
@@ -269,7 +275,9 @@ class SeatRes extends React.Component {
                     }
                     <div className='row justify-content-center pt-5 pb-1'>
                         <table className='mb-3'>
-                            {this.renderSeat()}
+                            <tbody>
+                                {this.renderSeat()}
+                            </tbody>
                         </table>
                     <div className='mt-5 text-dark' style={{
                         backgroundColor: 'white'
